@@ -1,0 +1,260 @@
+/**
+ * Projet 52: year tabs, week grid and lightbox.
+ *
+ * Adapted from sliceofcactus-astro/src/pages/projet-52.astro and
+ * sliceofcactus-astro/public/css/style.css. The shared magazine-hub chrome
+ * (runhead, masthead, view-toggle) lives in
+ * assets/styles/components/magazine-hub.css.
+ */
+
+body.page-template-page-projet-52 {
+	--accent: #c2542e;
+	--accent-deep: #8f3a1e;
+}
+
+.p52-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1rem 1.4rem;
+	margin: 1.4rem 0 1.6rem;
+}
+
+.p52-years {
+	display: flex;
+	gap: .5rem;
+}
+
+.p52-years button {
+	padding: .1rem .2rem;
+	border: none;
+	background: transparent;
+	color: var(--ink);
+	font-family: var(--font-head);
+	font-size: 1.4rem;
+	letter-spacing: .02em;
+	opacity: .35;
+	cursor: pointer;
+	transition: opacity .3s;
+}
+
+.p52-years button:hover {
+	opacity: .7;
+}
+
+.p52-years button.is-active {
+	border-bottom: 3px solid var(--accent);
+	opacity: 1;
+}
+
+.p52-progress {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	gap: .8rem;
+	min-width: 220px;
+}
+
+.p52-bar {
+	flex: 1;
+	height: 6px;
+	overflow: hidden;
+	border-radius: 6px;
+	background: rgb(20 18 16 / 12%);
+}
+
+.p52-bar span {
+	display: block;
+	width: 0;
+	height: 100%;
+	background: var(--accent);
+	transition: width .6s var(--ease);
+}
+
+.p52-count {
+	white-space: nowrap;
+	color: var(--ink);
+	font-family: var(--font-mono);
+	font-size: .74rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+
+.p52-empty {
+	margin: 2rem 0 4rem;
+	color: var(--grey);
+	font-family: var(--font-display);
+	font-size: 1.1rem;
+}
+
+.p52-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: .8rem;
+	padding-bottom: 3rem;
+}
+
+.wk {
+	position: relative;
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+	border-radius: 7px;
+	text-decoration: none;
+}
+
+.wk__no {
+	position: absolute;
+	z-index: 2;
+	top: .4rem;
+	left: .5rem;
+	padding: .1rem .35rem;
+	border-radius: 3px;
+	font-family: var(--font-mono);
+	font-size: .62rem;
+	letter-spacing: .08em;
+}
+
+.wk--full {
+	display: block;
+	width: 100%;
+	padding: 0;
+	border: none;
+	background: none;
+	box-shadow: 0 10px 22px -14px rgb(20 18 16 / 60%);
+	font: inherit;
+	cursor: pointer;
+	transition: transform .5s var(--ease);
+}
+
+.wk--full img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .7s var(--ease);
+}
+
+.wk--full:hover {
+	transform: translateY(-3px);
+}
+
+.wk--full:hover img {
+	transform: scale(1.08);
+}
+
+.wk--full .wk__no {
+	background: rgb(20 18 16 / 60%);
+	color: var(--flash);
+}
+
+.wk--full::after {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgb(0 0 0 / 25%), transparent 40%);
+	content: "";
+	pointer-events: none;
+}
+
+.wk--empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1.5px dashed rgb(20 18 16 / 28%);
+	background: rgb(20 18 16 / 2%);
+	color: rgb(20 18 16 / 45%);
+}
+
+.wk--empty .wk__no {
+	position: static;
+	background: transparent;
+	color: rgb(20 18 16 / 50%);
+	font-size: .9rem;
+}
+
+.wk--empty:hover {
+	border-color: var(--accent);
+	color: var(--accent);
+}
+
+.p52lb {
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	display: none;
+	place-items: center;
+	padding: 4vw;
+	background: rgb(20 18 16 / 92%);
+}
+
+.p52lb.is-open {
+	display: grid;
+}
+
+.p52lb__fig {
+	max-width: min(90vw, 760px);
+	padding: 12px 12px 0;
+	border-radius: 6px;
+	background: #fff;
+	box-shadow: 0 30px 60px -18px rgb(0 0 0 / 70%);
+}
+
+.p52lb__fig img {
+	display: block;
+	width: 100%;
+	max-height: 74vh;
+	height: auto;
+	border-radius: 3px;
+	object-fit: contain;
+}
+
+.p52lb__cap {
+	padding: .9rem .4rem 1rem;
+	color: var(--ink);
+	font-family: var(--font-head);
+	font-size: 1.1rem;
+	letter-spacing: .02em;
+	text-transform: uppercase;
+}
+
+.p52lb__close,
+.p52lb__nav {
+	position: absolute;
+	border: none;
+	background: transparent;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	cursor: pointer;
+}
+
+.p52lb__close {
+	top: 2vh;
+	right: 3vw;
+	font-size: 1rem;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+.p52lb__nav {
+	top: 50%;
+	padding: 1rem;
+	transform: translateY(-50%);
+	font-size: 2.6rem;
+}
+
+.p52lb__nav--prev {
+	left: 1vw;
+}
+
+.p52lb__nav--next {
+	right: 1vw;
+}
+
+.p52lb__nav:hover,
+.p52lb__close:hover {
+	color: var(--flash);
+}
+
+@media (max-width: 600px) {
+	.p52-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}

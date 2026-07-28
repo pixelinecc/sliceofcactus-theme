@@ -27,7 +27,7 @@ function soc_enqueue_assets(): void {
 		$style_version
 	);
 
-	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'recit' ) || is_tax( 'medium' );
+	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'recit' ) || is_tax( 'medium' ) || is_page_template( 'page-projet-52.php' );
 	$magazine_hub_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_magazine_hub ) {
@@ -128,6 +128,19 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
+	if ( is_page_template( 'page-projet-52.php' ) ) {
+		$p52_style_path = get_theme_file_path( '/assets/styles/templates/page-projet-52.css' );
+
+		if ( is_readable( $p52_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-page-projet-52',
+				get_theme_file_uri( '/assets/styles/templates/page-projet-52.css' ),
+				$magazine_hub_deps,
+				(string) filemtime( $p52_style_path )
+			);
+		}
+	}
+
 	$script_path = get_theme_file_path( '/assets/scripts/main.js' );
 
 	if ( is_readable( $script_path ) ) {
@@ -183,6 +196,21 @@ function soc_enqueue_assets(): void {
 				true
 			);
 			wp_script_add_data( 'sliceofcactus-archive-photo', 'strategy', 'defer' );
+		}
+	}
+
+	if ( is_page_template( 'page-projet-52.php' ) ) {
+		$p52_script_path = get_theme_file_path( '/assets/scripts/page-projet-52.js' );
+
+		if ( is_readable( $p52_script_path ) ) {
+			wp_enqueue_script(
+				'sliceofcactus-page-projet-52',
+				get_theme_file_uri( '/assets/scripts/page-projet-52.js' ),
+				array(),
+				(string) filemtime( $p52_script_path ),
+				true
+			);
+			wp_script_add_data( 'sliceofcactus-page-projet-52', 'strategy', 'defer' );
 		}
 	}
 }

@@ -298,3 +298,70 @@ function soc_get_recit_archive_items(): array {
 
 	return $recits;
 }
+
+/**
+ * Gets the Projet 52 grid: one photo per ISO week, grouped by calendar year.
+ *
+ * sliceofcactus-astro's projet-52.astro has no real data behind it (a
+ * YEARS = {2024: 40, ...} config feeding a picsum.photos placeholder grid).
+ * Here every week is a real "photo" post tagged with the narration
+ * "projet-52"; its week/year come from its native publish date, so editors
+ * only need to set the right date — no extra field. Weeks are paired by
+ * plain calendar year (not the ISO week-numbering year), a deliberate
+ * simplification: the only effect is a possible one-week mismatch for
+ * photos published in the last days of December or first days of January.
+ *
+ * @return array<int, array{done: int, weeks: array<int, WP_Post|null>}> Keyed by year, most recent first.
+ */
+function soc_get_projet52_years(): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'photo',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'ASC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'narration',
+					'field'    => 'slug',
+					'terms'    => array( 'projet-52' ),
+				),
+			),
+		)
+	);
+
+	$years = array();
+
+	foreach ( $query->posts as $post ) {
+		if ( 0 === soc_get_photo_cover_id( $post->ID ) ) {
+			continue;
+		}
+
+		$year = (int) get_the_date( 'Y', $post );
+		$week = (int) get_the_date( 'W', $post );
+
+		if ( $week < 1 || $week > 52 ) {
+			continue;
+		}
+
+		if ( ! isset( $years[ $year ] ) ) {
+			$years[ $year ] = array(
+				'done'  => 0,
+				'weeks' => array_fill( 1, 52, null ),
+			);
+		}
+
+		if ( null === $years[ $year ]['weeks'][ $week ] ) {
+			$years[ $year ]['done']++;
+		}
+
+		$years[ $year ]['weeks'][ $week ] = $post;
+	}
+
+	krsort( $years );
+
+	return $years;
+}

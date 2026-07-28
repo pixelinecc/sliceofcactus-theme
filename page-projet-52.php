@@ -1,0 +1,141 @@
+<?php
+/**
+ * Template Name: Projet 52
+ *
+ * Migrated from sliceofcactus-astro/src/pages/projet-52.astro. Astro's
+ * version has no real data (a hardcoded YEARS config feeding placeholder
+ * images) — here every week is a real "photo" post tagged with the
+ * narration "projet-52", grouped by soc_get_projet52_years().
+ *
+ * @package SliceOfCactus
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+get_header();
+
+$years        = soc_get_projet52_years();
+$default_year = ! empty( $years ) ? array_key_first( $years ) : null;
+?>
+<main id="main-content" class="soc-p52 rubrique-page">
+
+	<div class="mag-runhead">
+		<span><?php esc_html_e( 'Slice of Cactus — Projet 52', 'sliceofcactus' ); ?></span>
+		<span><?php esc_html_e( 'Label photo', 'sliceofcactus' ); ?></span>
+		<span><?php esc_html_e( 'une photo par semaine', 'sliceofcactus' ); ?></span>
+	</div>
+
+	<header class="mag-masthead">
+		<h1 class="mag-masthead__title">
+			<?php esc_html_e( 'Projet 52', 'sliceofcactus' ); ?>
+			<em><?php esc_html_e( 'une photographie par semaine, toute l\'année', 'sliceofcactus' ); ?></em>
+		</h1>
+		<div class="mag-masthead__lead" data-reveal>
+			<p>
+				<span class="drop">C</span>
+				<?php esc_html_e( 'inquante-deux semaines, cinquante-deux images. Un journal visuel qui se remplit au fil de l\'année — une discipline douce, une case à la fois.', 'sliceofcactus' ); ?>
+			</p>
+		</div>
+	</header>
+
+	<div class="view-switch">
+		<div class="view-toggle" role="tablist" aria-label="<?php esc_attr_e( 'Explorer la photo', 'sliceofcactus' ); ?>">
+			<a href="<?php echo esc_url( get_post_type_archive_link( 'photo' ) ); ?>"><?php esc_html_e( 'Séries', 'sliceofcactus' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/voyage-carte/' ) ); ?>"><?php esc_html_e( 'Carte', 'sliceofcactus' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/color-your-life/' ) ); ?>"><?php esc_html_e( 'Par couleur', 'sliceofcactus' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/projet-52/' ) ); ?>" class="is-active" aria-current="page"><?php esc_html_e( 'Projet 52', 'sliceofcactus' ); ?></a>
+		</div>
+	</div>
+
+	<?php if ( empty( $years ) ) : ?>
+
+		<p class="p52-empty"><?php esc_html_e( 'Aucune photo Projet 52 pour le moment.', 'sliceofcactus' ); ?></p>
+
+	<?php else : ?>
+
+		<div class="p52-head">
+			<div class="p52-years" id="p52Years" role="tablist" aria-label="<?php esc_attr_e( 'Année', 'sliceofcactus' ); ?>">
+				<?php foreach ( $years as $year => $data ) : ?>
+					<button
+						type="button"
+						data-year="<?php echo esc_attr( $year ); ?>"
+						data-done="<?php echo esc_attr( $data['done'] ); ?>"
+						<?php echo $year === $default_year ? 'class="is-active" aria-current="true"' : ''; ?>
+					>
+						<?php echo esc_html( $year ); ?>
+					</button>
+				<?php endforeach; ?>
+			</div>
+			<div class="p52-progress">
+				<div class="p52-bar"><span id="p52BarFill"></span></div>
+				<span class="p52-count" id="p52Count"></span>
+			</div>
+		</div>
+
+		<?php foreach ( $years as $year => $data ) : ?>
+			<div
+				class="p52-grid"
+				id="p52Grid-<?php echo esc_attr( $year ); ?>"
+				data-p52-grid
+				<?php echo $year !== $default_year ? 'hidden' : ''; ?>
+			>
+				<?php foreach ( $data['weeks'] as $week => $photo ) : ?>
+					<?php $week_label = sprintf( 'S%02d', $week ); ?>
+					<?php if ( $photo instanceof WP_Post ) : ?>
+						<?php
+						$cover_id = soc_get_photo_cover_id( $photo->ID );
+						$caption  = sprintf(
+							/* translators: 1: week number, 2: year. */
+							__( 'Semaine %1$d · %2$s', 'sliceofcactus' ),
+							$week,
+							get_the_title( $photo )
+						);
+						?>
+						<button
+							type="button"
+							class="wk wk--full"
+							data-full="<?php echo esc_url( wp_get_attachment_image_url( $cover_id, 'large' ) ); ?>"
+							data-caption="<?php echo esc_attr( $caption ); ?>"
+							aria-label="<?php echo esc_attr( $caption ); ?>"
+						>
+							<?php
+							echo wp_get_attachment_image(
+								$cover_id,
+								'medium',
+								false,
+								array(
+									'alt'     => $caption,
+									'loading' => 'lazy',
+								)
+							);
+							?>
+							<span class="wk__no"><?php echo esc_html( $week_label ); ?></span>
+						</button>
+					<?php else : ?>
+						<div class="wk wk--empty">
+							<span class="wk__no"><?php echo esc_html( $week_label ); ?></span>
+						</div>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			</div>
+		<?php endforeach; ?>
+
+	<?php endif; ?>
+
+</main>
+
+<div class="p52lb" id="p52lb" aria-hidden="true">
+	<button class="p52lb__close" id="p52lbClose" type="button" aria-label="<?php esc_attr_e( 'Fermer', 'sliceofcactus' ); ?>">
+		<?php esc_html_e( 'Fermer ✕', 'sliceofcactus' ); ?>
+	</button>
+	<button class="p52lb__nav p52lb__nav--prev" id="p52lbPrev" type="button" aria-label="<?php esc_attr_e( 'Précédent', 'sliceofcactus' ); ?>">‹</button>
+	<figure class="p52lb__fig">
+		<img id="p52lbImg" src="" alt="">
+		<figcaption class="p52lb__cap" id="p52lbCap"></figcaption>
+	</figure>
+	<button class="p52lb__nav p52lb__nav--next" id="p52lbNext" type="button" aria-label="<?php esc_attr_e( 'Suivant', 'sliceofcactus' ); ?>">›</button>
+</div>
+<?php
+get_footer();

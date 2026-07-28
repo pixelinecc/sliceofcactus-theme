@@ -7,6 +7,7 @@
 - Structure du thème
 - CPT
 - Taxonomies
+- Single Photo
 
 ## 🔄 En cours
 
@@ -16,7 +17,6 @@
 
 - Front page
 - Archive Photo
-- Single Photo
 - Créations
 - Récits
 - Projet 52

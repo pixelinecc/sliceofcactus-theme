@@ -29,6 +29,8 @@ if ( ! $active_narration && ! empty( $narrations ) ) {
 
 $archive_url = get_post_type_archive_link( 'photo' );
 $intro       = soc_get_photo_intro( $post_id );
+$location    = soc_get_photo_location( $post_id );
+$photo_year  = soc_get_photo_year( $post_id );
 $content     = apply_filters( 'the_content', get_the_content() );
 $image_count = preg_match_all( '/<img\b/i', $content );
 $uses_cover  = 0 === $image_count && has_post_thumbnail( $post_id );
@@ -81,25 +83,48 @@ $lightbox_id = 'soc-photo-lightbox-' . $post_id;
 
 		<h1 class="serie-hero__title"><?php echo wp_kses( $title_html, array( 'br' => array() ) ); ?></h1>
 
-		<?php if ( $image_count > 0 ) : ?>
+		<?php if ( $image_count > 0 || ! empty( $location ) || '' !== $photo_year ) : ?>
 			<div class="serie-hero__meta">
-				<?php if ( $film_count > 1 ) : ?>
+				<?php if ( $image_count > 0 ) : ?>
+					<?php if ( $film_count > 1 ) : ?>
+						<span>
+							<?php esc_html_e( 'Pellicules :', 'sliceofcactus' ); ?>
+							<b><?php echo esc_html( number_format_i18n( $film_count ) ); ?> × 36 poses</b>
+							·
+							<?php
+							printf(
+								/* translators: %s: number of images. */
+								esc_html( _n( '%s vue', '%s vues', $image_count, 'sliceofcactus' ) ),
+								esc_html( number_format_i18n( $image_count ) )
+							);
+							?>
+						</span>
+					<?php else : ?>
+						<span>
+							<?php esc_html_e( 'Pellicule :', 'sliceofcactus' ); ?>
+							<b><?php echo esc_html( number_format_i18n( $image_count ) ); ?> / 36 poses</b>
+						</span>
+					<?php endif; ?>
+				<?php endif; ?>
+
+				<?php if ( ! empty( $location ) ) : ?>
 					<span>
-						<?php esc_html_e( 'Pellicules :', 'sliceofcactus' ); ?>
-						<b><?php echo esc_html( number_format_i18n( $film_count ) ); ?> × 36 poses</b>
-						·
-						<?php
-						printf(
-							/* translators: %s: number of images. */
-							esc_html( _n( '%s vue', '%s vues', $image_count, 'sliceofcactus' ) ),
-							esc_html( number_format_i18n( $image_count ) )
-						);
-						?>
+						<?php esc_html_e( 'Lieu :', 'sliceofcactus' ); ?>
+						<b>
+							<?php
+							echo esc_html( $location['name'] );
+							if ( ! empty( $location['country'] ) ) {
+								echo esc_html( ', ' . $location['country'] );
+							}
+							?>
+						</b>
 					</span>
-				<?php else : ?>
+				<?php endif; ?>
+
+				<?php if ( '' !== $photo_year ) : ?>
 					<span>
-						<?php esc_html_e( 'Pellicule :', 'sliceofcactus' ); ?>
-						<b><?php echo esc_html( number_format_i18n( $image_count ) ); ?> / 36 poses</b>
+						<?php esc_html_e( 'Année :', 'sliceofcactus' ); ?>
+						<b><?php echo esc_html( $photo_year ); ?></b>
 					</span>
 				<?php endif; ?>
 			</div>

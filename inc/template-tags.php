@@ -98,6 +98,84 @@ function soc_get_photo_intro( int $post_id = 0 ): string {
 }
 
 /**
+ * Gets the location of a photo series.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return array{name?: string, country?: string, latitude?: float, longitude?: float}
+ */
+function soc_get_photo_location( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$location = function_exists( 'get_field' ) ? get_field( 'soc_photo_location', $post_id ) : null;
+
+	if ( ! is_array( $location ) || empty( $location['name'] ) ) {
+		return array();
+	}
+
+	return $location;
+}
+
+/**
+ * Gets the project year of a photo series.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return string Four-digit year, or an empty string when unset.
+ */
+function soc_get_photo_year( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return '';
+	}
+
+	$date = function_exists( 'get_field' )
+		? get_field( 'soc_photo_date', $post_id )
+		: get_post_meta( $post_id, 'soc_photo_date', true );
+
+	return is_string( $date ) && '' !== $date ? substr( $date, 0, 4 ) : '';
+}
+
+/**
+ * Gets the dominant color of a photo series.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return string Hex color, or an empty string when unset.
+ */
+function soc_get_photo_color( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return '';
+	}
+
+	$color = function_exists( 'get_field' ) ? get_field( 'soc_photo_color', $post_id ) : null;
+	$hex   = is_array( $color ) && ! empty( $color['hex'] ) ? $color['hex'] : '';
+
+	return is_string( $hex ) ? trim( $hex ) : '';
+}
+
+/**
+ * Prints the mobile browser theme-color meta tag for a single photo.
+ *
+ * Mirrors the per-series themeColor prop of sliceofcactus-astro/src/layouts/Base.astro,
+ * falling back to the same default cactus green when no color is set.
+ */
+function soc_photo_theme_color_meta(): void {
+	if ( ! is_singular( 'photo' ) ) {
+		return;
+	}
+
+	$color = soc_get_photo_color();
+
+	printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( '' !== $color ? $color : '#12B26A' ) );
+}
+add_action( 'wp_head', 'soc_photo_theme_color_meta' );
+
+/**
  * Finds the first assigned narration that has a dedicated template part.
  *
  * A narration without a dedicated template uses the generic photo template.

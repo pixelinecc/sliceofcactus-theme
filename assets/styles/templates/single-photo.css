@@ -10,6 +10,11 @@ body.single-photo.soc-narration-voyage {
 	--accent-deep: #193528;
 }
 
+body.single-photo.soc-narration-lifestyle {
+	--accent: #e11d74;
+	--accent-deep: #9d1457;
+}
+
 .serie-hero {
 	max-width: var(--maxw);
 	margin: 0 auto;

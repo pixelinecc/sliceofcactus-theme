@@ -132,3 +132,79 @@ function soc_get_photo_archive_series(): array {
 
 	return $photos;
 }
+
+/**
+ * Gets the creations displayed after a single creation.
+ *
+ * Mirrors the `others` list of sliceofcactus-astro's dessin/[id].astro and
+ * coloriage/[id].astro: every other creation sharing the same medium, with
+ * no limit or shuffling. A manually selected soc_creation_next item is
+ * kept first, as with soc_get_photo_suggestions.
+ *
+ * @param int $post_id Optional current creation ID.
+ * @return WP_Post[]
+ */
+function soc_get_creation_suggestions( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$medium = soc_get_creation_medium( $post_id );
+
+	if ( ! $medium ) {
+		return array();
+	}
+
+	$suggestion_ids = array();
+	$manual_next    = get_post_meta( $post_id, 'soc_creation_next', true );
+
+	if ( ! is_array( $manual_next ) ) {
+		$manual_next = $manual_next ? array( $manual_next ) : array();
+	}
+
+	foreach ( $manual_next as $next_id ) {
+		$next_id = absint( $next_id );
+
+		if (
+			$next_id
+			&& $next_id !== $post_id
+			&& 'creation' === get_post_type( $next_id )
+			&& 'publish' === get_post_status( $next_id )
+		) {
+			$suggestion_ids[] = $next_id;
+			break;
+		}
+	}
+
+	$others = get_posts(
+		array(
+			'post_type'           => 'creation',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'post__not_in'        => array_merge( array( $post_id ), $suggestion_ids ),
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'fields'              => 'ids',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'medium',
+					'field'    => 'term_id',
+					'terms'    => array( $medium->term_id ),
+				),
+			),
+		)
+	);
+
+	$suggestion_ids = array_merge( $suggestion_ids, array_map( 'absint', $others ) );
+
+	return array_values(
+		array_filter(
+			array_map( 'get_post', $suggestion_ids ),
+			static fn( $post ): bool => $post instanceof WP_Post
+		)
+	);
+}

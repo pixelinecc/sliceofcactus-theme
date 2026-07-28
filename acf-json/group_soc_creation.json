@@ -3,14 +3,6 @@
     "title": "Création — Données éditoriales",
     "fields": [
         {
-            "key": "field_soc_creation_tab_identity",
-            "label": "Identité et usage",
-            "name": "",
-            "type": "tab",
-            "placement": "top",
-            "endpoint": 0
-        },
-        {
             "key": "field_soc_creation_intro",
             "label": "Introduction",
             "name": "soc_creation_intro",
@@ -25,93 +17,11 @@
             "new_lines": ""
         },
         {
-            "key": "field_soc_creation_access",
-            "label": "Mode d’accès",
-            "name": "soc_creation_access",
-            "type": "radio",
-            "required": 1,
-            "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "choices": {
-                "view": "Consulter",
-                "download": "Télécharger",
-                "external": "Ressource externe"
-            },
-            "default_value": "view",
-            "return_format": "value",
-            "allow_null": 0,
-            "other_choice": 0,
-            "layout": "horizontal",
-            "save_other_choice": 0
-        },
-        {
-            "key": "field_soc_creation_license",
-            "label": "Licence",
-            "name": "soc_creation_license",
-            "type": "select",
-            "required": 1,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_creation_access",
-                        "operator": "==",
-                        "value": "download"
-                    }
-                ]
-            ],
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "choices": {
-                "personal": "Usage personnel",
-                "personal-noncommercial": "Usage personnel non commercial",
-                "custom": "Conditions personnalisées"
-            },
-            "default_value": "personal",
-            "return_format": "value",
-            "multiple": 0,
-            "allow_null": 0,
-            "ui": 0,
-            "ajax": 0,
-            "placeholder": ""
-        },
-        {
-            "key": "field_soc_creation_license_custom",
-            "label": "Conditions particulières",
-            "name": "soc_creation_license_custom",
-            "type": "textarea",
-            "required": 1,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_creation_license",
-                        "operator": "==",
-                        "value": "custom"
-                    },
-                    {
-                        "field": "field_soc_creation_access",
-                        "operator": "==",
-                        "value": "download"
-                    }
-                ]
-            ],
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "default_value": "",
-            "maxlength": "",
-            "rows": 4,
-            "new_lines": ""
-        },
-        {
-            "key": "field_soc_creation_tab_files",
-            "label": "Aperçus et accès",
-            "name": "",
-            "type": "tab",
-            "placement": "top",
-            "endpoint": 0
-        },
-        {
             "key": "field_soc_creation_previews",
             "label": "Aperçus",
             "name": "soc_creation_previews",
             "type": "gallery",
+            "instructions": "Images de la création, ordonnées.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": { "width": "", "class": "", "id": "" },
@@ -130,138 +40,11 @@
             "preview_size": "medium"
         },
         {
-            "key": "field_soc_creation_external_url",
-            "label": "URL externe",
-            "name": "soc_creation_external_url",
-            "type": "url",
-            "required": 1,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_creation_access",
-                        "operator": "==",
-                        "value": "external"
-                    }
-                ]
-            ],
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "default_value": "",
-            "placeholder": ""
-        },
-        {
-            "key": "field_soc_creation_external_label",
-            "label": "Texte du bouton",
-            "name": "soc_creation_external_label",
-            "type": "text",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_creation_access",
-                        "operator": "==",
-                        "value": "external"
-                    }
-                ]
-            ],
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "default_value": "Découvrir la ressource",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_soc_creation_files",
-            "label": "Fichiers",
-            "name": "soc_creation_files",
-            "type": "repeater",
-            "required": 1,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_creation_access",
-                        "operator": "==",
-                        "value": "download"
-                    }
-                ]
-            ],
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "layout": "block",
-            "pagination": 0,
-            "min": 1,
-            "max": 0,
-            "collapsed": "field_soc_creation_file_label",
-            "button_label": "Ajouter un fichier",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_soc_creation_file_label",
-                    "label": "Intitulé",
-                    "name": "label",
-                    "type": "text",
-                    "required": 1,
-                    "conditional_logic": 0,
-                    "wrapper": { "width": "50", "class": "", "id": "" },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_soc_creation_files"
-                },
-                {
-                    "key": "field_soc_creation_file",
-                    "label": "Fichier",
-                    "name": "file",
-                    "type": "file",
-                    "required": 1,
-                    "conditional_logic": 0,
-                    "wrapper": { "width": "50", "class": "", "id": "" },
-                    "return_format": "id",
-                    "library": "all",
-                    "min_size": "",
-                    "max_size": "",
-                    "mime_types": "",
-                    "parent_repeater": "field_soc_creation_files"
-                },
-                {
-                    "key": "field_soc_creation_file_format",
-                    "label": "Format",
-                    "name": "format",
-                    "type": "text",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": { "width": "50", "class": "", "id": "" },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "PDF, JPG…",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_soc_creation_files"
-                },
-                {
-                    "key": "field_soc_creation_file_info",
-                    "label": "Informations",
-                    "name": "info",
-                    "type": "text",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": { "width": "50", "class": "", "id": "" },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_soc_creation_files"
-                }
-            ]
-        },
-        {
             "key": "field_soc_creation_book",
-            "label": "Informations du livre",
+            "label": "Informations du carnet",
             "name": "soc_creation_book",
             "type": "group",
-            "instructions": "Métadonnées du livre de coloriage ou de dessin.",
+            "instructions": "À renseigner pour un coloriage : livre d’origine du carnet.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": { "width": "", "class": "", "id": "" },
@@ -335,52 +118,6 @@
             ]
         },
         {
-            "key": "field_soc_creation_tab_relations",
-            "label": "Relations",
-            "name": "",
-            "type": "tab",
-            "placement": "top",
-            "endpoint": 0
-        },
-        {
-            "key": "field_soc_creation_recits",
-            "label": "Récits d’origine ou associés",
-            "name": "soc_creation_recits",
-            "type": "relationship",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "post_type": [ "recit" ],
-            "post_status": [ "publish", "draft", "pending", "private" ],
-            "taxonomy": "",
-            "filters": [ "search" ],
-            "return_format": "id",
-            "min": "",
-            "max": "",
-            "elements": [ "featured_image" ],
-            "bidirectional": 0,
-            "bidirectional_target": []
-        },
-        {
-            "key": "field_soc_creation_collections",
-            "label": "Collections liées",
-            "name": "soc_creation_collections",
-            "type": "relationship",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "post_type": [ "collection" ],
-            "post_status": [ "publish", "draft", "pending", "private" ],
-            "taxonomy": "",
-            "filters": [ "search" ],
-            "return_format": "id",
-            "min": "",
-            "max": "",
-            "elements": [ "featured_image" ],
-            "bidirectional": 0,
-            "bidirectional_target": []
-        },
-        {
             "key": "field_soc_creation_resonances",
             "label": "Résonances",
             "name": "soc_creation_resonances",
@@ -435,5 +172,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1738091600
+    "modified": 1785254304
 }

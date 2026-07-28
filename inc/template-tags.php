@@ -243,3 +243,171 @@ function soc_photo_body_classes( array $classes ): array {
 	return array_values( array_unique( $classes ) );
 }
 add_filter( 'body_class', 'soc_photo_body_classes' );
+
+/**
+ * Gets the short introduction of a creation.
+ *
+ * @param int $post_id Optional creation ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_creation_intro( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
+		return '';
+	}
+
+	$intro = function_exists( 'get_field' )
+		? get_field( 'soc_creation_intro', $post_id )
+		: get_post_meta( $post_id, 'soc_creation_intro', true );
+
+	return is_string( $intro ) ? trim( $intro ) : '';
+}
+
+/**
+ * Gets the medium (dessin/coloriage) assigned to a creation.
+ *
+ * @param int $post_id Optional creation ID. Defaults to the current post.
+ * @return WP_Term|null
+ */
+function soc_get_creation_medium( int $post_id = 0 ): ?WP_Term {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
+		return null;
+	}
+
+	$terms = get_the_terms( $post_id, 'medium' );
+
+	return is_array( $terms ) && ! empty( $terms ) ? $terms[0] : null;
+}
+
+/**
+ * Gets the technique label of a creation (its first creation_type term).
+ *
+ * Stands in for the two-field `technique` object of sliceofcactus-astro's
+ * dessin pages: one WP taxonomy term name covers both the drop-cap source
+ * and the "Technique : …" sentence.
+ *
+ * @param int $post_id Optional creation ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_creation_technique_label( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
+		return '';
+	}
+
+	$terms = get_the_terms( $post_id, 'creation_type' );
+
+	return is_array( $terms ) && ! empty( $terms ) ? $terms[0]->name : '';
+}
+
+/**
+ * Gets the book/carnet info of a creation (coloriage only).
+ *
+ * @param int $post_id Optional creation ID. Defaults to the current post.
+ * @return array{title?: string, author?: string, publisher?: string, cover?: int}
+ */
+function soc_get_creation_book( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$book = function_exists( 'get_field' ) ? get_field( 'soc_creation_book', $post_id ) : null;
+
+	return is_array( $book ) ? $book : array();
+}
+
+/**
+ * Gets the ordered gallery images of a creation.
+ *
+ * @param int $post_id Optional creation ID. Defaults to the current post.
+ * @return int[] Attachment IDs.
+ */
+function soc_get_creation_gallery_ids( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$gallery = function_exists( 'get_field' ) ? (array) get_field( 'soc_creation_previews', $post_id ) : array();
+
+	return array_values( array_filter( array_map( 'absint', $gallery ) ) );
+}
+
+/**
+ * Gets the cover image of a creation: the featured image if set,
+ * otherwise the first soc_creation_previews image.
+ *
+ * @param int $post_id Optional creation ID. Defaults to the current post.
+ * @return int Attachment ID, or 0 when the creation has no image at all.
+ */
+function soc_get_creation_cover_id( int $post_id = 0 ): int {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
+		return 0;
+	}
+
+	if ( has_post_thumbnail( $post_id ) ) {
+		return (int) get_post_thumbnail_id( $post_id );
+	}
+
+	$gallery = soc_get_creation_gallery_ids( $post_id );
+
+	return ! empty( $gallery ) ? (int) reset( $gallery ) : 0;
+}
+
+/**
+ * Gets the accent color of a creation, based on its medium.
+ *
+ * There is no per-creation color override field (unlike Photo's
+ * soc_photo_color): sliceofcactus-astro only varies this per medium
+ * (dessin vs coloriage).
+ *
+ * @param int $post_id Optional creation ID. Defaults to the current post.
+ * @return string Hex color.
+ */
+function soc_get_creation_accent_color( int $post_id = 0 ): string {
+	$medium = soc_get_creation_medium( $post_id );
+
+	return $medium && 'coloriage' === $medium->slug ? '#7C3AED' : '#E0592F';
+}
+
+/**
+ * Prints the mobile browser theme-color meta tag for a single creation.
+ */
+function soc_creation_theme_color_meta(): void {
+	if ( ! is_singular( 'creation' ) ) {
+		return;
+	}
+
+	printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( soc_get_creation_accent_color() ) );
+}
+add_action( 'wp_head', 'soc_creation_theme_color_meta' );
+
+/**
+ * Adds the medium slug to the body classes of a single creation.
+ *
+ * @param string[] $classes Existing body classes.
+ * @return string[]
+ */
+function soc_creation_body_classes( array $classes ): array {
+	if ( ! is_singular( 'creation' ) ) {
+		return $classes;
+	}
+
+	$medium = soc_get_creation_medium();
+
+	if ( $medium ) {
+		$classes[] = 'soc-medium-' . sanitize_html_class( $medium->slug );
+	}
+
+	return array_values( array_unique( $classes ) );
+}
+add_filter( 'body_class', 'soc_creation_body_classes' );

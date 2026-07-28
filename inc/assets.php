@@ -27,6 +27,23 @@ function soc_enqueue_assets(): void {
 		$style_version
 	);
 
+	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_post_type_archive( 'photo' );
+	$magazine_hub_deps  = array( 'sliceofcactus' );
+
+	if ( $needs_magazine_hub ) {
+		$magazine_hub_style_path = get_theme_file_path( '/assets/styles/components/magazine-hub.css' );
+
+		if ( is_readable( $magazine_hub_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-magazine-hub',
+				get_theme_file_uri( '/assets/styles/components/magazine-hub.css' ),
+				array( 'sliceofcactus' ),
+				(string) filemtime( $magazine_hub_style_path )
+			);
+			$magazine_hub_deps[] = 'sliceofcactus-magazine-hub';
+		}
+	}
+
 	if ( is_singular( 'photo' ) ) {
 		$photo_style_path = get_theme_file_path( '/assets/styles/templates/single-photo.css' );
 
@@ -34,8 +51,21 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-single-photo',
 				get_theme_file_uri( '/assets/styles/templates/single-photo.css' ),
-				array( 'sliceofcactus' ),
+				$magazine_hub_deps,
 				(string) filemtime( $photo_style_path )
+			);
+		}
+	}
+
+	if ( is_singular( 'creation' ) ) {
+		$creation_style_path = get_theme_file_path( '/assets/styles/templates/single-creation.css' );
+
+		if ( is_readable( $creation_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-single-creation',
+				get_theme_file_uri( '/assets/styles/templates/single-creation.css' ),
+				$magazine_hub_deps,
+				(string) filemtime( $creation_style_path )
 			);
 		}
 	}
@@ -47,7 +77,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-archive-photo',
 				get_theme_file_uri( '/assets/styles/templates/archive-photo.css' ),
-				array( 'sliceofcactus' ),
+				$magazine_hub_deps,
 				(string) filemtime( $photo_archive_style_path )
 			);
 		}
@@ -78,6 +108,21 @@ function soc_enqueue_assets(): void {
 				true
 			);
 			wp_script_add_data( 'sliceofcactus-single-photo', 'strategy', 'defer' );
+		}
+	}
+
+	if ( is_singular( 'creation' ) ) {
+		$creation_script_path = get_theme_file_path( '/assets/scripts/single-creation.js' );
+
+		if ( is_readable( $creation_script_path ) ) {
+			wp_enqueue_script(
+				'sliceofcactus-single-creation',
+				get_theme_file_uri( '/assets/scripts/single-creation.js' ),
+				array(),
+				(string) filemtime( $creation_script_path ),
+				true
+			);
+			wp_script_add_data( 'sliceofcactus-single-creation', 'strategy', 'defer' );
 		}
 	}
 

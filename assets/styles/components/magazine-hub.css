@@ -1,0 +1,318 @@
+/**
+ * Magazine hub chrome shared by every "rubrique" page: Photo archive,
+ * Création singles (dessin/coloriage), and future Récits/Projet 52/
+ * Color Your Life pages.
+ *
+ * Ported from sliceofcactus-astro/public/css/style.css. Kept in one file
+ * so future rubrique pages reuse it instead of redefining it again.
+ */
+
+.rubrique-page {
+	max-width: var(--maxw);
+	margin: 60px auto 0;
+	padding: 0 0 clamp(3rem, 6vw, 6rem);
+}
+
+.mag-runhead {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	padding: 6.8rem var(--gutter) 1.1rem;
+	border-bottom: 1px solid rgb(255 255 255 / 28%);
+	color: rgb(255 255 255 / 75%);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .24em;
+	text-transform: uppercase;
+	gap: 1rem;
+}
+
+.mag-runhead b {
+	color: var(--paper);
+}
+
+.mag-masthead {
+	display: grid;
+	grid-template-columns: 1.5fr 1fr;
+	align-items: end;
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	padding: clamp(2.6rem, 5vw, 4.2rem) var(--gutter);
+	color: var(--paper);
+	gap: 2rem;
+}
+
+.mag-masthead__title {
+	color: var(--paper);
+	font-family: var(--font-head);
+	font-size: clamp(4rem, 17vw, 15rem);
+	letter-spacing: .01em;
+	line-height: .82;
+	text-transform: uppercase;
+}
+
+.mag-masthead__title em {
+	display: block;
+	margin-top: .4em;
+	color: var(--paper);
+	font-family: var(--font-display);
+	font-size: .22em;
+	font-style: italic;
+	line-height: 1;
+	letter-spacing: 0;
+	text-transform: none;
+	opacity: .88;
+}
+
+.mag-masthead__lead {
+	color: rgb(255 255 255 / 92%);
+	font-family: var(--font-display);
+	font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+	line-height: 1.5;
+}
+
+.drop {
+	float: left;
+	padding: .1em .12em 0 0;
+	color: var(--paper);
+	font-size: 5.5rem;
+	font-weight: 600;
+	line-height: .8;
+}
+
+.mag-masthead__lead .drop {
+	color: var(--paper);
+	font-size: 3.4rem;
+}
+
+.mag-sommaire {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	margin-top: 2rem;
+	padding: 1rem 0 .4rem;
+	border-top: 2px solid rgb(255 255 255 / 32%);
+}
+
+.mag-sommaire h2 {
+	font-family: var(--font-head);
+	font-size: clamp(1.6rem, 3.5vw, 3.6rem);
+	letter-spacing: .02em;
+	text-transform: uppercase;
+}
+
+.mag-sommaire span {
+	color: rgb(255 255 255 / 75%);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .2em;
+	text-transform: uppercase;
+}
+
+.view-switch {
+	display: flex;
+	justify-content: center;
+	margin: 1.8rem 0 .2rem;
+}
+
+.view-toggle {
+	display: inline-flex;
+	gap: .25rem;
+	padding: .3rem;
+	border: 1px solid rgb(20 18 16 / 14%);
+	border-radius: 40px;
+	background: rgb(20 18 16 / 6%);
+}
+
+.view-toggle a {
+	display: inline-flex;
+	align-items: center;
+	gap: .5rem;
+	padding: .55rem 1.15rem;
+	border-radius: 40px;
+	color: var(--ink);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background .3s, color .3s;
+}
+
+.view-toggle a.is-active {
+	background: var(--accent);
+	color: #fff;
+}
+
+.view-toggle a:not(.is-active):hover {
+	background: rgb(20 18 16 / 9%);
+}
+
+.back-link {
+	display: inline-flex;
+	align-items: center;
+	gap: .45rem;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+	text-decoration: none;
+	opacity: .8;
+	cursor: pointer;
+	transition: opacity .3s;
+}
+
+.back-link:hover {
+	opacity: 1;
+}
+
+.more-series {
+	max-width: var(--maxw);
+	margin: 4.5rem auto;
+	padding: 0 var(--gutter);
+}
+
+.more-series__grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.4rem;
+	padding: 1.4rem 0 0;
+}
+
+.more-series__card {
+	display: block;
+	color: var(--paper);
+	text-decoration: none;
+}
+
+.more-series__thumb {
+	position: relative;
+	overflow: hidden;
+	border-radius: 6px;
+	aspect-ratio: 3 / 2;
+	box-shadow: 0 14px 28px -16px rgb(20 18 16 / 60%);
+}
+
+.more-series__plate {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .6s var(--ease);
+}
+
+.more-series__card:hover .more-series__plate,
+.more-series__card:focus-visible .more-series__plate {
+	transform: scale(1.05);
+}
+
+.more-series__badge {
+	position: absolute;
+	right: .6rem;
+	bottom: .6rem;
+	width: 40px;
+	height: auto;
+	border: 1.5px solid rgb(255 255 255 / 85%);
+	border-radius: 2px;
+	box-shadow: 0 5px 14px -5px rgb(0 0 0 / 70%);
+	transition: transform .5s var(--ease);
+}
+
+.more-series__card:hover .more-series__badge {
+	transform: translateY(-2px) rotate(-2deg);
+}
+
+.more-series__cap {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	margin-top: .7rem;
+	gap: 1rem;
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+}
+
+.more-series__title {
+	font-weight: 700;
+}
+
+.more-series__n {
+	opacity: .65;
+}
+
+.serie-resonances {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	max-width: var(--maxw);
+	margin: 3rem auto 0;
+	padding: 0 var(--gutter) 3rem;
+	gap: .8rem;
+}
+
+.serie-resonances__label {
+	color: rgb(255 255 255 / 75%);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .18em;
+	text-transform: uppercase;
+}
+
+.serie-resonances__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem;
+	list-style: none;
+}
+
+.serie-resonances__list a {
+	display: inline-block;
+	padding: .4rem .9rem;
+	border: 1px solid rgb(255 255 255 / 35%);
+	border-radius: 40px;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background .3s, color .3s, border-color .3s;
+}
+
+.serie-resonances__list a:hover,
+.serie-resonances__list a:focus-visible {
+	border-color: var(--paper);
+	background: var(--paper);
+	color: var(--ink);
+}
+
+@media (max-width: 900px) {
+	.mag-masthead {
+		grid-template-columns: 1fr;
+	}
+
+	.more-series__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 600px) {
+	.more-series__grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.view-toggle a,
+	.back-link,
+	.more-series__plate,
+	.more-series__badge {
+		transition-duration: .01ms;
+	}
+}

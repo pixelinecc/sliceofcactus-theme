@@ -100,47 +100,111 @@
 })();
 
 /**
- * Footer interactions adapted from sliceofcactus-astro/src/components/Footer.astro
- * and the magnetic-link behavior in public/js/main.js.
+ * Footer interactions adapted from sliceofcactus-astro/src/components/Footer.astro.
+ *
+ * The magnetic-link behavior used to live here, scoped to .footer; it's now
+ * site-wide (see the "Site-wide interactions" block below), matching
+ * Astro's own document.querySelectorAll('[data-magnetic]').
  */
 
 (() => {
 	'use strict';
 
 	const footer = document.querySelector('.footer');
+	const topLink = footer?.querySelector('.footer__top-link');
 
-	if (!footer) {
+	if (!topLink) {
 		return;
 	}
 
 	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-	const topLink = footer.querySelector('.footer__top-link');
 
-	topLink?.addEventListener('click', (event) => {
+	topLink.addEventListener('click', (event) => {
 		event.preventDefault();
 		window.scrollTo({
 			top: 0,
 			behavior: reducedMotion.matches ? 'auto' : 'smooth',
 		});
 	});
+})();
 
+/**
+ * Site-wide interactions adapted from sliceofcactus-astro/public/js/main.js:
+ * custom cursor, magnetic buttons and scroll reveal. Preloader, typewriter,
+ * filmstrip and hero blob parallax are home-only and live in
+ * assets/scripts/front-page.js instead.
+ */
+
+(() => {
+	'use strict';
+
+	const cursor = document.getElementById('cursor');
 	const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	if (!finePointer || reducedMotion.matches) {
-		return;
+	if (finePointer && cursor) {
+		let mouseX = window.innerWidth / 2;
+		let mouseY = window.innerHeight / 2;
+		let cursorX = mouseX;
+		let cursorY = mouseY;
+
+		window.addEventListener('mousemove', (event) => {
+			mouseX = event.clientX;
+			mouseY = event.clientY;
+		});
+
+		const render = () => {
+			cursorX += (mouseX - cursorX) * 0.18;
+			cursorY += (mouseY - cursorY) * 0.18;
+			cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+			window.requestAnimationFrame(render);
+		};
+
+		render();
+
+		document.querySelectorAll('a, button, [data-magnetic]').forEach((element) => {
+			element.addEventListener('mouseenter', () => cursor.classList.add('is-hover'));
+			element.addEventListener('mouseleave', () => cursor.classList.remove('is-hover'));
+		});
 	}
 
-	footer.querySelectorAll('[data-magnetic]').forEach((element) => {
-		element.addEventListener('mousemove', (event) => {
-			const bounds = element.getBoundingClientRect();
-			const offsetX = event.clientX - bounds.left - bounds.width / 2;
-			const offsetY = event.clientY - bounds.top - bounds.height / 2;
+	if (finePointer && !reducedMotion) {
+		document.querySelectorAll('[data-magnetic]').forEach((element) => {
+			element.addEventListener('mousemove', (event) => {
+				const bounds = element.getBoundingClientRect();
+				const offsetX = event.clientX - bounds.left - bounds.width / 2;
+				const offsetY = event.clientY - bounds.top - bounds.height / 2;
 
-			element.style.transform = `translate(${offsetX * 0.28}px, ${offsetY * 0.28}px)`;
-		});
+				element.style.transform = `translate(${offsetX * 0.28}px, ${offsetY * 0.28}px)`;
+			});
 
-		element.addEventListener('mouseleave', () => {
-			element.style.transform = '';
+			element.addEventListener('mouseleave', () => {
+				element.style.transform = '';
+			});
 		});
-	});
+	}
+
+	const revealTargets = document.querySelectorAll('[data-reveal]');
+
+	if (revealTargets.length) {
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (!entry.isIntersecting) {
+					return;
+				}
+
+				entry.target.style.transitionDelay = `${entry.target.dataset.delay || 0}ms`;
+				entry.target.classList.add('is-in');
+				observer.unobserve(entry.target);
+			});
+		}, { threshold: 0.15 });
+
+		revealTargets.forEach((element, index) => {
+			if (!element.dataset.delay) {
+				element.dataset.delay = String((index % 4) * 90);
+			}
+
+			observer.observe(element);
+		});
+	}
 })();

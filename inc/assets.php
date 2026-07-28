@@ -44,6 +44,23 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
+	$needs_lightbox = is_singular( 'photo' ) || is_singular( 'creation' ) || is_front_page();
+	$lightbox_deps  = array( 'sliceofcactus' );
+
+	if ( $needs_lightbox ) {
+		$lightbox_style_path = get_theme_file_path( '/assets/styles/components/lightbox.css' );
+
+		if ( is_readable( $lightbox_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-lightbox',
+				get_theme_file_uri( '/assets/styles/components/lightbox.css' ),
+				array( 'sliceofcactus' ),
+				(string) filemtime( $lightbox_style_path )
+			);
+			$lightbox_deps[] = 'sliceofcactus-lightbox';
+		}
+	}
+
 	if ( is_singular( 'photo' ) ) {
 		$photo_style_path = get_theme_file_path( '/assets/styles/templates/single-photo.css' );
 
@@ -51,7 +68,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-single-photo',
 				get_theme_file_uri( '/assets/styles/templates/single-photo.css' ),
-				$magazine_hub_deps,
+				array_merge( $magazine_hub_deps, $lightbox_deps ),
 				(string) filemtime( $photo_style_path )
 			);
 		}
@@ -66,7 +83,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-single-creation',
 				get_theme_file_uri( '/assets/styles/templates/single-creation.css' ),
-				$magazine_hub_deps,
+				array_merge( $magazine_hub_deps, $lightbox_deps ),
 				(string) filemtime( $creation_style_path )
 			);
 			$creation_deps[] = 'sliceofcactus-single-creation';
@@ -170,6 +187,19 @@ function soc_enqueue_assets(): void {
 				get_theme_file_uri( '/assets/styles/templates/page-voyage-carte.css' ),
 				array_merge( $magazine_hub_deps, array( 'leaflet' ) ),
 				(string) filemtime( $carte_style_path )
+			);
+		}
+	}
+
+	if ( is_front_page() ) {
+		$front_page_style_path = get_theme_file_path( '/assets/styles/templates/front-page.css' );
+
+		if ( is_readable( $front_page_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-front-page',
+				get_theme_file_uri( '/assets/styles/templates/front-page.css' ),
+				$lightbox_deps,
+				(string) filemtime( $front_page_style_path )
 			);
 		}
 	}
@@ -282,6 +312,21 @@ function soc_enqueue_assets(): void {
 				true
 			);
 			wp_script_add_data( 'sliceofcactus-page-voyage-carte', 'strategy', 'defer' );
+		}
+	}
+
+	if ( is_front_page() ) {
+		$front_page_script_path = get_theme_file_path( '/assets/scripts/front-page.js' );
+
+		if ( is_readable( $front_page_script_path ) ) {
+			wp_enqueue_script(
+				'sliceofcactus-front-page',
+				get_theme_file_uri( '/assets/scripts/front-page.js' ),
+				array(),
+				(string) filemtime( $front_page_script_path ),
+				true
+			);
+			wp_script_add_data( 'sliceofcactus-front-page', 'strategy', 'defer' );
 		}
 	}
 }

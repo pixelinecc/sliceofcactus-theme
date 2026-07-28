@@ -1,0 +1,44 @@
+/**
+ * Custom cursor, adapted from sliceofcactus-astro/public/css/style.css.
+ *
+ * Site-wide: every Astro page renders its own <div class="cursor"> and
+ * sets `cursor: none` on <body>; here that lives once in header.php and
+ * this file, loaded unconditionally via main.css.
+ */
+
+body {
+	cursor: none;
+}
+
+.cursor {
+	position: fixed;
+	z-index: 10000;
+	top: 0;
+	left: 0;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: var(--ink);
+	box-shadow: 0 0 0 1.5px rgb(255 255 255 / 55%), 0 1px 5px rgb(0 0 0 / 40%);
+	transition: width .25s var(--ease), height .25s var(--ease), background .25s;
+	pointer-events: none;
+	transform: translate(-50%, -50%);
+}
+
+.cursor.is-hover {
+	width: 56px;
+	height: 56px;
+	background: #fff;
+	box-shadow: none;
+	mix-blend-mode: difference;
+}
+
+@media (hover: none) {
+	body {
+		cursor: auto;
+	}
+
+	.cursor {
+		display: none;
+	}
+}

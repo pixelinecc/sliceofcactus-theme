@@ -16,3 +16,26 @@
 .soc-skip-link:focus {
 	transform: translateY(0);
 }
+
+/**
+ * Scroll reveal, adapted from sliceofcactus-astro/public/css/style.css.
+ * Already used as [data-reveal] across several templates (archive Photo,
+ * Récits, Projet 52, Color Your Life, Carte des voyages…); the JS that
+ * toggles .is-in lives in assets/scripts/main.js.
+ */
+[data-reveal] {
+	opacity: 0;
+	transform: translateY(34px);
+	transition: opacity .9s var(--ease), transform .9s var(--ease);
+}
+
+[data-reveal].is-in {
+	transform: none;
+	opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-reveal] {
+		transition-duration: .01ms;
+	}
+}

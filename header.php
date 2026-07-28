@@ -26,6 +26,7 @@ if ( empty( $site_name_words ) ) {
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<div class="cursor" id="cursor"></div>
 <a class="soc-skip-link" href="#main-content">
 	<?php esc_html_e( 'Aller au contenu', 'sliceofcactus' ); ?>
 </a>

@@ -1,0 +1,106 @@
+/**
+ * Generic lightbox chrome, adapted from sliceofcactus-astro/public/css/style.css.
+ *
+ * Shared by single-photo (.sheet-grid), single-creation
+ * (.soc-creation-lightbox extends these rules), and the front page's
+ * filmstrip. Extracted from assets/styles/templates/single-photo.css,
+ * which used to be the only place these rules lived — single-creation.css
+ * only ever had its .soc-creation-lightbox overrides on top of them, but
+ * single-photo.css was never loaded on creation pages, so the base
+ * lightbox chrome was silently missing there.
+ */
+
+.lightbox {
+	position: fixed;
+	z-index: 10005;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+	gap: 1rem;
+	background: rgb(20 18 16 / 94%);
+	opacity: 0;
+	transition: opacity .4s;
+	visibility: hidden;
+}
+
+.lightbox.is-open {
+	opacity: 1;
+	visibility: visible;
+}
+
+.lightbox__fig {
+	max-width: min(90vw, 900px);
+	text-align: center;
+}
+
+.lightbox__fig img {
+	width: 100%;
+	max-height: 78vh;
+	border-radius: 4px;
+	box-shadow: 0 30px 60px -20px #000;
+	object-fit: contain;
+}
+
+.lightbox__fig figcaption {
+	margin-top: 1rem;
+	color: var(--flash);
+	font-family: var(--font-display);
+	letter-spacing: .1em;
+}
+
+.lightbox__close {
+	position: absolute;
+	top: 1.4rem;
+	right: 1.6rem;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--paper);
+	font-size: 2rem;
+	cursor: pointer;
+}
+
+.lightbox__nav {
+	flex-shrink: 0;
+	width: 52px;
+	height: 52px;
+	padding: 0;
+	border: 2px solid var(--paper);
+	border-radius: 50%;
+	background: none;
+	color: var(--paper);
+	font-size: 1.6rem;
+	cursor: pointer;
+	transition:
+		background .3s,
+		border-color .3s,
+		color .3s;
+}
+
+.lightbox__nav:hover,
+.lightbox__nav:focus-visible {
+	border-color: var(--flash);
+	background: var(--flash);
+	color: var(--ink);
+}
+
+@media (max-width: 560px) {
+	.lightbox {
+		padding: 4rem .75rem 2rem;
+		gap: .35rem;
+	}
+
+	.lightbox__nav {
+		width: 42px;
+		height: 42px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.lightbox,
+	.lightbox__nav {
+		transition-duration: .01ms;
+	}
+}

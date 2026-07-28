@@ -463,3 +463,246 @@ function soc_get_voyage_map_destinations(): array {
 
 	return array_values( $destinations );
 }
+
+/**
+ * Gets the most recent published photo series of a given narration.
+ *
+ * @param string $slug  Narration term slug.
+ * @param int    $limit Maximum number of series.
+ * @return WP_Post[]
+ */
+function soc_get_photos_by_narration( string $slug, int $limit ): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'photo',
+			'post_status'         => 'publish',
+			'posts_per_page'      => $limit,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'narration',
+					'field'    => 'slug',
+					'terms'    => array( $slug ),
+				),
+			),
+		)
+	);
+
+	return array_values(
+		array_filter(
+			$query->posts,
+			static fn( WP_Post $photo ): bool => soc_get_photo_cover_id( $photo->ID ) > 0
+		)
+	);
+}
+
+/**
+ * Gets the hero polaroids shown on the front page.
+ *
+ * sliceofcactus-astro's index.astro hardcodes 12 polaroids: a mix of
+ * picsum.photos placeholders and a couple of real static assets, each with
+ * a hand-placed position (left/top/rotation/z-index/width). There is no
+ * real data behind any of them. Here every slot keeps Astro's exact
+ * position but is filled with real, recently published content — Photo
+ * (voyage), Création (dessin/coloriage), Récit, Projet 52 and Color Your
+ * Life — and is simply dropped when that category has nothing published
+ * yet, rather than falling back to a placeholder image.
+ *
+ * @return array<int, array{style: string, href: string, caption: string, image_id: int}>
+ */
+function soc_get_home_hero_polaroids(): array {
+	$voyage    = soc_get_photos_by_narration( 'voyage', 3 );
+	$coloriage = soc_get_creation_archive_items( 'coloriage' );
+	$dessin    = soc_get_creation_archive_items( 'dessin' );
+	$color     = soc_get_color_your_life_series();
+	$p52       = soc_get_photos_by_narration( 'projet-52', 1 );
+	$recits    = soc_get_recit_archive_items();
+
+	$dessin_caption = static function ( WP_Post $creation ): string {
+		$technique = soc_get_creation_technique_label( $creation->ID );
+
+		return '' !== $technique
+			? sprintf(
+				/* translators: %s: dessin technique. */
+				__( 'Dessin · %s', 'sliceofcactus' ),
+				$technique
+			)
+			: __( 'Dessin', 'sliceofcactus' );
+	};
+
+	$coloriage_caption = static fn( WP_Post $creation ): string => sprintf(
+		/* translators: %s: coloriage title. */
+		__( 'Coloriage · %s', 'sliceofcactus' ),
+		get_the_title( $creation )
+	);
+
+	$photo_caption = static fn( WP_Post $photo ): string => sprintf(
+		/* translators: %s: photo series title. */
+		__( 'Photo · %s', 'sliceofcactus' ),
+		get_the_title( $photo )
+	);
+
+	$candidates = array(
+		array(
+			'style'   => 'left:3%;top:2%;--r:-12deg;--z:4;--w:1.02',
+			'href'    => get_post_type_archive_link( 'photo' ),
+			'caption' => __( 'Photo · Voyage', 'sliceofcactus' ),
+			'post'    => $voyage[0] ?? null,
+			'cover'   => static fn( WP_Post $p ) => soc_get_photo_cover_id( $p->ID ),
+		),
+		array(
+			'style'   => 'left:28%;top:0%;--r:7deg;--z:6;--w:.9',
+			'href'    => home_url( '/voyage-carte/' ),
+			'caption' => __( 'Explorer · la carte', 'sliceofcactus' ),
+			'post'    => $voyage[0] ?? null,
+			'cover'   => static fn( WP_Post $p ) => soc_get_photo_cover_id( $p->ID ),
+		),
+		array(
+			'style'      => 'left:50%;top:3%;--r:-6deg;--z:5;--w:1.05',
+			'href'       => get_post_type_archive_link( 'photo' ),
+			'post'       => $voyage[1] ?? null,
+			'cover'      => static fn( WP_Post $p ) => soc_get_photo_cover_id( $p->ID ),
+			'caption_cb' => $photo_caption,
+		),
+		array(
+			'style'   => 'left:72%;top:1%;--r:10deg;--z:7;--w:.88',
+			'href'    => home_url( '/color-your-life/' ),
+			'caption' => __( 'Par couleur', 'sliceofcactus' ),
+			'post'    => $color[0] ?? null,
+			'cover'   => static fn( WP_Post $p ) => soc_get_photo_cover_id( $p->ID ),
+		),
+		array(
+			'style'      => 'left:1%;top:34%;--r:6deg;--z:7;--w:.95',
+			'href'       => home_url( '/dessin/' ),
+			'post'       => $dessin[0] ?? null,
+			'cover'      => static fn( WP_Post $p ) => soc_get_creation_cover_id( $p->ID ),
+			'caption_cb' => $dessin_caption,
+		),
+		array(
+			'style'   => 'left:25%;top:32%;--r:-5deg;--z:11;--w:.82',
+			'href'    => get_post_type_archive_link( 'recit' ),
+			'caption' => __( 'Récits', 'sliceofcactus' ),
+			'post'    => $recits[0] ?? null,
+			'cover'   => static fn( WP_Post $p ) => absint( get_post_thumbnail_id( $p->ID ) ),
+		),
+		array(
+			'style'      => 'left:48%;top:34%;--r:-9deg;--z:8;--w:1.06',
+			'post'       => $coloriage[0] ?? null,
+			'cover'      => static fn( WP_Post $p ) => soc_get_creation_cover_id( $p->ID ),
+			'caption_cb' => $coloriage_caption,
+			'href_cb'    => static fn( WP_Post $p ) => get_permalink( $p ),
+		),
+		array(
+			'style'      => 'left:71%;top:33%;--r:7deg;--z:6;--w:.9',
+			'href'       => get_post_type_archive_link( 'photo' ),
+			'post'       => $voyage[2] ?? null,
+			'cover'      => static fn( WP_Post $p ) => soc_get_photo_cover_id( $p->ID ),
+			'caption_cb' => $photo_caption,
+		),
+		array(
+			'style'   => 'left:8%;top:64%;--r:5deg;--z:6;--w:.9',
+			'href'    => home_url( '/coloriage/' ),
+			'caption' => __( 'Coloriages', 'sliceofcactus' ),
+			'post'    => $coloriage[1] ?? null,
+			'cover'   => static fn( WP_Post $p ) => soc_get_creation_cover_id( $p->ID ),
+		),
+		array(
+			'style'      => 'left:31%;top:66%;--r:-7deg;--z:10;--w:1.0',
+			'href'       => home_url( '/dessin/' ),
+			'post'       => $dessin[1] ?? null,
+			'cover'      => static fn( WP_Post $p ) => soc_get_creation_cover_id( $p->ID ),
+			'caption_cb' => $dessin_caption,
+		),
+		array(
+			'style'   => 'left:54%;top:64%;--r:11deg;--z:8;--w:.88',
+			'href'    => home_url( '/projet-52/' ),
+			'caption' => __( 'Projet 52', 'sliceofcactus' ),
+			'post'    => $p52[0] ?? null,
+			'cover'   => static fn( WP_Post $p ) => soc_get_photo_cover_id( $p->ID ),
+		),
+		array(
+			'style'      => 'left:76%;top:66%;--r:-5deg;--z:7;--w:.92',
+			'post'       => $coloriage[2] ?? null,
+			'cover'      => static fn( WP_Post $p ) => soc_get_creation_cover_id( $p->ID ),
+			'caption_cb' => $coloriage_caption,
+			'href_cb'    => static fn( WP_Post $p ) => get_permalink( $p ),
+		),
+	);
+
+	$polaroids = array();
+
+	foreach ( $candidates as $candidate ) {
+		$post = $candidate['post'];
+
+		if ( ! $post instanceof WP_Post ) {
+			continue;
+		}
+
+		$image_id = $candidate['cover']( $post );
+
+		if ( ! $image_id ) {
+			continue;
+		}
+
+		$href = isset( $candidate['href_cb'] ) ? $candidate['href_cb']( $post ) : $candidate['href'];
+
+		if ( ! $href ) {
+			continue;
+		}
+
+		$polaroids[] = array(
+			'style'    => $candidate['style'],
+			'href'     => $href,
+			'caption'  => isset( $candidate['caption_cb'] ) ? $candidate['caption_cb']( $post ) : $candidate['caption'],
+			'image_id' => $image_id,
+		);
+	}
+
+	return $polaroids;
+}
+
+/**
+ * Gets the photo series featured in the front page's "36 poses" filmstrip.
+ *
+ * sliceofcactus-astro's index.astro fabricates a full 36-pose placeholder
+ * filmstrip (picsum.photos, hardcoded to a fake "Lisbonne, marée basse"
+ * series) unrelated to any real content. Here the filmstrip shows the most
+ * recently published real voyage series instead, falling back to the most
+ * recent photo series of any narration.
+ *
+ * @return WP_Post|null
+ */
+function soc_get_home_featured_photo(): ?WP_Post {
+	$voyage = soc_get_photos_by_narration( 'voyage', 1 );
+
+	if ( ! empty( $voyage ) ) {
+		return $voyage[0];
+	}
+
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'photo',
+			'post_status'         => 'publish',
+			'posts_per_page'      => 1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+		)
+	);
+
+	return ! empty( $query->posts ) ? $query->posts[0] : null;
+}
+
+/**
+ * Gets the récits shown in the front page's "Récits à la une" section.
+ *
+ * @param int $limit Maximum number of récits.
+ * @return WP_Post[]
+ */
+function soc_get_home_recits( int $limit = 3 ): array {
+	return array_slice( soc_get_recit_archive_items(), 0, $limit );
+}

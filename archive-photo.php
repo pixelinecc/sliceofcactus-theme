@@ -73,6 +73,7 @@ $total  = count( $photos );
 			$narration  = ! empty( $narrations ) ? $narrations[0] : null;
 			$location   = soc_get_photo_location( $photo->ID );
 			$poses      = soc_get_photo_pose_count( $photo->ID );
+			$cover_id   = soc_get_photo_cover_id( $photo->ID );
 			$no         = str_pad( (string) ( $index + 1 ), 2, '0', STR_PAD_LEFT );
 			$tot        = str_pad( (string) $total, 2, '0', STR_PAD_LEFT );
 
@@ -92,16 +93,19 @@ $total  = count( $photos );
 				data-narration-label="<?php echo esc_attr( $narration ? $narration->name : '' ); ?>"
 			>
 				<div class="serie-cell__media">
-					<?php
-					echo get_the_post_thumbnail(
-						$photo,
-						'large',
-						array(
-							'alt'     => get_the_title( $photo ),
-							'loading' => 'lazy',
-						)
-					);
-					?>
+					<?php if ( $cover_id ) : ?>
+						<?php
+						echo wp_get_attachment_image(
+							$cover_id,
+							'large',
+							false,
+							array(
+								'alt'     => get_the_title( $photo ),
+								'loading' => 'lazy',
+							)
+						);
+						?>
+					<?php endif; ?>
 				</div>
 				<div class="serie-cell__caption">
 					<span class="serie-cell__no"><?php echo esc_html( "{$no} / {$tot}" ); ?></span>

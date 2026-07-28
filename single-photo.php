@@ -2,8 +2,10 @@
 /**
  * Single photo controller.
  *
- * The visual template is selected from the assigned narration taxonomy:
- * template-parts/single/photo-{narration-slug}.php.
+ * One contact-sheet template serves every narration, matching
+ * sliceofcactus-astro/src/pages/photo/[id].astro: the visual distinction
+ * between narrations (voyage, lifestyle, …) is a body class and CSS accent,
+ * not a separate template file.
  *
  * @package SliceOfCactus
  */
@@ -19,8 +21,7 @@ get_header();
 	while ( have_posts() ) :
 		the_post();
 
-		$template_slug = soc_get_photo_narration_template_slug( get_the_ID() );
-		get_template_part( 'template-parts/single/photo', $template_slug );
+		get_template_part( 'template-parts/single/photo', 'contact-sheet' );
 	endwhile;
 	?>
 </main>

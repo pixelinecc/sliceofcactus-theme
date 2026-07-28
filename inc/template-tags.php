@@ -142,7 +142,7 @@ function soc_get_photo_year( int $post_id = 0 ): string {
 /**
  * Gets the number of poses (images) of a photo series.
  *
- * Counts images in the rendered content, matching the single-photo template,
+ * Counts the soc_photo_gallery images, matching the single-photo template,
  * falling back to 1 when only a featured image stands in for the gallery.
  *
  * @param int $post_id Optional photo ID. Defaults to the current post.
@@ -155,10 +155,34 @@ function soc_get_photo_pose_count( int $post_id = 0 ): int {
 		return 0;
 	}
 
-	$content = apply_filters( 'the_content', get_post_field( 'post_content', $post_id ) );
-	$count   = preg_match_all( '/<img\b/i', $content );
+	$gallery = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_gallery', $post_id ) : array();
+	$count   = count( array_filter( array_map( 'absint', $gallery ) ) );
 
 	return $count > 0 ? $count : ( has_post_thumbnail( $post_id ) ? 1 : 0 );
+}
+
+/**
+ * Gets the cover image of a photo series: the featured image if set,
+ * otherwise the first soc_photo_gallery image.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return int Attachment ID, or 0 when the series has no image at all.
+ */
+function soc_get_photo_cover_id( int $post_id = 0 ): int {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return 0;
+	}
+
+	if ( has_post_thumbnail( $post_id ) ) {
+		return (int) get_post_thumbnail_id( $post_id );
+	}
+
+	$gallery = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_gallery', $post_id ) : array();
+	$gallery = array_filter( array_map( 'absint', $gallery ) );
+
+	return ! empty( $gallery ) ? (int) reset( $gallery ) : 0;
 }
 
 /**
@@ -196,34 +220,6 @@ function soc_photo_theme_color_meta(): void {
 	printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( '' !== $color ? $color : '#12B26A' ) );
 }
 add_action( 'wp_head', 'soc_photo_theme_color_meta' );
-
-/**
- * Finds the first assigned narration that has a dedicated template part.
- *
- * A narration without a dedicated template uses the generic photo template.
- * This lets new narration terms exist in WordPress without causing an error
- * or pretending that their visual treatment has already been designed.
- *
- * @param int $post_id Optional photo ID. Defaults to the current post.
- * @return string Narration slug, or an empty string for the generic template.
- */
-function soc_get_photo_narration_template_slug( int $post_id = 0 ): string {
-	foreach ( soc_get_photo_narrations( $post_id ) as $term ) {
-		$slug = sanitize_title( $term->slug );
-
-		if ( '' === $slug ) {
-			continue;
-		}
-
-		$template = sprintf( 'template-parts/single/photo-%s.php', $slug );
-
-		if ( '' !== locate_template( $template, false, false ) ) {
-			return $slug;
-		}
-	}
-
-	return '';
-}
 
 /**
  * Adds narration slugs to the body classes of a single photo.

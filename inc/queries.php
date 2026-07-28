@@ -98,12 +98,6 @@ function soc_get_photo_archive_series(): array {
 			'posts_per_page'      => -1,
 			'ignore_sticky_posts' => true,
 			'no_found_rows'       => true,
-			'meta_query'          => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-				array(
-					'key'     => '_thumbnail_id',
-					'compare' => 'EXISTS',
-				),
-			),
 			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				array(
 					'taxonomy' => 'narration',
@@ -115,7 +109,12 @@ function soc_get_photo_archive_series(): array {
 		)
 	);
 
-	$photos = $query->posts;
+	$photos = array_values(
+		array_filter(
+			$query->posts,
+			static fn( WP_Post $photo ): bool => soc_get_photo_cover_id( $photo->ID ) > 0
+		)
+	);
 
 	usort(
 		$photos,

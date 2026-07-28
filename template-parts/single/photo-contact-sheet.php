@@ -2,9 +2,11 @@
 /**
  * Contact-sheet presentation migrated from Astro photo/[id].astro.
  *
- * @package SliceOfCactus
+ * The only template for the "photo" post type: every narration (voyage,
+ * lifestyle, …) shares this markup, matching [id].astro. The visual
+ * distinction is the soc-narration-{slug} body class and its CSS accent.
  *
- * @var array $args Template arguments.
+ * @package SliceOfCactus
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,27 +15,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $post_id          = get_the_ID();
 $narrations       = soc_get_photo_narrations( $post_id );
-$narration_slug   = isset( $args['narration_slug'] ) ? sanitize_title( $args['narration_slug'] ) : '';
-$active_narration = null;
-
-foreach ( $narrations as $narration ) {
-	if ( $narration_slug === $narration->slug ) {
-		$active_narration = $narration;
-		break;
-	}
-}
-
-if ( ! $active_narration && ! empty( $narrations ) ) {
-	$active_narration = $narrations[0];
-}
-
-$archive_url = get_post_type_archive_link( 'photo' );
-$intro       = soc_get_photo_intro( $post_id );
-$location    = soc_get_photo_location( $post_id );
-$photo_year  = soc_get_photo_year( $post_id );
-$content     = apply_filters( 'the_content', get_the_content() );
-$image_count = preg_match_all( '/<img\b/i', $content );
-$uses_cover  = 0 === $image_count && has_post_thumbnail( $post_id );
+$active_narration = ! empty( $narrations ) ? $narrations[0] : null;
+$archive_url      = get_post_type_archive_link( 'photo' );
+$intro            = soc_get_photo_intro( $post_id );
+$resonances       = get_the_terms( $post_id, 'resonance' );
+$resonances       = is_array( $resonances ) ? $resonances : array();
+$location         = soc_get_photo_location( $post_id );
+$photo_year       = soc_get_photo_year( $post_id );
+$gallery_ids      = function_exists( 'get_field' ) ? array_filter( array_map( 'absint', (array) get_field( 'soc_photo_gallery', $post_id ) ) ) : array();
+$image_count      = count( $gallery_ids );
+$uses_cover       = 0 === $image_count && has_post_thumbnail( $post_id );
 
 if ( $uses_cover ) {
 	$image_count = 1;
@@ -164,7 +155,11 @@ $lightbox_id = 'soc-photo-lightbox-' . $post_id;
 					<?php echo get_the_post_thumbnail( $post_id, 'large' ); ?>
 				</figure>
 			<?php else : ?>
-				<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Filtered Gutenberg content. ?>
+				<?php foreach ( $gallery_ids as $attachment_id ) : ?>
+					<figure class="wp-block-image">
+						<?php echo wp_get_attachment_image( $attachment_id, 'large', false, array( 'loading' => 'lazy' ) ); ?>
+					</figure>
+				<?php endforeach; ?>
 			<?php endif; ?>
 		</div>
 	</section>
@@ -209,6 +204,21 @@ $lightbox_id = 'soc-photo-lightbox-' . $post_id;
 					</a>
 				<?php endforeach; ?>
 			</div>
+		</section>
+	<?php endif; ?>
+
+	<?php if ( ! empty( $resonances ) ) : ?>
+		<section class="serie-resonances" aria-label="<?php esc_attr_e( 'Résonances', 'sliceofcactus' ); ?>">
+			<span class="serie-resonances__label"><?php esc_html_e( 'Résonances :', 'sliceofcactus' ); ?></span>
+			<ul class="serie-resonances__list">
+				<?php foreach ( $resonances as $resonance ) : ?>
+					<li>
+						<a href="<?php echo esc_url( get_term_link( $resonance ) ); ?>">
+							<?php echo esc_html( $resonance->name ); ?>
+						</a>
+					</li>
+				<?php endforeach; ?>
+			</ul>
 		</section>
 	<?php endif; ?>
 </article>

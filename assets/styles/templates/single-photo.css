@@ -318,6 +318,52 @@ body.single-photo.soc-narration-lifestyle {
 	padding: 0 var(--gutter);
 }
 
+.serie-resonances {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	max-width: var(--maxw);
+	margin: 3rem auto 0;
+	padding: 0 var(--gutter) 3rem;
+	gap: .8rem;
+}
+
+.serie-resonances__label {
+	color: rgb(255 255 255 / 75%);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .18em;
+	text-transform: uppercase;
+}
+
+.serie-resonances__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem;
+	list-style: none;
+}
+
+.serie-resonances__list a {
+	display: inline-block;
+	padding: .4rem .9rem;
+	border: 1px solid rgb(255 255 255 / 35%);
+	border-radius: 40px;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background .3s, color .3s, border-color .3s;
+}
+
+.serie-resonances__list a:hover,
+.serie-resonances__list a:focus-visible {
+	border-color: var(--paper);
+	background: var(--paper);
+	color: var(--ink);
+}
+
 .mag-sommaire {
 	display: flex;
 	align-items: baseline;

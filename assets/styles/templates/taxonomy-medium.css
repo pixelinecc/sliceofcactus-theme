@@ -1,0 +1,128 @@
+/**
+ * Medium taxonomy archive: book grid shared by the /dessin and /coloriage
+ * pages.
+ *
+ * Adapted from sliceofcactus-astro/src/pages/dessin/index.astro,
+ * coloriage/index.astro and sliceofcactus-astro/public/css/style.css. The
+ * shared magazine-hub chrome (runhead, masthead, view-toggle, sommaire)
+ * lives in assets/styles/components/magazine-hub.css; the per-medium accent
+ * variables live in assets/styles/templates/single-creation.css.
+ */
+
+.colo-intro {
+	max-width: 60ch;
+	margin: .4rem 0 1.6rem;
+	color: rgb(255 255 255 / 90%);
+	font-family: var(--font-display);
+	font-size: 1.25rem;
+	line-height: 1.4;
+}
+
+.book-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	align-items: start;
+	gap: 2rem;
+}
+
+.book-card {
+	display: block;
+	color: var(--paper);
+	text-decoration: none;
+	cursor: none;
+}
+
+.book-card__cover {
+	position: relative;
+	aspect-ratio: 4 / 5;
+	overflow: hidden;
+	border-radius: 8px;
+	background: #e7e0d4;
+	box-shadow: 0 20px 40px -22px rgb(20 18 16 / 70%);
+	transition: transform .5s var(--ease);
+}
+
+.book-card:hover .book-card__cover {
+	transform: translateY(-5px);
+}
+
+.book-card__plate {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .7s var(--ease);
+}
+
+.book-card:hover .book-card__plate {
+	transform: scale(1.04);
+}
+
+.book-card__jaq {
+	position: absolute;
+	right: .8rem;
+	bottom: .8rem;
+	width: 64px;
+	height: auto;
+	border: 2px solid rgb(255 255 255 / 92%);
+	border-radius: 3px;
+	box-shadow: 0 10px 22px -8px rgb(0 0 0 / 75%);
+	transition: transform .5s var(--ease);
+}
+
+.book-card:hover .book-card__jaq {
+	transform: translateY(-3px) rotate(-2.5deg);
+}
+
+.book-card__badge {
+	position: absolute;
+	top: .7rem;
+	left: .7rem;
+	padding: .3rem .55rem;
+	border-radius: 40px;
+	background: rgb(20 18 16 / 72%);
+	color: #fff;
+	font-family: var(--font-mono);
+	font-size: .6rem;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+.book-card__body {
+	margin-top: .9rem;
+}
+
+.book-card__ed {
+	color: rgb(255 255 255 / 68%);
+	font-family: var(--font-mono);
+	font-size: .66rem;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+.book-card__title {
+	margin: .25rem 0;
+	color: var(--paper);
+	font-family: var(--font-head);
+	font-size: 2.5rem;
+	line-height: .98;
+	text-transform: uppercase;
+}
+
+.book-card__meta {
+	color: rgb(255 255 255 / 85%);
+	font-family: var(--font-display);
+	font-size: .95rem;
+}
+
+@media (max-width: 900px) {
+	.book-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 560px) {
+	.book-grid {
+		grid-template-columns: 1fr;
+	}
+}

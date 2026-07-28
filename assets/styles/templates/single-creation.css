@@ -5,14 +5,19 @@
  * coloriage/[id].astro and sliceofcactus-astro/public/css/style.css. Shared
  * magazine-hub chrome (runhead, masthead, view-toggle, more-series,
  * resonances) lives in assets/styles/components/magazine-hub.css.
+ *
+ * The .soc-medium-* accent variables are shared with the /dessin and
+ * /coloriage archives (assets/styles/templates/taxonomy-medium.css),
+ * matching Astro's bodyClass="theme-dessin"/"theme-colo" applying on both
+ * the single and index pages.
  */
 
-body.single-creation.soc-medium-dessin {
+body.soc-medium-dessin {
 	--accent: #e0592f;
 	--accent-deep: #b23f1c;
 }
 
-body.single-creation.soc-medium-coloriage {
+body.soc-medium-coloriage {
 	--accent: #7c3aed;
 	--accent-deep: #5b27b0;
 }

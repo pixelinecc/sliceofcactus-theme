@@ -208,3 +208,55 @@ function soc_get_creation_suggestions( int $post_id = 0 ): array {
 		)
 	);
 }
+
+/**
+ * Gets the creations shown on the Dessin/Coloriage archive.
+ *
+ * Mirrors sliceofcactus-astro's dessin/index.astro and coloriage/index.astro:
+ * every creation of the given medium, most recent first. Coloriages are
+ * additionally required to have a cover image, matching Astro's
+ * `s.rubrique === 'coloriage' && s.couverture` filter — dessins have no such
+ * requirement.
+ *
+ * @param string $medium_slug Medium term slug: 'dessin' or 'coloriage'.
+ * @return WP_Post[]
+ */
+function soc_get_creation_archive_items( string $medium_slug ): array {
+	$term = get_term_by( 'slug', $medium_slug, 'medium' );
+
+	if ( ! $term instanceof WP_Term ) {
+		return array();
+	}
+
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'creation',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'medium',
+					'field'    => 'term_id',
+					'terms'    => array( $term->term_id ),
+				),
+			),
+		)
+	);
+
+	$items = $query->posts;
+
+	if ( 'coloriage' === $medium_slug ) {
+		$items = array_values(
+			array_filter(
+				$items,
+				static fn( WP_Post $item ): bool => soc_get_creation_cover_id( $item->ID ) > 0
+			)
+		);
+	}
+
+	return $items;
+}

@@ -35,7 +35,7 @@
         "assign_terms": "edit_posts"
     },
     "public": true,
-    "publicly_queryable": false,
+    "publicly_queryable": true,
     "hierarchical": false,
     "show_ui": true,
     "show_in_menu": true,
@@ -48,12 +48,12 @@
     "show_in_quick_edit": false,
     "show_admin_column": true,
     "rewrite": {
-        "permalink_rewrite": "no_permalink",
+        "permalink_rewrite": "custom_permalink",
         "slug": "",
         "with_front": false,
         "rewrite_hierarchical": false
     },
-    "query_var": "none",
+    "query_var": "post_type_key",
     "query_var_name": "",
     "default_term": {
         "default_term_enabled": false,
@@ -65,5 +65,5 @@
     "meta_box": "default",
     "meta_box_cb": "",
     "meta_box_sanitize_cb": "",
-    "modified": 1785240101
+    "modified": 1785254304
 }

@@ -364,11 +364,21 @@ function soc_get_creation_cover_id( int $post_id = 0 ): int {
 }
 
 /**
- * Gets the accent color of a creation, based on its medium.
+ * Gets the accent color for a medium slug (dessin/coloriage).
  *
  * There is no per-creation color override field (unlike Photo's
- * soc_photo_color): sliceofcactus-astro only varies this per medium
- * (dessin vs coloriage).
+ * soc_photo_color): sliceofcactus-astro only varies this per medium,
+ * on both single creations and the /dessin, /coloriage archives.
+ *
+ * @param string $medium_slug Medium term slug.
+ * @return string Hex color.
+ */
+function soc_get_creation_accent_color_for_medium( string $medium_slug ): string {
+	return 'coloriage' === $medium_slug ? '#7C3AED' : '#E0592F';
+}
+
+/**
+ * Gets the accent color of a creation, based on its medium.
  *
  * @param int $post_id Optional creation ID. Defaults to the current post.
  * @return string Hex color.
@@ -376,36 +386,59 @@ function soc_get_creation_cover_id( int $post_id = 0 ): int {
 function soc_get_creation_accent_color( int $post_id = 0 ): string {
 	$medium = soc_get_creation_medium( $post_id );
 
-	return $medium && 'coloriage' === $medium->slug ? '#7C3AED' : '#E0592F';
+	return soc_get_creation_accent_color_for_medium( $medium ? $medium->slug : '' );
 }
 
 /**
- * Prints the mobile browser theme-color meta tag for a single creation.
+ * Gets the medium slug of the current /dessin or /coloriage archive.
+ *
+ * Reads the queried medium term (native taxonomy archive), defaulting to
+ * 'dessin' as a defensive fallback.
+ *
+ * @return string 'dessin' or 'coloriage'.
+ */
+function soc_get_creation_archive_medium(): string {
+	$term = get_queried_object();
+
+	return ( $term instanceof WP_Term && 'coloriage' === $term->slug ) ? 'coloriage' : 'dessin';
+}
+
+/**
+ * Prints the mobile browser theme-color meta tag for a single creation
+ * or the /dessin, /coloriage archives.
  */
 function soc_creation_theme_color_meta(): void {
-	if ( ! is_singular( 'creation' ) ) {
+	if ( is_singular( 'creation' ) ) {
+		$color = soc_get_creation_accent_color();
+	} elseif ( is_tax( 'medium' ) ) {
+		$color = soc_get_creation_accent_color_for_medium( soc_get_creation_archive_medium() );
+	} else {
 		return;
 	}
 
-	printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( soc_get_creation_accent_color() ) );
+	printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( $color ) );
 }
 add_action( 'wp_head', 'soc_creation_theme_color_meta' );
 
 /**
- * Adds the medium slug to the body classes of a single creation.
+ * Adds the medium slug to the body classes of a single creation or the
+ * /dessin, /coloriage archives.
  *
  * @param string[] $classes Existing body classes.
  * @return string[]
  */
 function soc_creation_body_classes( array $classes ): array {
-	if ( ! is_singular( 'creation' ) ) {
+	if ( is_singular( 'creation' ) ) {
+		$medium = soc_get_creation_medium();
+		$slug   = $medium ? $medium->slug : '';
+	} elseif ( is_tax( 'medium' ) ) {
+		$slug = soc_get_creation_archive_medium();
+	} else {
 		return $classes;
 	}
 
-	$medium = soc_get_creation_medium();
-
-	if ( $medium ) {
-		$classes[] = 'soc-medium-' . sanitize_html_class( $medium->slug );
+	if ( '' !== $slug ) {
+		$classes[] = 'soc-medium-' . sanitize_html_class( $slug );
 	}
 
 	return array_values( array_unique( $classes ) );

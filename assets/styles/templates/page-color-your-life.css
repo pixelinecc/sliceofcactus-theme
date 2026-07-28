@@ -1,0 +1,189 @@
+/**
+ * Color Your Life: sticky color spectrum and series grid.
+ *
+ * Adapted from sliceofcactus-astro/src/pages/color-your-life.astro and
+ * sliceofcactus-astro/public/css/style.css. The shared magazine-hub chrome
+ * (runhead, masthead, view-toggle) lives in
+ * assets/styles/components/magazine-hub.css. Astro applies the same
+ * bodyClass="theme-voyage" here as on voyage series, so this page reuses
+ * that accent rather than defining its own.
+ */
+
+body.page-template-page-color-your-life-php {
+	--accent: #27513e;
+	--accent-deep: #193528;
+}
+
+.spectrum {
+	position: sticky;
+	z-index: 20;
+	top: 72px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem;
+	margin: 1.4rem 0 2rem;
+	padding: 1rem 0;
+	background: var(--paper);
+	backdrop-filter: blur(4px);
+}
+
+.spectrum button {
+	display: inline-flex;
+	align-items: center;
+	gap: .5rem;
+	padding: .45rem .9rem;
+	border: 1px solid rgb(20 18 16 / 18%);
+	border-radius: 40px;
+	background: transparent;
+	color: var(--ink);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background .3s, color .3s, border-color .3s;
+}
+
+.spectrum button i {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: var(--c, #999);
+	box-shadow: 0 0 0 2px rgb(255 255 255 / 60%) inset;
+}
+
+.spectrum button:hover {
+	border-color: var(--c, var(--ink));
+}
+
+.spectrum button.is-active {
+	border-color: var(--c, var(--ink));
+	background: var(--c, var(--ink));
+	color: #fff;
+}
+
+.spectrum button[data-color="all"].is-active {
+	background: var(--ink);
+	color: var(--paper);
+}
+
+.cyl-empty {
+	margin: 2rem 0 4rem;
+	color: var(--grey);
+	font-family: var(--font-display);
+	font-size: 1.1rem;
+}
+
+.cyl-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 1.2rem;
+	padding-bottom: 3rem;
+}
+
+.cyl-card {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	border-radius: 10px;
+	box-shadow: 0 16px 34px -20px rgb(20 18 16 / 60%);
+	color: var(--paper);
+	text-decoration: none;
+	transition: transform .5s var(--ease), opacity .4s, filter .4s;
+}
+
+.cyl-card.is-dim {
+	transform: scale(.97);
+	opacity: .12;
+	filter: grayscale(1);
+}
+
+.cyl-card__img {
+	position: relative;
+	aspect-ratio: 4 / 5;
+	overflow: hidden;
+}
+
+.cyl-card__img img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .7s var(--ease);
+}
+
+.cyl-card:hover img {
+	transform: scale(1.06);
+}
+
+.cyl-card__wash {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		180deg,
+		color-mix(in srgb, var(--c) 10%, transparent) 0%,
+		transparent 30%,
+		color-mix(in srgb, var(--c) 78%, transparent) 100%
+	);
+	transition: opacity .4s;
+	mix-blend-mode: multiply;
+	pointer-events: none;
+}
+
+.cyl-card:hover .cyl-card__wash {
+	opacity: .7;
+}
+
+.cyl-card__cap {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	gap: .15rem;
+	padding: 1.1rem 1.1rem 1rem;
+}
+
+.cyl-card__color {
+	display: flex;
+	align-items: center;
+	gap: .4rem;
+	color: #fff;
+	font-family: var(--font-mono);
+	font-size: .66rem;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+	opacity: .9;
+}
+
+.cyl-card__color i {
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: var(--c);
+	box-shadow: 0 0 0 2px rgb(255 255 255 / 70%);
+}
+
+.cyl-card__title {
+	color: #fff;
+	font-family: var(--font-head);
+	font-size: 1.8rem;
+	line-height: .95;
+	text-transform: uppercase;
+}
+
+.cyl-card__n {
+	color: #fff;
+	font-family: var(--font-mono);
+	font-size: .66rem;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+	opacity: .8;
+}
+
+@media (max-width: 600px) {
+	.spectrum {
+		top: 60px;
+	}
+}

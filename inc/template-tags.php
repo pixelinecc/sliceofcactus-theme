@@ -205,6 +205,63 @@ function soc_get_photo_color( int $post_id = 0 ): string {
 }
 
 /**
+ * Gets the dominant color name of a photo series, e.g. "Bleu océan".
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_photo_color_name( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return '';
+	}
+
+	$color = function_exists( 'get_field' ) ? get_field( 'soc_photo_color', $post_id ) : null;
+	$name  = is_array( $color ) && ! empty( $color['name'] ) ? $color['name'] : '';
+
+	return is_string( $name ) ? trim( $name ) : '';
+}
+
+/**
+ * Converts a hex color to its hue (0-360), for sorting on a color wheel.
+ *
+ * Ports the inline hue() helper of sliceofcactus-astro's
+ * color-your-life.astro.
+ *
+ * @param string $hex Hex color, with or without a leading #.
+ * @return float
+ */
+function soc_hex_to_hue( string $hex ): float {
+	$hex = ltrim( $hex, '#' );
+
+	if ( 6 !== strlen( $hex ) ) {
+		return 0.0;
+	}
+
+	$r   = hexdec( substr( $hex, 0, 2 ) ) / 255;
+	$g   = hexdec( substr( $hex, 2, 2 ) ) / 255;
+	$b   = hexdec( substr( $hex, 4, 2 ) ) / 255;
+	$max = max( $r, $g, $b );
+	$min = min( $r, $g, $b );
+	$d   = $max - $min;
+
+	if ( 0.0 === $d ) {
+		return 0.0;
+	}
+
+	if ( $max === $r ) {
+		$h = fmod( ( $g - $b ) / $d, 6 );
+	} elseif ( $max === $g ) {
+		$h = ( $b - $r ) / $d + 2;
+	} else {
+		$h = ( $r - $g ) / $d + 4;
+	}
+
+	return fmod( ( $h * 60 ) + 360, 360 );
+}
+
+/**
  * Prints the mobile browser theme-color meta tag for a single photo.
  *
  * Mirrors the per-series themeColor prop of sliceofcactus-astro/src/layouts/Base.astro,

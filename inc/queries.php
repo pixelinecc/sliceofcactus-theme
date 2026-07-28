@@ -365,3 +365,30 @@ function soc_get_projet52_years(): array {
 
 	return $years;
 }
+
+/**
+ * Gets the photo series shown on the Color Your Life page, sorted by hue.
+ *
+ * Mirrors sliceofcactus-astro's color-your-life.astro: the same series as
+ * the Photo archive (soc_get_photo_archive_series — same three rubriques,
+ * cover image required), further limited to series with a dominant color,
+ * ordered around the color wheel instead of by date.
+ *
+ * @return WP_Post[]
+ */
+function soc_get_color_your_life_series(): array {
+	$series = array_values(
+		array_filter(
+			soc_get_photo_archive_series(),
+			static fn( WP_Post $photo ): bool => '' !== soc_get_photo_color( $photo->ID )
+		)
+	);
+
+	usort(
+		$series,
+		static fn( WP_Post $a, WP_Post $b ): int
+			=> soc_hex_to_hue( soc_get_photo_color( $a->ID ) ) <=> soc_hex_to_hue( soc_get_photo_color( $b->ID ) )
+	);
+
+	return $series;
+}

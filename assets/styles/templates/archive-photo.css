@@ -1,0 +1,303 @@
+/**
+ * Photo archive: magazine hub, rubrique chips and series grid.
+ *
+ * Adapted from sliceofcactus-astro/src/pages/photo/index.astro
+ * and sliceofcactus-astro/public/css/style.css.
+ *
+ * The custom cursor and per-narration accent overrides are intentionally
+ * left out: the archive uses the default (cactus green) universe, and the
+ * cursor is a separate, not-yet-migrated transversal feature.
+ */
+
+.rubrique-page {
+	max-width: var(--maxw);
+	margin: 60px auto 0;
+	padding: 0 0 clamp(3rem, 6vw, 6rem);
+}
+
+.mag-runhead {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	padding: 6.8rem var(--gutter) 1.1rem;
+	border-bottom: 1px solid rgb(255 255 255 / 28%);
+	color: rgb(255 255 255 / 75%);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .24em;
+	text-transform: uppercase;
+	gap: 1rem;
+}
+
+.mag-masthead {
+	display: grid;
+	grid-template-columns: 1.5fr 1fr;
+	align-items: end;
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	padding: clamp(2.6rem, 5vw, 4.2rem) var(--gutter);
+	color: var(--paper);
+	gap: 2rem;
+}
+
+.mag-masthead__title {
+	color: var(--paper);
+	font-family: var(--font-head);
+	font-size: clamp(4rem, 17vw, 15rem);
+	letter-spacing: .01em;
+	line-height: .82;
+	text-transform: uppercase;
+}
+
+.mag-masthead__title em {
+	display: block;
+	margin-top: .4em;
+	color: var(--paper);
+	font-family: var(--font-display);
+	font-size: .22em;
+	font-style: italic;
+	line-height: 1;
+	letter-spacing: 0;
+	text-transform: none;
+	opacity: .88;
+}
+
+.mag-masthead__lead {
+	color: rgb(255 255 255 / 92%);
+	font-family: var(--font-display);
+	font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+	line-height: 1.5;
+}
+
+.drop {
+	float: left;
+	padding: .1em .12em 0 0;
+	color: var(--paper);
+	font-size: 5.5rem;
+	font-weight: 600;
+	line-height: .8;
+}
+
+.mag-masthead__lead .drop {
+	color: var(--paper);
+	font-size: 3.4rem;
+}
+
+.mag-sommaire {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	margin-top: 2rem;
+	padding: 1rem 0 .4rem;
+	border-top: 2px solid rgb(255 255 255 / 32%);
+}
+
+.mag-sommaire h2 {
+	font-family: var(--font-head);
+	font-size: clamp(1.6rem, 3.5vw, 3.6rem);
+	letter-spacing: .02em;
+	text-transform: uppercase;
+}
+
+.mag-sommaire span {
+	color: rgb(255 255 255 / 75%);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .2em;
+	text-transform: uppercase;
+}
+
+.view-switch {
+	display: flex;
+	justify-content: center;
+	margin: 1.8rem 0 .2rem;
+}
+
+.view-toggle {
+	display: inline-flex;
+	gap: .25rem;
+	padding: .3rem;
+	border: 1px solid rgb(20 18 16 / 14%);
+	border-radius: 40px;
+	background: rgb(20 18 16 / 6%);
+}
+
+.view-toggle a {
+	display: inline-flex;
+	align-items: center;
+	gap: .5rem;
+	padding: .55rem 1.15rem;
+	border-radius: 40px;
+	color: var(--ink);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background .3s, color .3s;
+}
+
+.view-toggle a.is-active {
+	background: var(--accent);
+	color: #fff;
+}
+
+.view-toggle a:not(.is-active):hover {
+	background: rgb(20 18 16 / 9%);
+}
+
+.rubchips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .6rem;
+	margin: 1.4rem 0 .2rem;
+}
+
+.rubchips button {
+	padding: .5rem .95rem;
+	border: 1px solid rgb(255 255 255 / 35%);
+	border-radius: 40px;
+	background: transparent;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background .3s, color .3s, border-color .3s;
+}
+
+.rubchips button:hover,
+.rubchips button.is-active {
+	border-color: var(--paper);
+	background: var(--paper);
+	color: var(--ink);
+}
+
+.serie-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	width: 100vw;
+	margin-top: 2rem;
+	margin-left: calc(50% - 50vw);
+	border-top: 1px solid rgb(20 18 16 / 16%);
+	border-bottom: 1px solid rgb(20 18 16 / 16%);
+	background: rgb(20 18 16 / 16%);
+	gap: 1px;
+}
+
+.serie-cell {
+	position: relative;
+	display: block;
+	background: var(--paper);
+	color: var(--ink);
+	text-decoration: none;
+}
+
+.serie-cell__media {
+	overflow: hidden;
+	aspect-ratio: 16 / 10;
+}
+
+.serie-cell__media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	filter: grayscale(1) contrast(1.03);
+	transition: transform 1.2s var(--ease), filter .7s var(--ease);
+}
+
+.serie-cell:hover .serie-cell__media img {
+	filter: grayscale(0) contrast(1.05);
+	transform: scale(1.04);
+}
+
+.serie-cell__caption {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	padding: 1.2rem clamp(1.2rem, 3vw, 2.4rem) 1.8rem;
+	gap: 1.2rem;
+}
+
+.serie-cell__no {
+	padding-top: .5rem;
+	color: var(--coral);
+	font-family: var(--font-mono);
+	font-size: .74rem;
+	letter-spacing: .14em;
+	white-space: nowrap;
+}
+
+.serie-cell__place {
+	display: block;
+	margin-bottom: .45rem;
+	color: var(--grey);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .18em;
+	text-transform: uppercase;
+}
+
+.serie-cell__title {
+	font-family: var(--font-head);
+	font-size: clamp(1.9rem, 3.2vw, 3rem);
+	letter-spacing: .01em;
+	line-height: .9;
+	text-transform: uppercase;
+}
+
+.serie-cell__title::after {
+	color: var(--coral);
+	content: " →";
+	opacity: 0;
+	transition: opacity .35s;
+}
+
+.serie-cell:hover .serie-cell__title::after {
+	opacity: 1;
+}
+
+.serie-cell__count {
+	padding-top: .5rem;
+	color: var(--grey);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .1em;
+	white-space: nowrap;
+}
+
+.serie-cell__count b {
+	color: var(--ink);
+}
+
+@media (max-width: 1024px) {
+	.serie-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 900px) {
+	.mag-masthead {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 620px) {
+	.serie-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.serie-cell__media img,
+	.serie-cell__title::after,
+	.view-toggle a,
+	.rubchips button {
+		transition-duration: .01ms;
+	}
+}

@@ -140,6 +140,28 @@ function soc_get_photo_year( int $post_id = 0 ): string {
 }
 
 /**
+ * Gets the number of poses (images) of a photo series.
+ *
+ * Counts images in the rendered content, matching the single-photo template,
+ * falling back to 1 when only a featured image stands in for the gallery.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return int
+ */
+function soc_get_photo_pose_count( int $post_id = 0 ): int {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return 0;
+	}
+
+	$content = apply_filters( 'the_content', get_post_field( 'post_content', $post_id ) );
+	$count   = preg_match_all( '/<img\b/i', $content );
+
+	return $count > 0 ? $count : ( has_post_thumbnail( $post_id ) ? 1 : 0 );
+}
+
+/**
  * Gets the dominant color of a photo series.
  *
  * @param int $post_id Optional photo ID. Defaults to the current post.

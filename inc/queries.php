@@ -80,3 +80,56 @@ function soc_get_photo_suggestions( int $post_id = 0, int $limit = 6 ): array {
 		)
 	);
 }
+
+/**
+ * Gets the photo series shown on the Photo archive.
+ *
+ * Mirrors the RUBRIQUES filter of sliceofcactus-astro/src/pages/photo/index.astro:
+ * every narration except the two standalone collections (Projet 52, Color Your Life),
+ * limited to series with a cover image, most recent project date first.
+ *
+ * @return WP_Post[]
+ */
+function soc_get_photo_archive_series(): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'photo',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'meta_query'          => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				array(
+					'key'     => '_thumbnail_id',
+					'compare' => 'EXISTS',
+				),
+			),
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'narration',
+					'field'    => 'slug',
+					'terms'    => array( 'projet-52', 'color-your-life' ),
+					'operator' => 'NOT IN',
+				),
+			),
+		)
+	);
+
+	$photos = $query->posts;
+
+	usort(
+		$photos,
+		static function ( WP_Post $a, WP_Post $b ): int {
+			$date_a = function_exists( 'get_field' )
+				? get_field( 'soc_photo_date', $a->ID )
+				: get_post_meta( $a->ID, 'soc_photo_date', true );
+			$date_b = function_exists( 'get_field' )
+				? get_field( 'soc_photo_date', $b->ID )
+				: get_post_meta( $b->ID, 'soc_photo_date', true );
+
+			return strcmp( (string) $date_b, (string) $date_a );
+		}
+	);
+
+	return $photos;
+}

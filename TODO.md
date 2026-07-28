@@ -26,4 +26,4 @@
 - Projet 52
 - Color Your Life
 - Carte des voyages
-- Résonances1
+- Résonances

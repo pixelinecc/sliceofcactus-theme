@@ -39,3 +39,14 @@
 		transition-duration: .01ms;
 	}
 }
+
+/**
+ * Shared "nothing here yet" note, matching the same rule already
+ * duplicated per page as .p52-empty and .cyl-empty.
+ */
+.soc-empty-note {
+	margin: 2rem 0 4rem;
+	color: var(--grey);
+	font-family: var(--font-display);
+	font-size: 1.1rem;
+}

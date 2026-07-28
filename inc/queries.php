@@ -706,3 +706,37 @@ function soc_get_home_featured_photo(): ?WP_Post {
 function soc_get_home_recits( int $limit = 3 ): array {
 	return array_slice( soc_get_recit_archive_items(), 0, $limit );
 }
+
+/**
+ * Gets the published posts of a given type carrying a résonance term.
+ *
+ * Résonances are the one functional evolution over sliceofcactus-astro
+ * (see CLAUDE.md): they connect Photo, Création and Récit, so the
+ * résonance archive queries all three through this single helper.
+ *
+ * @param WP_Term $term      Résonance term.
+ * @param string  $post_type 'photo', 'creation' or 'recit'.
+ * @return WP_Post[]
+ */
+function soc_get_resonance_items( WP_Term $term, string $post_type ): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => $post_type,
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'resonance',
+					'field'    => 'term_id',
+					'terms'    => array( $term->term_id ),
+				),
+			),
+		)
+	);
+
+	return $query->posts;
+}

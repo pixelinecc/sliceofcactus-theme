@@ -7,7 +7,8 @@
     "object_type": [
         "recit",
         "collection",
-        "creation"
+        "creation",
+        "photo"
     ],
     "advanced_configuration": true,
     "import_source": "",
@@ -39,7 +40,7 @@
         "assign_terms": "edit_posts"
     },
     "public": true,
-    "publicly_queryable": false,
+    "publicly_queryable": true,
     "hierarchical": false,
     "show_ui": true,
     "show_in_menu": true,
@@ -52,12 +53,12 @@
     "show_in_quick_edit": false,
     "show_admin_column": false,
     "rewrite": {
-        "permalink_rewrite": "no_permalink",
-        "slug": "",
+        "permalink_rewrite": "custom_permalink",
+        "slug": "resonances",
         "with_front": false,
         "rewrite_hierarchical": false
     },
-    "query_var": "none",
+    "query_var": "post_type_key",
     "query_var_name": "",
     "default_term": {
         "default_term_enabled": false,
@@ -69,5 +70,5 @@
     "meta_box": "disabled",
     "meta_box_cb": "",
     "meta_box_sanitize_cb": "",
-    "modified": 1785247236
+    "modified": 1785340800
 }

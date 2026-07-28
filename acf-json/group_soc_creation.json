@@ -257,6 +257,84 @@
             ]
         },
         {
+            "key": "field_soc_creation_book",
+            "label": "Informations du livre",
+            "name": "soc_creation_book",
+            "type": "group",
+            "instructions": "Métadonnées du livre de coloriage ou de dessin.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_soc_creation_book_title",
+                    "label": "Titre du livre",
+                    "name": "title",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": { "width": "", "class": "", "id": "" },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "Mon livre de coloriage",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_soc_creation_book_author",
+                    "label": "Auteur",
+                    "name": "author",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": { "width": "50", "class": "", "id": "" },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_soc_creation_book_publisher",
+                    "label": "Éditeur",
+                    "name": "publisher",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": { "width": "50", "class": "", "id": "" },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_soc_creation_book_cover",
+                    "label": "Jaquette",
+                    "name": "cover",
+                    "type": "image",
+                    "instructions": "Image de couverture du livre.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": { "width": "", "class": "", "id": "" },
+                    "return_format": "id",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "jpg,jpeg,png,webp,avif",
+                    "preview_size": "thumbnail"
+                }
+            ]
+        },
+        {
             "key": "field_soc_creation_tab_relations",
             "label": "Relations",
             "name": "",
@@ -357,5 +435,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1785247236
+    "modified": 1738091600
 }

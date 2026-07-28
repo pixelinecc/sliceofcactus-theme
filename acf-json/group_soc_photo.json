@@ -1,0 +1,312 @@
+{
+    "key": "group_soc_photo",
+    "title": "Photo — Données éditoriales",
+    "fields": [
+        {
+            "key": "field_soc_photo_intro",
+            "label": "Introduction",
+            "name": "soc_photo_intro",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Introduction courte, 300 caractères recommandés.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": 300,
+            "rows": 4,
+            "new_lines": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_soc_photo_resonances",
+            "label": "Résonances",
+            "name": "soc_photo_resonances",
+            "aria-label": "",
+            "type": "taxonomy",
+            "instructions": "Trois résonances au maximum sont recommandées.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "resonance",
+            "add_term": 0,
+            "save_terms": 1,
+            "load_terms": 1,
+            "return_format": "id",
+            "field_type": "multi_select",
+            "allow_null": 1,
+            "multiple": 1,
+            "bidirectional_target": []
+        },
+        {
+            "key": "field_soc_photo_next",
+            "label": "photo suivante",
+            "name": "soc_photo_next",
+            "aria-label": "",
+            "type": "relationship",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "photo"
+            ],
+            "post_status": [
+                "publish",
+                "draft",
+                "pending",
+                "private"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": 1,
+            "elements": [
+                "featured_image"
+            ],
+            "bidirectional": 0,
+            "bidirectional_target": []
+        },
+        {
+            "key": "field_soc_photo_gallery",
+            "label": "Galerie",
+            "name": "soc_photo_gallery",
+            "aria-label": "",
+            "type": "gallery",
+            "instructions": "Images de la série photographique, ordonnées.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "id",
+            "library": "all",
+            "min": "",
+            "max": "",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "jpg,jpeg,png,webp,avif",
+            "insert": "append",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_soc_photo_location",
+            "label": "Lieu",
+            "name": "soc_photo_location",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Lieu géographique de la série photographique.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_soc_photo_location_name",
+                    "label": "Nom du lieu",
+                    "name": "name",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "Paris",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_soc_photo_location_country",
+                    "label": "Pays",
+                    "name": "country",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "France",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_soc_photo_location_latitude",
+                    "label": "Latitude",
+                    "name": "latitude",
+                    "aria-label": "",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "min": "",
+                    "max": "",
+                    "step": "any",
+                    "placeholder": "48.8566",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_soc_photo_location_longitude",
+                    "label": "Longitude",
+                    "name": "longitude",
+                    "aria-label": "",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "min": "",
+                    "max": "",
+                    "step": "any",
+                    "placeholder": "2.3522",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
+            "key": "field_soc_photo_date",
+            "label": "Date du projet",
+            "name": "soc_photo_date",
+            "aria-label": "",
+            "type": "date_picker",
+            "instructions": "Mois et année du projet photographique.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "F Y",
+            "return_format": "Y-m",
+            "first_day": 1
+        },
+        {
+            "key": "field_soc_photo_color",
+            "label": "Couleur dominante",
+            "name": "soc_photo_color",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Couleur principale de la série, utilisée pour le filtrage.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_soc_photo_color_name",
+                    "label": "Nom de la couleur",
+                    "name": "name",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "Bleu océan",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_soc_photo_color_hex",
+                    "label": "Valeur hexadécimale",
+                    "name": "hex",
+                    "aria-label": "",
+                    "type": "color_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "#12B26A",
+                    "enable_opacity": 0,
+                    "return_format": "string"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "photo"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1738091600
+}

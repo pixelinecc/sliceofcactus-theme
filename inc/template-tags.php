@@ -47,3 +47,103 @@ function soc_the_creation_type( int $post_id = 0 ): void {
 		echo esc_html( $label );
 	}
 }
+
+/**
+ * Gets the narrations assigned to a photo.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return WP_Term[]
+ */
+function soc_get_photo_narrations( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$terms = wp_get_post_terms(
+		$post_id,
+		'narration',
+		array(
+			'orderby' => 'term_id',
+			'order'   => 'ASC',
+		)
+	);
+
+	if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+		return array();
+	}
+
+	return $terms;
+}
+
+/**
+ * Gets the short introduction of a photo.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_photo_intro( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return '';
+	}
+
+	$intro = function_exists( 'get_field' )
+		? get_field( 'soc_photo_intro', $post_id )
+		: get_post_meta( $post_id, 'soc_photo_intro', true );
+
+	return is_string( $intro ) ? trim( $intro ) : '';
+}
+
+/**
+ * Finds the first assigned narration that has a dedicated template part.
+ *
+ * A narration without a dedicated template uses the generic photo template.
+ * This lets new narration terms exist in WordPress without causing an error
+ * or pretending that their visual treatment has already been designed.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return string Narration slug, or an empty string for the generic template.
+ */
+function soc_get_photo_narration_template_slug( int $post_id = 0 ): string {
+	foreach ( soc_get_photo_narrations( $post_id ) as $term ) {
+		$slug = sanitize_title( $term->slug );
+
+		if ( '' === $slug ) {
+			continue;
+		}
+
+		$template = sprintf( 'template-parts/single/photo-%s.php', $slug );
+
+		if ( '' !== locate_template( $template, false, false ) ) {
+			return $slug;
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Adds narration slugs to the body classes of a single photo.
+ *
+ * @param string[] $classes Existing body classes.
+ * @return string[]
+ */
+function soc_photo_body_classes( array $classes ): array {
+	if ( ! is_singular( 'photo' ) ) {
+		return $classes;
+	}
+
+	foreach ( soc_get_photo_narrations() as $term ) {
+		$term_class = sanitize_html_class( $term->slug );
+
+		if ( '' !== $term_class ) {
+			$classes[] = 'soc-narration-' . $term_class;
+		}
+	}
+
+	return array_values( array_unique( $classes ) );
+}
+add_filter( 'body_class', 'soc_photo_body_classes' );

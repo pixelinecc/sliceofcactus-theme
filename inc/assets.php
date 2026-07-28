@@ -27,19 +27,45 @@ function soc_enqueue_assets(): void {
 		$style_version
 	);
 
-	$script_path = get_theme_file_path( '/assets/scripts/main.js' );
+	if ( is_singular( 'photo' ) ) {
+		$photo_style_path = get_theme_file_path( '/assets/styles/templates/single-photo.css' );
 
-	if ( ! is_readable( $script_path ) ) {
-		return;
+		if ( is_readable( $photo_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-single-photo',
+				get_theme_file_uri( '/assets/styles/templates/single-photo.css' ),
+				array( 'sliceofcactus' ),
+				(string) filemtime( $photo_style_path )
+			);
+		}
 	}
 
-	wp_enqueue_script(
-		'sliceofcactus-interactions',
-		get_theme_file_uri( '/assets/scripts/main.js' ),
-		array(),
-		(string) filemtime( $script_path ),
-		true
-	);
-	wp_script_add_data( 'sliceofcactus-interactions', 'strategy', 'defer' );
+	$script_path = get_theme_file_path( '/assets/scripts/main.js' );
+
+	if ( is_readable( $script_path ) ) {
+		wp_enqueue_script(
+			'sliceofcactus-interactions',
+			get_theme_file_uri( '/assets/scripts/main.js' ),
+			array(),
+			(string) filemtime( $script_path ),
+			true
+		);
+		wp_script_add_data( 'sliceofcactus-interactions', 'strategy', 'defer' );
+	}
+
+	if ( is_singular( 'photo' ) ) {
+		$photo_script_path = get_theme_file_path( '/assets/scripts/single-photo.js' );
+
+		if ( is_readable( $photo_script_path ) ) {
+			wp_enqueue_script(
+				'sliceofcactus-single-photo',
+				get_theme_file_uri( '/assets/scripts/single-photo.js' ),
+				array(),
+				(string) filemtime( $photo_script_path ),
+				true
+			);
+			wp_script_add_data( 'sliceofcactus-single-photo', 'strategy', 'defer' );
+		}
+	}
 }
 add_action( 'wp_enqueue_scripts', 'soc_enqueue_assets' );

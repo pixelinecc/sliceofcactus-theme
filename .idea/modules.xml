@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../slice-of-cactus-foundations/.idea/slice-of-cactus-foundations.iml" filepath="$PROJECT_DIR$/../slice-of-cactus-foundations/.idea/slice-of-cactus-foundations.iml" />
       <module fileurl="file://$PROJECT_DIR$/../sliceofcactus-astro/.idea/sliceofcactus-astro.iml" filepath="$PROJECT_DIR$/../sliceofcactus-astro/.idea/sliceofcactus-astro.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/sliceofcactus-theme.iml" filepath="$PROJECT_DIR$/.idea/sliceofcactus-theme.iml" />
     </modules>

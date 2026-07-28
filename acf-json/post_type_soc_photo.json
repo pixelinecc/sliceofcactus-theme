@@ -1,5 +1,5 @@
 {
-    "key": "post_type_soc_collection",
+    "key": "post_type_soc_photo",
     "title": "Photos",
     "menu_order": 0,
     "active": true,
@@ -90,6 +90,6 @@
     "can_export": true,
     "delete_with_user": false,
     "register_meta_box_cb": "",
-    "enter_title_here": "Titre de la collection",
-    "modified": 1785253950
+    "enter_title_here": "Titre de la photo",
+    "modified": 1785254132
 }

@@ -392,3 +392,74 @@ function soc_get_color_your_life_series(): array {
 
 	return $series;
 }
+
+/**
+ * Gets the destinations shown on the voyage map, grouped by location name.
+ *
+ * Mirrors sliceofcactus-astro's voyage-carte.astro: every "voyage" series
+ * with a location, grouped by location name, series sorted most recent
+ * first within each destination.
+ *
+ * @return array<int, array{name: string, country: string, lat: float, lon: float, series: WP_Post[]}>
+ */
+function soc_get_voyage_map_destinations(): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'photo',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'narration',
+					'field'    => 'slug',
+					'terms'    => array( 'voyage' ),
+				),
+			),
+		)
+	);
+
+	$destinations = array();
+
+	foreach ( $query->posts as $photo ) {
+		$location = soc_get_photo_location( $photo->ID );
+
+		if ( empty( $location ) || ! is_numeric( $location['latitude'] ?? '' ) || ! is_numeric( $location['longitude'] ?? '' ) ) {
+			continue;
+		}
+
+		$key = $location['name'];
+
+		if ( ! isset( $destinations[ $key ] ) ) {
+			$destinations[ $key ] = array(
+				'name'    => $location['name'],
+				'country' => $location['country'] ?? '',
+				'lat'     => (float) $location['latitude'],
+				'lon'     => (float) $location['longitude'],
+				'series'  => array(),
+			);
+		}
+
+		$destinations[ $key ]['series'][] = $photo;
+	}
+
+	foreach ( $destinations as &$destination ) {
+		usort(
+			$destination['series'],
+			static function ( WP_Post $a, WP_Post $b ): int {
+				$date_a = function_exists( 'get_field' )
+					? get_field( 'soc_photo_date', $a->ID )
+					: get_post_meta( $a->ID, 'soc_photo_date', true );
+				$date_b = function_exists( 'get_field' )
+					? get_field( 'soc_photo_date', $b->ID )
+					: get_post_meta( $b->ID, 'soc_photo_date', true );
+
+				return strcmp( (string) $date_b, (string) $date_a );
+			}
+		);
+	}
+	unset( $destination );
+
+	return array_values( $destinations );
+}

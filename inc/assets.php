@@ -27,7 +27,7 @@ function soc_enqueue_assets(): void {
 		$style_version
 	);
 
-	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'recit' ) || is_tax( 'medium' ) || is_page_template( 'page-projet-52.php' ) || is_page_template( 'page-color-your-life.php' );
+	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'recit' ) || is_tax( 'medium' ) || is_page_template( 'page-projet-52.php' ) || is_page_template( 'page-color-your-life.php' ) || is_page_template( 'page-voyage-carte.php' );
 	$magazine_hub_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_magazine_hub ) {
@@ -154,6 +154,26 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
+	if ( is_page_template( 'page-voyage-carte.php' ) ) {
+		wp_enqueue_style(
+			'leaflet',
+			'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+			array(),
+			'1.9.4'
+		);
+
+		$carte_style_path = get_theme_file_path( '/assets/styles/templates/page-voyage-carte.css' );
+
+		if ( is_readable( $carte_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-page-voyage-carte',
+				get_theme_file_uri( '/assets/styles/templates/page-voyage-carte.css' ),
+				array_merge( $magazine_hub_deps, array( 'leaflet' ) ),
+				(string) filemtime( $carte_style_path )
+			);
+		}
+	}
+
 	$script_path = get_theme_file_path( '/assets/scripts/main.js' );
 
 	if ( is_readable( $script_path ) ) {
@@ -239,6 +259,29 @@ function soc_enqueue_assets(): void {
 				true
 			);
 			wp_script_add_data( 'sliceofcactus-page-color-your-life', 'strategy', 'defer' );
+		}
+	}
+
+	if ( is_page_template( 'page-voyage-carte.php' ) ) {
+		wp_enqueue_script(
+			'leaflet',
+			'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+			array(),
+			'1.9.4',
+			true
+		);
+
+		$carte_script_path = get_theme_file_path( '/assets/scripts/page-voyage-carte.js' );
+
+		if ( is_readable( $carte_script_path ) ) {
+			wp_enqueue_script(
+				'sliceofcactus-page-voyage-carte',
+				get_theme_file_uri( '/assets/scripts/page-voyage-carte.js' ),
+				array( 'leaflet' ),
+				(string) filemtime( $carte_script_path ),
+				true
+			);
+			wp_script_add_data( 'sliceofcactus-page-voyage-carte', 'strategy', 'defer' );
 		}
 	}
 }

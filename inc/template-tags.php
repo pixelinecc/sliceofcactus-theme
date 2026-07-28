@@ -672,3 +672,27 @@ function soc_recit_theme_color_meta(): void {
 	printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( '#FBEEDA' ) );
 }
 add_action( 'wp_head', 'soc_recit_theme_color_meta' );
+
+/**
+ * Prints the mobile browser theme-color meta tag for the special Photo
+ * page templates (Projet 52, Color Your Life, Carte des voyages).
+ *
+ * Each has one fixed color, matching the constant themeColor prop set on
+ * its sliceofcactus-astro page.
+ */
+function soc_photo_page_template_theme_color_meta(): void {
+	$colors = array(
+		'page-projet-52.php'       => '#C2542E',
+		'page-color-your-life.php' => '#FBEEDA',
+		'page-voyage-carte.php'    => '#27513E',
+	);
+
+	foreach ( $colors as $template => $color ) {
+		if ( is_page_template( $template ) ) {
+			printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( $color ) );
+
+			return;
+		}
+	}
+}
+add_action( 'wp_head', 'soc_photo_page_template_theme_color_meta' );

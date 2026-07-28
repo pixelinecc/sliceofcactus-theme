@@ -1,0 +1,111 @@
+/**
+ * Carte des voyages: Leaflet map wrapper, destination chips and popups.
+ *
+ * Adapted from sliceofcactus-astro/src/pages/voyage-carte.astro and
+ * sliceofcactus-astro/public/css/style.css. Only .map-wrap and .dest-chips
+ * are ported: Astro's stylesheet also has an older hand-drawn map
+ * (.map, .pin, .mi-series, .map-info) that voyage-carte.astro no longer
+ * uses — it was replaced by Leaflet — so it's left out here.
+ *
+ * The shared magazine-hub chrome (runhead, masthead, view-toggle) lives in
+ * assets/styles/components/magazine-hub.css. Astro applies the same
+ * bodyClass="theme-voyage" as on voyage series and Color Your Life.
+ */
+
+body.page-template-page-voyage-carte-php {
+	--accent: #27513e;
+	--accent-deep: #193528;
+}
+
+.map-wrap {
+	position: relative;
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	background: var(--accent-deep);
+	padding: clamp(1rem, 3vw, 2.4rem) 0;
+}
+
+.soc-leaflet-map {
+	width: 100%;
+	max-width: 1180px;
+	height: 520px;
+	margin: 0 auto;
+	border-radius: 8px;
+}
+
+.dest-chips {
+	display: flex;
+	flex-wrap: wrap;
+	max-width: 1180px;
+	gap: .6rem;
+	margin: 1.6rem auto 0;
+}
+
+.dest-chips button {
+	padding: .5rem .95rem;
+	border: 1px solid rgb(251 238 218 / 40%);
+	border-radius: 40px;
+	background: transparent;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background .3s, color .3s, border-color .3s;
+}
+
+.dest-chips button:hover,
+.dest-chips button.is-active {
+	border-color: var(--flash);
+	background: var(--flash);
+	color: var(--ink);
+}
+
+.leaflet-popup-dark .leaflet-popup-content-wrapper {
+	border: 1px solid #333;
+	border-radius: 6px;
+	background: #1a1a1a;
+	color: #eee;
+}
+
+.leaflet-popup-dark .leaflet-popup-tip {
+	background: #1a1a1a;
+}
+
+.soc-dest-popup__title {
+	display: block;
+	margin-bottom: 8px;
+	font-size: .9rem;
+}
+
+.soc-dest-popup__serie {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 6px;
+	color: inherit;
+	text-decoration: none;
+}
+
+.soc-dest-popup__serie:hover {
+	opacity: .8;
+}
+
+.soc-dest-popup__serie img {
+	flex-shrink: 0;
+	width: 48px;
+	height: 48px;
+	border-radius: 4px;
+	object-fit: cover;
+}
+
+.soc-dest-popup__serie strong {
+	display: block;
+	font-size: .85rem;
+}
+
+.soc-dest-popup__serie span span {
+	font-size: .75rem;
+	opacity: .7;
+}

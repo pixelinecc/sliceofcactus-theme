@@ -1,0 +1,79 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": false,
+		"color": {
+			"custom": false,
+			"customDuotone": false,
+			"customGradient": false,
+			"defaultPalette": false,
+			"defaultDuotone": false,
+			"defaultGradients": false,
+			"palette": [
+				{
+					"color": "#141210",
+					"name": "Encre",
+					"slug": "ink"
+				},
+				{
+					"color": "#fbeeda",
+					"name": "Papier",
+					"slug": "paper"
+				},
+				{
+					"color": "#F1E6D8",
+					"name": "Papier secondaire",
+					"slug": "paper-2"
+				},
+				{
+					"color": "#E9FF43",
+					"name": "Flash",
+					"slug": "flash"
+				},
+				{
+					"color": "#8b8378",
+					"name": "Gris",
+					"slug": "grey"
+				},
+				{
+					"color": "#12B26A",
+					"name": "Accent",
+					"slug": "accent"
+				},
+				{
+					"color": "#0C7A48",
+					"name": "Accent profond",
+					"slug": "accent-deep"
+				}
+			]
+		},
+		"layout": {
+			"contentSize": "680px",
+			"wideSize": "1560px"
+		},
+		"spacing": {
+			"margin": false,
+			"padding": false
+		},
+		"typography": {
+			"customFontSize": false,
+			"dropCap": false,
+			"fluid": true
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var:preset|color|accent",
+			"text": "var:preset|color|paper"
+		},
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontWeight": "400",
+					"lineHeight": ".95"
+				}
+			}
+		}
+	}
+}

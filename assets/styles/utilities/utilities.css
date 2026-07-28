@@ -1,0 +1,18 @@
+/**
+ * WordPress accessibility utilities retained from the initial theme.
+ */
+
+.soc-skip-link {
+	position: absolute;
+	z-index: 10010;
+	top: 1rem;
+	left: 1rem;
+	padding: .5rem 1rem;
+	background: var(--paper);
+	color: var(--ink);
+	transform: translateY(-200%);
+}
+
+.soc-skip-link:focus {
+	transform: translateY(0);
+}

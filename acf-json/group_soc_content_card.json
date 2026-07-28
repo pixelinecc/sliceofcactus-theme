@@ -1,0 +1,66 @@
+{
+    "key": "group_soc_content_card",
+    "title": "Contenu — Référencement complémentaire",
+    "fields": [
+        {
+            "key": "field_soc_card_text",
+            "label": "Texte court de carte",
+            "name": "soc_card_text",
+            "type": "textarea",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "maxlength": "",
+            "rows": 3,
+            "new_lines": ""
+        },
+        {
+            "key": "field_soc_hide_from_internal_search",
+            "label": "Masquer de la recherche interne",
+            "name": "soc_hide_from_internal_search",
+            "type": "true_false",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "message": "Ne pas présenter ce contenu dans les résultats de recherche internes.",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Masqué",
+            "ui_off_text": "Visible"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "recit"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "collection"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "creation"
+            }
+        ]
+    ],
+    "menu_order": 10,
+    "position": "side",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1785247236
+}

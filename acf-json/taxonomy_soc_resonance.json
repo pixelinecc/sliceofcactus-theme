@@ -1,0 +1,73 @@
+{
+    "key": "taxonomy_soc_resonance",
+    "title": "Résonances",
+    "menu_order": 0,
+    "active": true,
+    "taxonomy": "resonance",
+    "object_type": [
+        "recit",
+        "collection",
+        "creation"
+    ],
+    "advanced_configuration": true,
+    "import_source": "",
+    "import_date": "",
+    "labels": {
+        "singular_name": "Résonance",
+        "name": "Résonances",
+        "menu_name": "Résonances",
+        "search_items": "Rechercher des résonances",
+        "all_items": "Toutes les résonances",
+        "edit_item": "Modifier la résonance",
+        "view_item": "Voir la résonance",
+        "update_item": "Mettre à jour la résonance",
+        "add_new_item": "Ajouter une résonance",
+        "new_item_name": "Nom de la nouvelle résonance",
+        "not_found": "Aucune résonance trouvée",
+        "no_terms": "Aucune résonance",
+        "items_list_navigation": "Navigation de la liste des résonances",
+        "items_list": "Liste des résonances",
+        "back_to_items": "← Retour aux résonances",
+        "item_link": "Lien de la résonance",
+        "item_link_description": "Un lien vers une résonance."
+    },
+    "description": "Boussole éditoriale transversale et vocabulaire contrôlé.",
+    "capabilities": {
+        "manage_terms": "manage_options",
+        "edit_terms": "manage_options",
+        "delete_terms": "manage_options",
+        "assign_terms": "edit_posts"
+    },
+    "public": true,
+    "publicly_queryable": false,
+    "hierarchical": false,
+    "show_ui": true,
+    "show_in_menu": true,
+    "show_in_nav_menus": false,
+    "show_in_rest": true,
+    "rest_base": "",
+    "rest_namespace": "wp/v2",
+    "rest_controller_class": "WP_REST_Terms_Controller",
+    "show_tagcloud": false,
+    "show_in_quick_edit": false,
+    "show_admin_column": false,
+    "rewrite": {
+        "permalink_rewrite": "no_permalink",
+        "slug": "",
+        "with_front": false,
+        "rewrite_hierarchical": false
+    },
+    "query_var": "none",
+    "query_var_name": "",
+    "default_term": {
+        "default_term_enabled": false,
+        "default_term_name": "",
+        "default_term_slug": "",
+        "default_term_description": ""
+    },
+    "sort": false,
+    "meta_box": "disabled",
+    "meta_box_cb": "",
+    "meta_box_sanitize_cb": "",
+    "modified": 1785247236
+}

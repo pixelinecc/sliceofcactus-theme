@@ -1,0 +1,87 @@
+{
+    "key": "group_soc_resonance",
+    "title": "Résonance — Métadonnées",
+    "fields": [
+        {
+            "key": "field_soc_resonance_intro",
+            "label": "Introduction courte",
+            "name": "soc_resonance_intro",
+            "type": "textarea",
+            "instructions": "250 caractères recommandés.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "maxlength": 250,
+            "rows": 4,
+            "new_lines": ""
+        },
+        {
+            "key": "field_soc_resonance_image",
+            "label": "Image évocatrice",
+            "name": "soc_resonance_image",
+            "type": "image",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "return_format": "id",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "jpg,jpeg,png,webp,avif",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_soc_resonance_order",
+            "label": "Ordre éditorial",
+            "name": "soc_resonance_order",
+            "type": "number",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "min": 1,
+            "max": "",
+            "step": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_soc_resonance_color",
+            "label": "Couleur d’accent",
+            "name": "soc_resonance_color",
+            "type": "color_picker",
+            "instructions": "Usage visuel discret.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "taxonomy",
+                "operator": "==",
+                "value": "resonance"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1785196800
+}

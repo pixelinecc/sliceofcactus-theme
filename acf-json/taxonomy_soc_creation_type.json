@@ -1,0 +1,69 @@
+{
+    "key": "taxonomy_soc_creation_type",
+    "title": "Types de créations",
+    "menu_order": 0,
+    "active": true,
+    "taxonomy": "creation_type",
+    "object_type": [
+        "creation"
+    ],
+    "advanced_configuration": true,
+    "import_source": "",
+    "import_date": "",
+    "labels": {
+        "singular_name": "Type de création",
+        "name": "Types de créations",
+        "menu_name": "Types de créations",
+        "search_items": "Rechercher des types de créations",
+        "all_items": "Tous les types de créations",
+        "edit_item": "Modifier le type de création",
+        "view_item": "Voir le type de création",
+        "update_item": "Mettre à jour le type de création",
+        "add_new_item": "Ajouter un type de création",
+        "new_item_name": "Nom du nouveau type de création",
+        "not_found": "Aucun type de création trouvé",
+        "no_terms": "Aucun type de création",
+        "items_list_navigation": "Navigation de la liste des types de créations",
+        "items_list": "Liste des types de créations",
+        "back_to_items": "← Retour aux types de créations"
+    },
+    "description": "Typologie contrôlée des créations.",
+    "capabilities": {
+        "manage_terms": "manage_options",
+        "edit_terms": "manage_options",
+        "delete_terms": "manage_options",
+        "assign_terms": "edit_posts"
+    },
+    "public": true,
+    "publicly_queryable": false,
+    "hierarchical": false,
+    "show_ui": true,
+    "show_in_menu": true,
+    "show_in_nav_menus": false,
+    "show_in_rest": true,
+    "rest_base": "",
+    "rest_namespace": "wp/v2",
+    "rest_controller_class": "WP_REST_Terms_Controller",
+    "show_tagcloud": false,
+    "show_in_quick_edit": false,
+    "show_admin_column": true,
+    "rewrite": {
+        "permalink_rewrite": "no_permalink",
+        "slug": "",
+        "with_front": false,
+        "rewrite_hierarchical": false
+    },
+    "query_var": "none",
+    "query_var_name": "",
+    "default_term": {
+        "default_term_enabled": false,
+        "default_term_name": "",
+        "default_term_slug": "",
+        "default_term_description": ""
+    },
+    "sort": false,
+    "meta_box": "default",
+    "meta_box_cb": "",
+    "meta_box_sanitize_cb": "",
+    "modified": 1785196800
+}

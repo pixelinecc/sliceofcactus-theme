@@ -1,0 +1,141 @@
+/**
+ * Fixed site header migrated from the active Astro header.
+ */
+
+.soc-site-header {
+	position: fixed;
+	z-index: 9000;
+	top: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 1.1rem clamp(1.2rem, 4vw, 2rem);
+	transition:
+		transform .5s var(--ease),
+		background .4s;
+}
+
+.soc-site-header.is-hidden {
+	transform: translateY(-120%);
+}
+
+.soc-site-header.is-solid {
+	border-bottom: 1px solid rgb(20 18 16 / 8%);
+	backdrop-filter: blur(12px);
+}
+
+.soc-site-header:focus-within,
+.soc-site-header.is-menu-open {
+	transform: none;
+}
+
+.soc-site-brand {
+	flex: 0 0 auto;
+}
+
+.nav__logo,
+.custom-logo-link {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0;
+}
+
+.nav__logo {
+	font-family: var(--font-head);
+	font-size: 2.2rem;
+	line-height: .88;
+	letter-spacing: .02em;
+	text-transform: uppercase;
+}
+
+.nav__logo-text,
+.nav__logo-text > span {
+	display: block;
+}
+
+.nav__logo .is-outline {
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-text-stroke: 1.2px currentcolor;
+}
+
+.custom-logo {
+	width: auto;
+	max-height: 5.8rem;
+}
+
+.nav__burger {
+	z-index: 9001;
+	display: none;
+	flex: 0 0 44px;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+}
+
+.nav__burger span {
+	width: 26px;
+	height: 2px;
+	background: var(--ink);
+	transition: transform .3s, background .3s;
+}
+
+.nav__burger:focus-visible {
+	outline: 3px solid currentcolor;
+	outline-offset: 3px;
+}
+
+.nav:not(.is-solid) .nav__logo,
+.nav:not(.is-solid) .custom-logo-link {
+	color: var(--paper);
+}
+
+.nav:not(.is-solid) .nav__burger span {
+	background: var(--paper);
+}
+
+body.admin-bar .soc-site-header {
+	top: 32px;
+}
+
+@media (max-width: 782px) {
+	body.admin-bar .soc-site-header {
+		top: 46px;
+	}
+}
+
+@media (max-width: 720px) {
+	.soc-site-header.has-menu-toggle .nav__burger {
+		display: flex;
+	}
+
+	.nav__burger.is-open span:first-child {
+		transform: rotate(45deg) translate(4px, 4px);
+	}
+
+	.nav__burger.is-open span:last-child {
+		transform: rotate(-45deg) translate(4px, -4px);
+	}
+
+	.nav__burger.is-open span {
+		background: var(--paper);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.soc-site-header,
+	.nav__burger span {
+		transition-duration: .01ms;
+	}
+}

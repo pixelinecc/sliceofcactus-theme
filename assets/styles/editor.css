@@ -1,0 +1,24 @@
+/**
+ * Gutenberg-only adaptations.
+ *
+ * The shared design-system styles are registered separately through
+ * add_editor_style() so WordPress can scope every stylesheet correctly.
+ */
+
+body {
+	background: var(--page-background);
+	color: var(--paper);
+	font-family: var(--font-body);
+}
+
+.wp-block {
+	max-width: var(--content-width);
+}
+
+.wp-block[data-align="wide"] {
+	max-width: var(--maxw);
+}
+
+.wp-block[data-align="full"] {
+	max-width: none;
+}

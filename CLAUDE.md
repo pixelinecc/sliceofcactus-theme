@@ -112,6 +112,36 @@ Ne jamais créer un nouveau CPT sans validation explicite.
 
 ---
 
+# Organisation des fichiers
+
+Décision validée le 2026-07-28.
+
+Structure WordPress classique. Jamais de dossier `components/` par fonctionnalité.
+
+Templates dans `template-parts/<contexte>/`.
+
+CSS dans `assets/styles/`.
+
+JavaScript dans `assets/scripts/`.
+
+## Convention de nommage
+
+Un même radical dans les trois arbres pour une même fonctionnalité.
+
+Exemple :
+
+template-parts/single/photo-contact-sheet.php
+assets/styles/templates/single-photo.css
+assets/scripts/single-photo.js
+
+## Pourquoi
+
+Astro ne s'organise pas en dossiers de composants par fonctionnalité : ce sont des fichiers de route avec script inline et un design system CSS partagé. La structure classique WordPress est donc la plus proche d'Astro, pas l'inverse.
+
+Co-localiser CSS + JS + PHP dans un dossier `components/` n'apporte aucun bénéfice technique en WordPress classique (pas de compilateur, pas de scoping, pas de bundling). Ce serait de la complexité ajoutée sans contrepartie.
+
+---
+
 # CSS
 
 Réutiliser le CSS Astro autant que possible.

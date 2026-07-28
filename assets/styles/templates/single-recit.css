@@ -1,0 +1,148 @@
+/**
+ * Single récit: article body, hero figure and linked note.
+ *
+ * Adapted from sliceofcactus-astro/src/pages/recits/[id].astro and
+ * sliceofcactus-astro/public/css/style.css. The .soc-medium-* /
+ * .post-type-archive-recit accent variables live in
+ * assets/styles/templates/archive-recit.css, shared by both pages. The
+ * shared .serie-resonances block lives in
+ * assets/styles/components/magazine-hub.css.
+ *
+ * article__figure--full/portrait/contained have no Astro equivalent: Astro
+ * always inserted the image at a fixed size after the first paragraph.
+ * They style the soc_recit_hero_layout ACF field, added so the hero image
+ * can vary without a second template.
+ */
+
+.article {
+	max-width: 680px;
+	margin: 0 auto;
+	padding: 0 clamp(1.2rem, 4vw, 3rem);
+}
+
+.article__back {
+	display: inline-block;
+	margin: 1.6rem 0 1.4rem;
+	color: var(--accent);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+}
+
+.article__kicker {
+	color: var(--accent);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .2em;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.article__title {
+	margin: .5rem 0;
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: clamp(2.3rem, 6vw, 4.2rem);
+	line-height: 1.02;
+	text-align: center;
+}
+
+.article__meta {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	margin: 1rem 0 0;
+	color: var(--grey);
+	font-family: var(--font-mono);
+	font-size: .7rem;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+}
+
+.article__meta::before,
+.article__meta::after {
+	width: min(80px, 15vw);
+	height: 1px;
+	background: rgb(20 18 16 / 30%);
+	content: "";
+}
+
+.article__body {
+	margin: 2rem auto 0;
+	color: #2b2721;
+	font-family: var(--font-display);
+	font-size: 1.2rem;
+	line-height: 1.8;
+}
+
+.article__body p {
+	margin: 0 0 1.35rem;
+}
+
+.article__body p:first-of-type::first-letter {
+	float: left;
+	padding: .06em .12em 0 0;
+	color: var(--accent);
+	font-family: var(--font-head);
+	font-size: 4.4rem;
+	line-height: .72;
+}
+
+.article__figure {
+	max-width: 520px;
+	margin: 1.8rem auto 2rem;
+}
+
+.article__figure img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 3px;
+	filter: grayscale(1) contrast(1.03);
+}
+
+.article__figure figcaption {
+	margin-top: .55rem;
+	color: var(--grey);
+	font-family: var(--font-mono);
+	font-size: .66rem;
+	letter-spacing: .1em;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.article__figure--full {
+	width: 100vw;
+	max-width: none;
+	margin-left: calc(50% - 50vw);
+}
+
+.article__figure--portrait {
+	max-width: 340px;
+}
+
+.article__figure--contained {
+	max-width: 100%;
+}
+
+.linked-note {
+	display: none;
+	max-width: 680px;
+	margin: 1.4rem auto 4rem;
+	color: #3a352e;
+	font-family: var(--font-display);
+	font-style: italic;
+	font-size: 1.05rem;
+	text-align: center;
+}
+
+.linked-note.is-on {
+	display: block;
+}
+
+.linked-note a {
+	border-bottom: 1px solid var(--accent);
+	color: var(--accent);
+}

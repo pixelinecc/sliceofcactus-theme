@@ -444,3 +444,174 @@ function soc_creation_body_classes( array $classes ): array {
 	return array_values( array_unique( $classes ) );
 }
 add_filter( 'body_class', 'soc_creation_body_classes' );
+
+/**
+ * Formats a Y-m-d date as a short French month label.
+ *
+ * Ports the frMonth() helper of sliceofcactus-astro's recits pages.
+ *
+ * @param string $date Y-m-d date string.
+ * @return string
+ */
+function soc_format_recit_date( string $date ): string {
+	$parts = explode( '-', $date );
+
+	if ( count( $parts ) < 2 ) {
+		return $date;
+	}
+
+	list( $year, $month ) = $parts;
+
+	$months = array(
+		__( 'janv.', 'sliceofcactus' ),
+		__( 'févr.', 'sliceofcactus' ),
+		__( 'mars', 'sliceofcactus' ),
+		__( 'avr.', 'sliceofcactus' ),
+		__( 'mai', 'sliceofcactus' ),
+		__( 'juin', 'sliceofcactus' ),
+		__( 'juil.', 'sliceofcactus' ),
+		__( 'août', 'sliceofcactus' ),
+		__( 'sept.', 'sliceofcactus' ),
+		__( 'oct.', 'sliceofcactus' ),
+		__( 'nov.', 'sliceofcactus' ),
+		__( 'déc.', 'sliceofcactus' ),
+	);
+
+	$index = (int) $month - 1;
+
+	return isset( $months[ $index ] ) ? $months[ $index ] . ' ' . $year : $date;
+}
+
+/**
+ * Gets the raw date (Y-m-d) of a récit.
+ *
+ * @param int $post_id Optional récit ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_recit_date( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'recit' !== get_post_type( $post_id ) ) {
+		return '';
+	}
+
+	$date = function_exists( 'get_field' )
+		? get_field( 'soc_recit_date', $post_id )
+		: get_post_meta( $post_id, 'soc_recit_date', true );
+
+	return is_string( $date ) ? $date : '';
+}
+
+/**
+ * Gets the short French month label of a récit's date.
+ *
+ * @param int $post_id Optional récit ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_recit_date_label( int $post_id = 0 ): string {
+	$date = soc_get_recit_date( $post_id );
+
+	return '' !== $date ? soc_format_recit_date( $date ) : '';
+}
+
+/**
+ * Gets the display place of a récit: its location name, falling back to
+ * its city, matching the flat `lieu` string of sliceofcactus-astro's
+ * recits.json.
+ *
+ * @param int $post_id Optional récit ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_recit_location_label( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'recit' !== get_post_type( $post_id ) ) {
+		return '';
+	}
+
+	$name = function_exists( 'get_field' )
+		? get_field( 'soc_recit_location_name', $post_id )
+		: get_post_meta( $post_id, 'soc_recit_location_name', true );
+
+	if ( is_string( $name ) && '' !== trim( $name ) ) {
+		return trim( $name );
+	}
+
+	$city = function_exists( 'get_field' )
+		? get_field( 'soc_recit_city', $post_id )
+		: get_post_meta( $post_id, 'soc_recit_city', true );
+
+	return is_string( $city ) ? trim( $city ) : '';
+}
+
+/**
+ * Gets the hero image layout of a récit: wide, full, portrait or contained.
+ *
+ * @param int $post_id Optional récit ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_recit_hero_layout( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+	$layout  = function_exists( 'get_field' ) ? get_field( 'soc_recit_hero_layout', $post_id ) : '';
+	$allowed = array( 'wide', 'full', 'portrait', 'contained' );
+
+	return in_array( $layout, $allowed, true ) ? $layout : 'wide';
+}
+
+/**
+ * Gets the hero image caption of a récit.
+ *
+ * @param int $post_id Optional récit ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_recit_hero_caption( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+	$caption = function_exists( 'get_field' ) ? get_field( 'soc_recit_hero_caption', $post_id ) : '';
+
+	return is_string( $caption ) ? trim( $caption ) : '';
+}
+
+/**
+ * Gets the creations associated with a récit, published only.
+ *
+ * Stands in for the single serie_liee link of sliceofcactus-astro's
+ * recits/[id].astro: the content model links récits to creations here,
+ * not directly to photo series.
+ *
+ * @param int $post_id Optional récit ID. Defaults to the current post.
+ * @return WP_Post[]
+ */
+function soc_get_recit_related_creations( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'recit' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$ids = function_exists( 'get_field' ) ? (array) get_field( 'soc_recit_creations', $post_id ) : array();
+	$ids = array_filter( array_map( 'absint', $ids ) );
+
+	return array_values(
+		array_filter(
+			array_map( 'get_post', $ids ),
+			static fn( $post ): bool => $post instanceof WP_Post && 'publish' === $post->post_status
+		)
+	);
+}
+
+/**
+ * Prints the mobile browser theme-color meta tag for the Récits archive
+ * and single récits.
+ *
+ * Récits use one fixed color (unlike Photo/Création, which vary per
+ * narration/medium), matching the constant themeColor prop of
+ * sliceofcactus-astro's recits pages.
+ */
+function soc_recit_theme_color_meta(): void {
+	if ( ! is_singular( 'recit' ) && ! is_post_type_archive( 'recit' ) ) {
+		return;
+	}
+
+	printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( '#FBEEDA' ) );
+}
+add_action( 'wp_head', 'soc_recit_theme_color_meta' );

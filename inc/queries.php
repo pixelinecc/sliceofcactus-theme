@@ -260,3 +260,41 @@ function soc_get_creation_archive_items( string $medium_slug ): array {
 
 	return $items;
 }
+
+/**
+ * Gets the récits shown on the Récits archive, most recent first.
+ *
+ * Mirrors sliceofcactus-astro's recits/index.astro: the JSON array is
+ * already most-recent-first, its first item running as "la une".
+ *
+ * @return WP_Post[]
+ */
+function soc_get_recit_archive_items(): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'recit',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+		)
+	);
+
+	$recits = $query->posts;
+
+	usort(
+		$recits,
+		static function ( WP_Post $a, WP_Post $b ): int {
+			$date_a = function_exists( 'get_field' )
+				? get_field( 'soc_recit_date', $a->ID )
+				: get_post_meta( $a->ID, 'soc_recit_date', true );
+			$date_b = function_exists( 'get_field' )
+				? get_field( 'soc_recit_date', $b->ID )
+				: get_post_meta( $b->ID, 'soc_recit_date', true );
+
+			return strcmp( (string) $date_b, (string) $date_a );
+		}
+	);
+
+	return $recits;
+}

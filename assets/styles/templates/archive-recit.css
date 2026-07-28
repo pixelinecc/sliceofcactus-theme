@@ -1,0 +1,166 @@
+/**
+ * Récits archive: journal front page (à la une + two-column entries).
+ *
+ * Adapted from sliceofcactus-astro/src/pages/recits/index.astro and
+ * sliceofcactus-astro/public/css/style.css. The shared magazine-hub chrome
+ * (mag-runhead) lives in assets/styles/components/magazine-hub.css; this
+ * file only overrides it for the paper (non-colored) Récits background.
+ */
+
+body.post-type-archive-recit,
+body.single-recit {
+	--accent: #2b4a6f;
+	--accent-deep: #1b3149;
+}
+
+body.post-type-archive-recit .mag-runhead {
+	border-bottom: 1px solid rgb(20 18 16 / 22%);
+	background: transparent;
+	color: var(--grey);
+}
+
+body.post-type-archive-recit .mag-runhead b {
+	color: var(--ink);
+}
+
+.journal-name {
+	margin-top: 1.6rem;
+	padding: 1.2rem 0;
+	border-top: 3px double var(--ink);
+	border-bottom: 3px double var(--ink);
+	text-align: center;
+}
+
+.journal-name h1 {
+	font-family: var(--font-display);
+	font-weight: 900;
+	font-size: clamp(3rem, 10vw, 6.5rem);
+	line-height: .9;
+	letter-spacing: -.01em;
+}
+
+.journal-name .sub {
+	margin-top: .35rem;
+	color: #3a352e;
+	font-family: var(--font-display);
+	font-style: italic;
+	font-size: 1.1rem;
+}
+
+.journal-folio {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-top: .9rem;
+	color: var(--accent);
+	font-family: var(--font-mono);
+	font-size: .66rem;
+	letter-spacing: .18em;
+	text-transform: uppercase;
+}
+
+.journal-lead {
+	display: block;
+	max-width: 720px;
+	margin: 0 auto;
+	padding: 2.2rem 0 1.8rem;
+	border-bottom: 1px solid rgb(20 18 16 / 22%);
+	color: var(--ink);
+	text-align: center;
+	text-decoration: none;
+	cursor: none;
+}
+
+.journal-lead__title {
+	margin: .5rem 0 .6rem;
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: clamp(2.2rem, 5.4vw, 3.8rem);
+	line-height: 1.02;
+}
+
+.journal-lead__ex {
+	max-width: 56ch;
+	margin: 0 auto;
+	color: #3a352e;
+	font-family: var(--font-display);
+	font-size: 1.18rem;
+	line-height: 1.6;
+}
+
+.journal-lead__more {
+	display: inline-block;
+	margin-top: .8rem;
+	padding-bottom: .15rem;
+	border-bottom: 2px solid var(--accent);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+}
+
+.journal-lead:hover .journal-lead__title {
+	color: var(--accent);
+}
+
+.journal-cols {
+	columns: 2;
+	column-gap: clamp(2rem, 5vw, 4rem);
+	column-rule: 1px solid rgb(20 18 16 / 22%);
+	padding: 1.8rem 0 3.5rem;
+}
+
+.entry {
+	display: block;
+	padding: 1.1rem 0;
+	border-bottom: 1px solid rgb(20 18 16 / 14%);
+	color: var(--ink);
+	text-decoration: none;
+	break-inside: avoid;
+	cursor: none;
+}
+
+.entry__thumb {
+	float: right;
+	width: 60px;
+	height: 60px;
+	margin: .15rem 0 .5rem .9rem;
+	border-radius: 2px;
+	object-fit: cover;
+	filter: grayscale(1) contrast(1.05);
+	opacity: .85;
+}
+
+.entry__k {
+	color: var(--accent);
+	font-family: var(--font-mono);
+	font-size: .66rem;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+}
+
+.entry__t {
+	margin: .3rem 0 .35rem;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 1.5rem;
+	line-height: 1.1;
+}
+
+.entry__ex {
+	color: #4a443c;
+	font-family: var(--font-display);
+	font-size: 1rem;
+	line-height: 1.5;
+}
+
+.entry:hover .entry__t {
+	color: var(--accent);
+}
+
+@media (max-width: 720px) {
+	.journal-cols {
+		columns: 1;
+	}
+}

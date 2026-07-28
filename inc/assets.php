@@ -27,7 +27,7 @@ function soc_enqueue_assets(): void {
 		$style_version
 	);
 
-	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_post_type_archive( 'photo' ) || is_tax( 'medium' );
+	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'recit' ) || is_tax( 'medium' );
 	$magazine_hub_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_magazine_hub ) {
@@ -95,6 +95,35 @@ function soc_enqueue_assets(): void {
 				get_theme_file_uri( '/assets/styles/templates/taxonomy-medium.css' ),
 				$creation_deps,
 				(string) filemtime( $medium_archive_style_path )
+			);
+		}
+	}
+
+	$recit_deps = $magazine_hub_deps;
+
+	if ( is_singular( 'recit' ) || is_post_type_archive( 'recit' ) ) {
+		$recit_archive_style_path = get_theme_file_path( '/assets/styles/templates/archive-recit.css' );
+
+		if ( is_readable( $recit_archive_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-archive-recit',
+				get_theme_file_uri( '/assets/styles/templates/archive-recit.css' ),
+				$magazine_hub_deps,
+				(string) filemtime( $recit_archive_style_path )
+			);
+			$recit_deps[] = 'sliceofcactus-archive-recit';
+		}
+	}
+
+	if ( is_singular( 'recit' ) ) {
+		$recit_style_path = get_theme_file_path( '/assets/styles/templates/single-recit.css' );
+
+		if ( is_readable( $recit_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-single-recit',
+				get_theme_file_uri( '/assets/styles/templates/single-recit.css' ),
+				$recit_deps,
+				(string) filemtime( $recit_style_path )
 			);
 		}
 	}

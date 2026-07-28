@@ -112,17 +112,29 @@ Ne jamais créer un nouveau CPT sans validation explicite.
 
 ---
 
-# Organisation des fichiers
+## Organisation des fichiers
 
-Décision validée le 2026-07-28.
+Décision figée le 2026-07-28.
 
-Structure WordPress classique. Jamais de dossier `components/` par fonctionnalité.
+Utiliser une structure WordPress classique.
 
-Templates dans `template-parts/<contexte>/`.
+- Templates : `template-parts/<contexte>/`
+- CSS : `assets/styles/`
+- JavaScript : `assets/scripts/`
 
-CSS dans `assets/styles/`.
+Ne jamais créer de dossier `components/` regroupant PHP, CSS et JavaScript.
 
-JavaScript dans `assets/scripts/`.
+Pour une même fonctionnalité, conserver un radical de nommage cohérent entre les différents arbres.
+
+Exemple :
+
+- `template-parts/single/photo-contact-sheet.php`
+- `assets/styles/templates/single-photo.css`
+- `assets/scripts/single-photo.js`
+
+Les assets restent chargés avec les fonctions WordPress d’enqueue.
+
+Ne pas créer un fichier CSS ou JavaScript pour chaque petit template part. Regrouper les assets au niveau de la page ou de la fonctionnalité principale.
 
 ## Convention de nommage
 

@@ -490,8 +490,29 @@ Après modification :
 - résume les fichiers modifiés ;
 - signale les écarts ou décisions nécessaires ;
 - propose un message de commit.
-```
 
+Décisions déjà prises :
+- CPT : photo
+- galerie : champ ACF soc_photo_gallery
+- texte : éditeur Gutenberg
+- taxonomie : resonance
+- aucune règle de rewrite personnalisée
+- aucun dispatcher
+- un template single-photo.php
+- styles dans assets/styles/templates/single-photo.css
+
+Ne remets pas ces décisions en question.
+Commence par lister les fichiers à modifier, puis attends ma validation.
+```
+---
+## 19 bis
+```text
+Cherche d'abord la solution WordPress native la plus simple.
+
+Ne crée aucune règle de rewrite, abstraction ou mécanisme personnalisé sans me demander validation avant.
+
+Si un simple menu, une archive native, une taxonomie ou un template WordPress suffit, utilise cette solution.
+```
 ---
 
 ## 20. Boussole du projet

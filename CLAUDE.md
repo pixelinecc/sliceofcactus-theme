@@ -99,6 +99,35 @@ Pour chaque lot :
 6. proposer un commit
 
 ---
+## Principe de simplicité
+
+Toujours utiliser en priorité les fonctionnalités natives de WordPress.
+
+Avant d'ajouter du code personnalisé, vérifier si le besoin peut être couvert par :
+
+- les menus WordPress
+- la hiérarchie native des templates
+- les archives de CPT
+- les taxonomies
+- Gutenberg
+- les fonctions WordPress existantes
+
+Ne pas ajouter :
+
+- de règles de rewrite
+- de routeur personnalisé
+- de dispatcher complexe
+- de helper abstrait
+- de couche intermédiaire
+
+sans démontrer que la solution native ne suffit pas.
+
+Pour chaque ajout structurel, expliquer :
+
+1. le besoin concret ;
+2. pourquoi WordPress natif ne suffit pas ;
+3. le coût de maintenance ajouté.
+---
 
 # ACF
 

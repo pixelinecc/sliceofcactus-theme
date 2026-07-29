@@ -90,8 +90,8 @@ $total = array_sum( array_map( static fn( array $group ): int => count( $group['
 						$sub_label  = ! empty( $narrations ) ? $narrations[0]->name : __( 'Photo', 'sliceofcactus' );
 					} elseif ( 'creation' === $type ) {
 						$cover_id  = soc_get_creation_cover_id( $item->ID );
-						$medium    = soc_get_creation_medium( $item->ID );
-						$sub_label = $medium ? $medium->name : __( 'Création', 'sliceofcactus' );
+						$rubrique  = soc_get_creation_rubrique( $item->ID );
+						$sub_label = $rubrique ? $rubrique->name : __( 'Création', 'sliceofcactus' );
 					} else {
 						$cover_id  = absint( get_post_thumbnail_id( $item->ID ) );
 						$date      = soc_get_recit_date_label( $item->ID );

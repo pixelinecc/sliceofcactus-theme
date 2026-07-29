@@ -36,7 +36,7 @@ $universe_panels = array(
 		'cta'    => __( 'Voir les séries →', 'sliceofcactus' ),
 	),
 	array(
-		'href'   => home_url( '/dessin/' ),
+		'href'   => soc_get_creation_rubrique_archive_link( 'dessin' ),
 		'color'  => '#E0592F',
 		'image'  => ! empty( $universe_dessin ) ? soc_get_creation_cover_id( $universe_dessin[0]->ID ) : 0,
 		'num'    => '02',
@@ -339,17 +339,8 @@ $home_recits = soc_get_home_recits( 3 );
 			</div>
 			<div class="home-recits__grid">
 				<?php foreach ( $home_recits as $recit ) : ?>
-					<?php
-					$recit_meta = array_filter(
-						array(
-							soc_get_recit_date_label( $recit->ID ),
-							soc_get_recit_location_label( $recit->ID ),
-						),
-						static fn( string $part ): bool => '' !== $part
-					);
-					?>
 					<a class="hr-card" href="<?php echo esc_url( get_permalink( $recit ) ); ?>">
-						<span class="hr-card__k"><?php echo esc_html( implode( ' · ', $recit_meta ) ); ?></span>
+						<span class="hr-card__k"><?php echo esc_html( soc_get_recit_date_label( $recit->ID ) ); ?></span>
 						<h3 class="hr-card__t"><?php echo esc_html( get_the_title( $recit ) ); ?></h3>
 						<p class="hr-card__ex"><?php echo esc_html( get_the_excerpt( $recit ) ); ?></p>
 					</a>

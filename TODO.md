@@ -20,7 +20,7 @@
 ## 📌 Décisions d'architecture
 
 - Structure WordPress classique validée (template-parts/ + assets/), pas de dossiers components/ par fonctionnalité. Détail et raisons dans CLAUDE.md.
-- Archives Dessin/Coloriage : taxonomie medium rendue publique (slug de rewrite vide) plutôt qu'un rewrite custom — voir taxonomy-medium.php et acf-json/taxonomy_soc_medium.json.
+- Archives Dessin/Coloriage : taxonomie creation_type (rubrique) rendue publique (slug de rewrite vide) plutôt qu'un rewrite custom — voir taxonomy-creation_type.php et acf-json/taxonomy_soc_creation_type.json. La taxonomie medium porte désormais la technique fine (aquarelle, feutres…).
 - Récits : le corps du texte utilise the_content() (Gutenberg) plutôt que le tableau `corps` d'Astro. Le champ relationnel `soc_recit_collections` (CPT `collection`) n'est pas câblé : ce CPT n'existe pas encore.
 - Projet 52 : semaine/année calculées depuis la date de publication native du post Photo (narration `projet-52`), pas de nouveau champ ACF. Une Page WP de slug `projet-52` doit lui être assignée en admin (modèle « Projet 52 »).
 - Color Your Life : ne filtre pas par narration (contrairement à ce que supposait l'audit) — ce sont les mêmes séries que l'archive Photo, re-triées par couleur. Une Page WP de slug `color-your-life` doit lui être assignée en admin (modèle « Color Your Life »).
@@ -39,3 +39,4 @@
 - Importer le vrai contenu (series.json, recits.json) et flusher les permaliens une fois en place
 - Assigner les Page Templates créées (Projet 52, Color Your Life, Carte des voyages) à de vraies Pages WP
 - Pages statiques restantes (mentions légales, etc.)
+- Revoir les Résonances (`group_soc_resonance.json` et son usage sur Photo/Création/Récit) : même passage en revue que le nettoyage ACF fait sur les autres groupes (champs morts, cohérence des relations)

@@ -78,6 +78,22 @@ function soc_get_photo_narrations( int $post_id = 0 ): array {
 }
 
 /**
+ * Gets the short introduction of a photo series, from its excerpt.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_photo_intro( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return '';
+	}
+
+	return trim( wp_strip_all_tags( get_the_excerpt( $post_id ) ) );
+}
+
+/**
  * Gets the location of a photo series.
  *
  * @param int $post_id Optional photo ID. Defaults to the current post.
@@ -294,25 +310,28 @@ function soc_get_creation_intro( int $post_id = 0 ): string {
 }
 
 /**
- * Gets the medium (dessin/coloriage) assigned to a creation.
+ * Gets the rubrique (dessin/coloriage/couture) assigned to a creation.
+ *
+ * The creation_type taxonomy carries the rubrique split; medium carries the
+ * finer technique (aquarelle, feutres…) — see soc_get_creation_technique_label().
  *
  * @param int $post_id Optional creation ID. Defaults to the current post.
  * @return WP_Term|null
  */
-function soc_get_creation_medium( int $post_id = 0 ): ?WP_Term {
+function soc_get_creation_rubrique( int $post_id = 0 ): ?WP_Term {
 	$post_id = $post_id ?: get_the_ID();
 
 	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
 		return null;
 	}
 
-	$terms = get_the_terms( $post_id, 'medium' );
+	$terms = get_the_terms( $post_id, 'creation_type' );
 
 	return is_array( $terms ) && ! empty( $terms ) ? $terms[0] : null;
 }
 
 /**
- * Gets the technique label of a creation (its first creation_type term).
+ * Gets the technique label of a creation (its first medium term).
  *
  * Stands in for the two-field `technique` object of sliceofcactus-astro's
  * dessin pages: one WP taxonomy term name covers both the drop-cap source
@@ -328,7 +347,7 @@ function soc_get_creation_technique_label( int $post_id = 0 ): string {
 		return '';
 	}
 
-	$terms = get_the_terms( $post_id, 'creation_type' );
+	$terms = get_the_terms( $post_id, 'medium' );
 
 	return is_array( $terms ) && ! empty( $terms ) ? $terms[0]->name : '';
 }
@@ -393,43 +412,62 @@ function soc_get_creation_cover_id( int $post_id = 0 ): int {
 }
 
 /**
- * Gets the accent color for a medium slug (dessin/coloriage).
+ * Gets the accent color for a rubrique slug (dessin/coloriage).
  *
  * There is no per-creation color override field (unlike Photo's
- * soc_photo_color): sliceofcactus-astro only varies this per medium,
+ * soc_photo_color): sliceofcactus-astro only varies this per rubrique,
  * on both single creations and the /dessin, /coloriage archives.
  *
- * @param string $medium_slug Medium term slug.
+ * @param string $rubrique_slug Rubrique (creation_type) term slug.
  * @return string Hex color.
  */
-function soc_get_creation_accent_color_for_medium( string $medium_slug ): string {
-	return 'coloriage' === $medium_slug ? '#7C3AED' : '#E0592F';
+function soc_get_creation_accent_color_for_rubrique( string $rubrique_slug ): string {
+	return 'coloriage' === $rubrique_slug ? '#7C3AED' : '#E0592F';
 }
 
 /**
- * Gets the accent color of a creation, based on its medium.
+ * Gets the accent color of a creation, based on its rubrique.
  *
  * @param int $post_id Optional creation ID. Defaults to the current post.
  * @return string Hex color.
  */
 function soc_get_creation_accent_color( int $post_id = 0 ): string {
-	$medium = soc_get_creation_medium( $post_id );
+	$rubrique = soc_get_creation_rubrique( $post_id );
 
-	return soc_get_creation_accent_color_for_medium( $medium ? $medium->slug : '' );
+	return soc_get_creation_accent_color_for_rubrique( $rubrique ? $rubrique->slug : '' );
 }
 
 /**
- * Gets the medium slug of the current /dessin or /coloriage archive.
+ * Gets the rubrique slug of the current /dessin or /coloriage archive.
  *
- * Reads the queried medium term (native taxonomy archive), defaulting to
- * 'dessin' as a defensive fallback.
+ * Reads the queried creation_type term (native taxonomy archive), defaulting
+ * to 'dessin' as a defensive fallback.
  *
  * @return string 'dessin' or 'coloriage'.
  */
-function soc_get_creation_archive_medium(): string {
+function soc_get_creation_archive_rubrique(): string {
 	$term = get_queried_object();
 
 	return ( $term instanceof WP_Term && 'coloriage' === $term->slug ) ? 'coloriage' : 'dessin';
+}
+
+/**
+ * Gets the native archive URL of a rubrique (dessin/coloriage), i.e. its
+ * creation_type term link.
+ *
+ * @param string $slug 'dessin' or 'coloriage'.
+ * @return string
+ */
+function soc_get_creation_rubrique_archive_link( string $slug ): string {
+	$term = get_term_by( 'slug', $slug, 'creation_type' );
+
+	if ( ! $term instanceof WP_Term ) {
+		return '';
+	}
+
+	$link = get_term_link( $term );
+
+	return is_string( $link ) ? $link : '';
 }
 
 /**
@@ -439,8 +477,8 @@ function soc_get_creation_archive_medium(): string {
 function soc_creation_theme_color_meta(): void {
 	if ( is_singular( 'creation' ) ) {
 		$color = soc_get_creation_accent_color();
-	} elseif ( is_tax( 'medium' ) ) {
-		$color = soc_get_creation_accent_color_for_medium( soc_get_creation_archive_medium() );
+	} elseif ( is_tax( 'creation_type' ) ) {
+		$color = soc_get_creation_accent_color_for_rubrique( soc_get_creation_archive_rubrique() );
 	} else {
 		return;
 	}
@@ -450,7 +488,7 @@ function soc_creation_theme_color_meta(): void {
 add_action( 'wp_head', 'soc_creation_theme_color_meta' );
 
 /**
- * Adds the medium slug to the body classes of a single creation or the
+ * Adds the rubrique slug to the body classes of a single creation or the
  * /dessin, /coloriage archives.
  *
  * @param string[] $classes Existing body classes.
@@ -458,16 +496,16 @@ add_action( 'wp_head', 'soc_creation_theme_color_meta' );
  */
 function soc_creation_body_classes( array $classes ): array {
 	if ( is_singular( 'creation' ) ) {
-		$medium = soc_get_creation_medium();
-		$slug   = $medium ? $medium->slug : '';
-	} elseif ( is_tax( 'medium' ) ) {
-		$slug = soc_get_creation_archive_medium();
+		$rubrique = soc_get_creation_rubrique();
+		$slug     = $rubrique ? $rubrique->slug : '';
+	} elseif ( is_tax( 'creation_type' ) ) {
+		$slug = soc_get_creation_archive_rubrique();
 	} else {
 		return $classes;
 	}
 
 	if ( '' !== $slug ) {
-		$classes[] = 'soc-medium-' . sanitize_html_class( $slug );
+		$classes[] = 'soc-rubrique-' . sanitize_html_class( $slug );
 	}
 
 	return array_values( array_unique( $classes ) );
@@ -512,7 +550,7 @@ function soc_format_recit_date( string $date ): string {
 }
 
 /**
- * Gets the raw date (Y-m-d) of a récit.
+ * Gets the raw date (Y-m-d) of a récit, from its publish date.
  *
  * @param int $post_id Optional récit ID. Defaults to the current post.
  * @return string
@@ -524,11 +562,7 @@ function soc_get_recit_date( int $post_id = 0 ): string {
 		return '';
 	}
 
-	$date = function_exists( 'get_field' )
-		? get_field( 'soc_recit_date', $post_id )
-		: get_post_meta( $post_id, 'soc_recit_date', true );
-
-	return is_string( $date ) ? $date : '';
+	return get_the_date( 'Y-m-d', $post_id );
 }
 
 /**
@@ -541,36 +575,6 @@ function soc_get_recit_date_label( int $post_id = 0 ): string {
 	$date = soc_get_recit_date( $post_id );
 
 	return '' !== $date ? soc_format_recit_date( $date ) : '';
-}
-
-/**
- * Gets the display place of a récit: its location name, falling back to
- * its city, matching the flat `lieu` string of sliceofcactus-astro's
- * recits.json.
- *
- * @param int $post_id Optional récit ID. Defaults to the current post.
- * @return string
- */
-function soc_get_recit_location_label( int $post_id = 0 ): string {
-	$post_id = $post_id ?: get_the_ID();
-
-	if ( ! $post_id || 'recit' !== get_post_type( $post_id ) ) {
-		return '';
-	}
-
-	$name = function_exists( 'get_field' )
-		? get_field( 'soc_recit_location_name', $post_id )
-		: get_post_meta( $post_id, 'soc_recit_location_name', true );
-
-	if ( is_string( $name ) && '' !== trim( $name ) ) {
-		return trim( $name );
-	}
-
-	$city = function_exists( 'get_field' )
-		? get_field( 'soc_recit_city', $post_id )
-		: get_post_meta( $post_id, 'soc_recit_city', true );
-
-	return is_string( $city ) ? trim( $city ) : '';
 }
 
 /**
@@ -588,16 +592,20 @@ function soc_get_recit_hero_layout( int $post_id = 0 ): string {
 }
 
 /**
- * Gets the hero image caption of a récit.
+ * Gets the hero image caption of a récit: the native caption of its
+ * featured image.
  *
  * @param int $post_id Optional récit ID. Defaults to the current post.
  * @return string
  */
 function soc_get_recit_hero_caption( int $post_id = 0 ): string {
 	$post_id = $post_id ?: get_the_ID();
-	$caption = function_exists( 'get_field' ) ? get_field( 'soc_recit_hero_caption', $post_id ) : '';
 
-	return is_string( $caption ) ? trim( $caption ) : '';
+	if ( ! $post_id || ! has_post_thumbnail( $post_id ) ) {
+		return '';
+	}
+
+	return trim( wp_get_attachment_caption( get_post_thumbnail_id( $post_id ) ) );
 }
 
 /**
@@ -629,43 +637,19 @@ function soc_get_recit_related_creations( int $post_id = 0 ): array {
 }
 
 /**
- * Gets the récits associated with a photo series, published only.
+ * Gets the photos associated with a récit, published only.
  *
- * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @param int $post_id Optional récit ID. Defaults to the current post.
  * @return WP_Post[]
  */
-function soc_get_photo_related_recits( int $post_id = 0 ): array {
+function soc_get_recit_photos( int $post_id = 0 ): array {
 	$post_id = $post_id ?: get_the_ID();
 
-	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+	if ( ! $post_id || 'recit' !== get_post_type( $post_id ) ) {
 		return array();
 	}
 
-	$ids = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_recits', $post_id ) : array();
-	$ids = array_filter( array_map( 'absint', $ids ) );
-
-	return array_values(
-		array_filter(
-			array_map( 'get_post', $ids ),
-			static fn( $post ): bool => $post instanceof WP_Post && 'publish' === $post->post_status
-		)
-	);
-}
-
-/**
- * Gets the creations associated with a photo series, published only.
- *
- * @param int $post_id Optional photo ID. Defaults to the current post.
- * @return WP_Post[]
- */
-function soc_get_photo_related_creations( int $post_id = 0 ): array {
-	$post_id = $post_id ?: get_the_ID();
-
-	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
-		return array();
-	}
-
-	$ids = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_creations', $post_id ) : array();
+	$ids = function_exists( 'get_field' ) ? (array) get_field( 'soc_recit_photos', $post_id ) : array();
 	$ids = array_filter( array_map( 'absint', $ids ) );
 
 	return array_values(

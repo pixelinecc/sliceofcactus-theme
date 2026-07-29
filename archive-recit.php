@@ -51,22 +51,14 @@ $rest   = $total > 0 ? array_slice( $recits, 1 ) : array();
 	</div>
 
 	<?php if ( $first ) : ?>
-		<?php
-		$first_meta = array_filter(
-			array(
-				soc_get_recit_date_label( $first->ID ),
-				soc_get_recit_location_label( $first->ID ),
-			),
-			static fn( string $part ): bool => '' !== $part
-		);
-		?>
+		<?php $first_date = soc_get_recit_date_label( $first->ID ); ?>
 		<a class="journal-lead" href="<?php echo esc_url( get_permalink( $first ) ); ?>">
 			<span class="kicker">
 				<?php
 				printf(
-					/* translators: %s: date and place. */
+					/* translators: %s: date. */
 					esc_html__( 'La une · %s', 'sliceofcactus' ),
-					esc_html( implode( ' · ', $first_meta ) )
+					esc_html( $first_date )
 				);
 				?>
 			</span>
@@ -78,15 +70,6 @@ $rest   = $total > 0 ? array_slice( $recits, 1 ) : array();
 
 	<div class="journal-cols">
 		<?php foreach ( $rest as $recit ) : ?>
-			<?php
-			$entry_meta = array_filter(
-				array(
-					soc_get_recit_date_label( $recit->ID ),
-					soc_get_recit_location_label( $recit->ID ),
-				),
-				static fn( string $part ): bool => '' !== $part
-			);
-			?>
 			<a class="entry" href="<?php echo esc_url( get_permalink( $recit ) ); ?>">
 				<?php if ( has_post_thumbnail( $recit ) ) : ?>
 					<?php
@@ -101,7 +84,7 @@ $rest   = $total > 0 ? array_slice( $recits, 1 ) : array();
 					);
 					?>
 				<?php endif; ?>
-				<span class="entry__k"><?php echo esc_html( implode( ' · ', $entry_meta ) ); ?></span>
+				<span class="entry__k"><?php echo esc_html( soc_get_recit_date_label( $recit->ID ) ); ?></span>
 				<h3 class="entry__t"><?php echo esc_html( get_the_title( $recit ) ); ?></h3>
 				<p class="entry__ex"><?php echo esc_html( get_the_excerpt( $recit ) ); ?></p>
 			</a>

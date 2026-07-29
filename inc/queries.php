@@ -103,7 +103,7 @@ function soc_get_photo_archive_series(): array {
  * Gets the creations displayed after a single creation.
  *
  * Mirrors the `others` list of sliceofcactus-astro's dessin/[id].astro and
- * coloriage/[id].astro: every other creation sharing the same medium, with
+ * coloriage/[id].astro: every other creation sharing the same rubrique, with
  * no limit or shuffling (no manual curation, matching Astro).
  *
  * @param int $post_id Optional current creation ID.
@@ -116,9 +116,9 @@ function soc_get_creation_suggestions( int $post_id = 0 ): array {
 		return array();
 	}
 
-	$medium = soc_get_creation_medium( $post_id );
+	$rubrique = soc_get_creation_rubrique( $post_id );
 
-	if ( ! $medium ) {
+	if ( ! $rubrique ) {
 		return array();
 	}
 
@@ -134,9 +134,9 @@ function soc_get_creation_suggestions( int $post_id = 0 ): array {
 			'no_found_rows'       => true,
 			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				array(
-					'taxonomy' => 'medium',
+					'taxonomy' => 'creation_type',
 					'field'    => 'term_id',
-					'terms'    => array( $medium->term_id ),
+					'terms'    => array( $rubrique->term_id ),
 				),
 			),
 		)
@@ -184,19 +184,57 @@ function soc_get_creation_related_recits( int $post_id = 0 ): array {
 }
 
 /**
+ * Gets the récits that reference a photo series via soc_recit_photos.
+ *
+ * Reverse lookup: no field lives on the photo itself, avoiding a second
+ * manual relationship to keep in sync with soc_recit_photos.
+ *
+ * @param int $post_id Optional current photo ID.
+ * @return WP_Post[]
+ */
+function soc_get_photo_related_recits( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'recit',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'meta_query'          => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				array(
+					'key'     => 'soc_recit_photos',
+					'value'   => $post_id,
+					'compare' => '=',
+				),
+			),
+		)
+	);
+
+	return $query->posts;
+}
+
+/**
  * Gets the creations shown on the Dessin/Coloriage archive.
  *
  * Mirrors sliceofcactus-astro's dessin/index.astro and coloriage/index.astro:
- * every creation of the given medium, most recent first. Coloriages are
+ * every creation of the given rubrique, most recent first. Coloriages are
  * additionally required to have a cover image, matching Astro's
  * `s.rubrique === 'coloriage' && s.couverture` filter — dessins have no such
  * requirement.
  *
- * @param string $medium_slug Medium term slug: 'dessin' or 'coloriage'.
+ * @param string $rubrique_slug Rubrique (creation_type) term slug: 'dessin' or 'coloriage'.
  * @return WP_Post[]
  */
-function soc_get_creation_archive_items( string $medium_slug ): array {
-	$term = get_term_by( 'slug', $medium_slug, 'medium' );
+function soc_get_creation_archive_items( string $rubrique_slug ): array {
+	$term = get_term_by( 'slug', $rubrique_slug, 'creation_type' );
 
 	if ( ! $term instanceof WP_Term ) {
 		return array();
@@ -213,7 +251,7 @@ function soc_get_creation_archive_items( string $medium_slug ): array {
 			'no_found_rows'       => true,
 			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				array(
-					'taxonomy' => 'medium',
+					'taxonomy' => 'creation_type',
 					'field'    => 'term_id',
 					'terms'    => array( $term->term_id ),
 				),
@@ -223,7 +261,7 @@ function soc_get_creation_archive_items( string $medium_slug ): array {
 
 	$items = $query->posts;
 
-	if ( 'coloriage' === $medium_slug ) {
+	if ( 'coloriage' === $rubrique_slug ) {
 		$items = array_values(
 			array_filter(
 				$items,
@@ -233,6 +271,37 @@ function soc_get_creation_archive_items( string $medium_slug ): array {
 	}
 
 	return $items;
+}
+
+/**
+ * Gets the creations shown on the combined Créations archive.
+ *
+ * No Astro equivalent (Astro only has separate dessin/coloriage index
+ * pages, already covered by soc_get_creation_archive_items() /
+ * taxonomy-creation_type.php) — this powers the new unified /creations/
+ * overview, every rubrique mixed, most recent first, cover image required.
+ *
+ * @return WP_Post[]
+ */
+function soc_get_creation_archive_series(): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'creation',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+		)
+	);
+
+	return array_values(
+		array_filter(
+			$query->posts,
+			static fn( WP_Post $item ): bool => soc_get_creation_cover_id( $item->ID ) > 0
+		)
+	);
 }
 
 /**
@@ -249,28 +318,14 @@ function soc_get_recit_archive_items(): array {
 			'post_type'           => 'recit',
 			'post_status'         => 'publish',
 			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
 			'ignore_sticky_posts' => true,
 			'no_found_rows'       => true,
 		)
 	);
 
-	$recits = $query->posts;
-
-	usort(
-		$recits,
-		static function ( WP_Post $a, WP_Post $b ): int {
-			$date_a = function_exists( 'get_field' )
-				? get_field( 'soc_recit_date', $a->ID )
-				: get_post_meta( $a->ID, 'soc_recit_date', true );
-			$date_b = function_exists( 'get_field' )
-				? get_field( 'soc_recit_date', $b->ID )
-				: get_post_meta( $b->ID, 'soc_recit_date', true );
-
-			return strcmp( (string) $date_b, (string) $date_a );
-		}
-	);
-
-	return $recits;
+	return $query->posts;
 }
 
 /**
@@ -535,7 +590,7 @@ function soc_get_home_hero_polaroids(): array {
 		),
 		array(
 			'style'      => 'left:1%;top:34%;--r:6deg;--z:7;--w:.95',
-			'href'       => home_url( '/dessin/' ),
+			'href'       => soc_get_creation_rubrique_archive_link( 'dessin' ),
 			'post'       => $dessin[0] ?? null,
 			'cover'      => static fn( WP_Post $p ) => soc_get_creation_cover_id( $p->ID ),
 			'caption_cb' => $dessin_caption,
@@ -563,14 +618,14 @@ function soc_get_home_hero_polaroids(): array {
 		),
 		array(
 			'style'   => 'left:8%;top:64%;--r:5deg;--z:6;--w:.9',
-			'href'    => home_url( '/coloriage/' ),
+			'href'    => soc_get_creation_rubrique_archive_link( 'coloriage' ),
 			'caption' => __( 'Coloriages', 'sliceofcactus' ),
 			'post'    => $coloriage[1] ?? null,
 			'cover'   => static fn( WP_Post $p ) => soc_get_creation_cover_id( $p->ID ),
 		),
 		array(
 			'style'      => 'left:31%;top:66%;--r:-7deg;--z:10;--w:1.0',
-			'href'       => home_url( '/dessin/' ),
+			'href'       => soc_get_creation_rubrique_archive_link( 'dessin' ),
 			'post'       => $dessin[1] ?? null,
 			'cover'      => static fn( WP_Post $p ) => soc_get_creation_cover_id( $p->ID ),
 			'caption_cb' => $dessin_caption,

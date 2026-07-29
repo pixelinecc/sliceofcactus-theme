@@ -4,8 +4,9 @@
  *
  * The corps array of paragraphs is replaced by the Gutenberg editor
  * (the_content()); the image Astro inserted after the first paragraph is
- * replaced by the dedicated hero fields (soc_recit_hero_layout/_caption),
- * rendered as a figure above the body.
+ * replaced by the featured image, rendered as a figure above the body
+ * (layout variant from soc_recit_hero_layout, caption from the image's
+ * own native attachment caption).
  *
  * @package SliceOfCactus
  */
@@ -14,15 +15,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$post_id      = get_the_ID();
-$archive_url  = get_post_type_archive_link( 'recit' );
-$location     = soc_get_recit_location_label( $post_id );
-$date_label   = soc_get_recit_date_label( $post_id );
-$hero_layout  = soc_get_recit_hero_layout( $post_id );
-$hero_caption = soc_get_recit_hero_caption( $post_id );
-$resonances   = get_the_terms( $post_id, 'resonance' );
-$resonances   = is_array( $resonances ) ? $resonances : array();
-$related      = soc_get_recit_related_creations( $post_id );
+$post_id        = get_the_ID();
+$archive_url    = get_post_type_archive_link( 'recit' );
+$date_label     = soc_get_recit_date_label( $post_id );
+$hero_layout    = soc_get_recit_hero_layout( $post_id );
+$hero_caption   = soc_get_recit_hero_caption( $post_id );
+$resonances     = get_the_terms( $post_id, 'resonance' );
+$resonances     = is_array( $resonances ) ? $resonances : array();
+$related        = soc_get_recit_related_creations( $post_id );
+$related_photos = soc_get_recit_photos( $post_id );
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'article' ); ?>>
 	<?php if ( $archive_url ) : ?>
@@ -32,17 +33,7 @@ $related      = soc_get_recit_related_creations( $post_id );
 	<?php endif; ?>
 
 	<div class="article__kicker">
-		<?php
-		echo '' !== $location
-			? esc_html(
-				sprintf(
-					/* translators: %s: place name. */
-					__( 'Récit · %s', 'sliceofcactus' ),
-					$location
-				)
-			)
-			: esc_html__( 'Récit', 'sliceofcactus' );
-		?>
+		<?php esc_html_e( 'Récit', 'sliceofcactus' ); ?>
 	</div>
 
 	<h1 class="article__title"><?php the_title(); ?></h1>
@@ -70,6 +61,17 @@ $related      = soc_get_recit_related_creations( $post_id );
 			<?php foreach ( $related as $index => $creation ) : ?>
 				<?php echo 0 < $index ? ', ' : ' '; ?>
 				<a href="<?php echo esc_url( get_permalink( $creation ) ); ?>"><?php echo esc_html( get_the_title( $creation ) ); ?></a>
+			<?php endforeach; ?>
+			.
+		</p>
+	<?php endif; ?>
+
+	<?php if ( ! empty( $related_photos ) ) : ?>
+		<p class="linked-note is-on">
+			<?php esc_html_e( 'Photos associées :', 'sliceofcactus' ); ?>
+			<?php foreach ( $related_photos as $index => $photo ) : ?>
+				<?php echo 0 < $index ? ', ' : ' '; ?>
+				<a href="<?php echo esc_url( get_permalink( $photo ) ); ?>"><?php echo esc_html( get_the_title( $photo ) ); ?></a>
 			<?php endforeach; ?>
 			.
 		</p>

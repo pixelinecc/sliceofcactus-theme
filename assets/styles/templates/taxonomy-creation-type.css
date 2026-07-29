@@ -1,12 +1,12 @@
 /**
- * Medium taxonomy archive: book grid shared by the /dessin and /coloriage
- * pages.
+ * Creation_type taxonomy archive: book grid shared by the /dessin and
+ * /coloriage pages.
  *
  * Adapted from sliceofcactus-astro/src/pages/dessin/index.astro,
  * coloriage/index.astro and sliceofcactus-astro/public/css/style.css. The
  * shared magazine-hub chrome (runhead, masthead, view-toggle, sommaire)
- * lives in assets/styles/components/magazine-hub.css; the per-medium accent
- * variables live in assets/styles/templates/single-creation.css.
+ * lives in assets/styles/components/magazine-hub.css; the per-rubrique
+ * accent variables live in assets/styles/templates/single-creation.css.
  */
 
 .colo-intro {

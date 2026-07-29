@@ -112,6 +112,34 @@
 	text-transform: uppercase;
 }
 
+.rubchips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .6rem;
+	margin: 1.4rem 0 .2rem;
+}
+
+.rubchips button {
+	padding: .5rem .95rem;
+	border: 1px solid rgb(255 255 255 / 35%);
+	border-radius: 40px;
+	background: transparent;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background .3s, color .3s, border-color .3s;
+}
+
+.rubchips button:hover,
+.rubchips button.is-active {
+	border-color: var(--paper);
+	background: var(--paper);
+	color: var(--ink);
+}
+
 .view-switch {
 	display: flex;
 	justify-content: center;
@@ -333,7 +361,8 @@
 	.view-toggle a,
 	.back-link,
 	.more-series__plate,
-	.more-series__badge {
+	.more-series__badge,
+	.rubchips button {
 		transition-duration: .01ms;
 	}
 }

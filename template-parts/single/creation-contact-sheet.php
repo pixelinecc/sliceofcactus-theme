@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $post_id        = get_the_ID();
-$medium         = soc_get_creation_medium( $post_id );
-$is_coloriage   = $medium && 'coloriage' === $medium->slug;
+$rubrique       = soc_get_creation_rubrique( $post_id );
+$is_coloriage   = $rubrique && 'coloriage' === $rubrique->slug;
 $technique      = soc_get_creation_technique_label( $post_id );
 $book           = soc_get_creation_book( $post_id );
 $accroche       = soc_get_creation_intro( $post_id );
@@ -76,7 +76,7 @@ $drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $drop_source, 0, 1 ) 
 
 	<a
 		class="back-link"
-		href="<?php echo esc_url( home_url( $is_coloriage ? '/coloriage/' : '/dessin/' ) ); ?>"
+		href="<?php echo esc_url( soc_get_creation_rubrique_archive_link( $is_coloriage ? 'coloriage' : 'dessin' ) ); ?>"
 	>
 		<?php echo $is_coloriage ? esc_html__( '‹ Tous les coloriages', 'sliceofcactus' ) : esc_html__( '‹ Toutes les techniques', 'sliceofcactus' ); ?>
 	</a>
@@ -101,14 +101,17 @@ $drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $drop_source, 0, 1 ) 
 
 	<div class="view-switch">
 		<div class="view-toggle" role="tablist" aria-label="<?php esc_attr_e( 'Explorer le dessin', 'sliceofcactus' ); ?>">
+			<a href="<?php echo esc_url( get_post_type_archive_link( 'creation' ) ); ?>">
+				<?php esc_html_e( 'Toutes', 'sliceofcactus' ); ?>
+			</a>
 			<a
-				href="<?php echo esc_url( home_url( '/dessin/' ) ); ?>"
+				href="<?php echo esc_url( soc_get_creation_rubrique_archive_link( 'dessin' ) ); ?>"
 				<?php echo ! $is_coloriage ? 'class="is-active" aria-current="page"' : ''; ?>
 			>
 				<?php esc_html_e( 'Dessins', 'sliceofcactus' ); ?>
 			</a>
 			<a
-				href="<?php echo esc_url( home_url( '/coloriage/' ) ); ?>"
+				href="<?php echo esc_url( soc_get_creation_rubrique_archive_link( 'coloriage' ) ); ?>"
 				<?php echo $is_coloriage ? 'class="is-active" aria-current="page"' : ''; ?>
 			>
 				<?php esc_html_e( 'Coloriages', 'sliceofcactus' ); ?>

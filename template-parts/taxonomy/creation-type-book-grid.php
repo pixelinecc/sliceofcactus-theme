@@ -1,7 +1,7 @@
 <?php
 /**
- * Medium taxonomy archive: shared markup for the /dessin and /coloriage
- * book grids.
+ * Creation_type taxonomy archive: shared markup for the /dessin and
+ * /coloriage book grids.
  *
  * Migrated from sliceofcactus-astro/src/pages/dessin/index.astro and
  * coloriage/index.astro, which are near-identical besides copy and the
@@ -15,10 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$medium_slug  = soc_get_creation_archive_medium();
-$is_coloriage = 'coloriage' === $medium_slug;
-$items        = soc_get_creation_archive_items( $medium_slug );
-$total        = count( $items );
+$rubrique_slug = soc_get_creation_archive_rubrique();
+$is_coloriage  = 'coloriage' === $rubrique_slug;
+$items         = soc_get_creation_archive_items( $rubrique_slug );
+$total         = count( $items );
 ?>
 <div class="rubrique-page colo">
 
@@ -66,14 +66,17 @@ $total        = count( $items );
 
 	<div class="view-switch">
 		<div class="view-toggle" role="tablist" aria-label="<?php esc_attr_e( 'Explorer le dessin', 'sliceofcactus' ); ?>">
+			<a href="<?php echo esc_url( get_post_type_archive_link( 'creation' ) ); ?>">
+				<?php esc_html_e( 'Toutes', 'sliceofcactus' ); ?>
+			</a>
 			<a
-				href="<?php echo esc_url( home_url( '/dessin/' ) ); ?>"
+				href="<?php echo esc_url( soc_get_creation_rubrique_archive_link( 'dessin' ) ); ?>"
 				<?php echo ! $is_coloriage ? 'class="is-active" aria-current="page"' : ''; ?>
 			>
 				<?php esc_html_e( 'Dessins', 'sliceofcactus' ); ?>
 			</a>
 			<a
-				href="<?php echo esc_url( home_url( '/coloriage/' ) ); ?>"
+				href="<?php echo esc_url( soc_get_creation_rubrique_archive_link( 'coloriage' ) ); ?>"
 				<?php echo $is_coloriage ? 'class="is-active" aria-current="page"' : ''; ?>
 			>
 				<?php esc_html_e( 'Coloriages', 'sliceofcactus' ); ?>

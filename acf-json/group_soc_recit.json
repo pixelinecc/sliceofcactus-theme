@@ -21,26 +21,6 @@
             "selected": 0
         },
         {
-            "key": "field_soc_recit_intro",
-            "label": "Introduction",
-            "name": "soc_recit_intro",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "Introduction courte, 300 caractères recommandés.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": 300,
-            "rows": 4,
-            "new_lines": "",
-            "placeholder": ""
-        },
-        {
             "key": "field_soc_recit_hero_layout",
             "label": "Présentation du hero",
             "name": "soc_recit_hero_layout",
@@ -66,45 +46,6 @@
             "other_choice": 0,
             "layout": "vertical",
             "save_other_choice": 0
-        },
-        {
-            "key": "field_soc_recit_hero_caption",
-            "label": "Légende du hero",
-            "name": "soc_recit_hero_caption",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_soc_recit_date",
-            "label": "Date du récit",
-            "name": "soc_recit_date",
-            "aria-label": "",
-            "type": "date_picker",
-            "instructions": "Date réelle du voyage, de la rencontre ou du projet.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "display_format": "d\/m\/Y",
-            "return_format": "Y-m-d",
-            "first_day": 1,
-            "default_to_current_date": 0
         },
         {
             "key": "field_soc_recit_status",
@@ -154,42 +95,6 @@
             "selected": 0
         },
         {
-            "key": "field_soc_recit_collections",
-            "label": "Collections liées",
-            "name": "soc_recit_collections",
-            "aria-label": "",
-            "type": "relationship",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "post_type": [
-                "collection"
-            ],
-            "post_status": [
-                "publish",
-                "draft",
-                "pending",
-                "private"
-            ],
-            "taxonomy": "",
-            "filters": [
-                "search"
-            ],
-            "return_format": "id",
-            "min": "",
-            "max": "",
-            "elements": [
-                "featured_image"
-            ],
-            "bidirectional": 0,
-            "bidirectional_target": []
-        },
-        {
             "key": "field_soc_recit_creations",
             "label": "Créations associées",
             "name": "soc_recit_creations",
@@ -226,9 +131,9 @@
             "bidirectional_target": []
         },
         {
-            "key": "field_soc_recit_next",
-            "label": "Continuer avec ce récit",
-            "name": "soc_recit_next",
+            "key": "field_6a6a0e4e0c94b",
+            "label": "Photos associées",
+            "name": "soc_recit_photos",
             "aria-label": "",
             "type": "relationship",
             "instructions": "",
@@ -240,7 +145,7 @@
                 "id": ""
             },
             "post_type": [
-                "recit"
+                "photo"
             ],
             "post_status": [
                 "publish",
@@ -254,228 +159,13 @@
             ],
             "return_format": "id",
             "min": "",
-            "max": 1,
+            "max": "",
+            "allow_in_bindings": 1,
             "elements": [
                 "featured_image"
             ],
             "bidirectional": 0,
             "bidirectional_target": []
-        },
-        {
-            "key": "field_soc_recit_tab_location",
-            "label": "Lieu et La carte",
-            "name": "",
-            "aria-label": "",
-            "type": "tab",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": false,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "placement": "top",
-            "endpoint": 0,
-            "selected": 0
-        },
-        {
-            "key": "field_soc_recit_map_enabled",
-            "label": "Afficher sur La carte",
-            "name": "soc_recit_map_enabled",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "ui": 1,
-            "ui_on_text": "Oui",
-            "ui_off_text": "Non"
-        },
-        {
-            "key": "field_soc_recit_location_name",
-            "label": "Nom du lieu",
-            "name": "soc_recit_location_name",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_recit_map_enabled",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_soc_recit_latitude",
-            "label": "Latitude",
-            "name": "soc_recit_latitude",
-            "aria-label": "",
-            "type": "number",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_recit_map_enabled",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "min": -90,
-            "max": 90,
-            "step": "any",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_soc_recit_longitude",
-            "label": "Longitude",
-            "name": "soc_recit_longitude",
-            "aria-label": "",
-            "type": "number",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_recit_map_enabled",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "min": -180,
-            "max": 180,
-            "step": "any",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_soc_recit_location_precision",
-            "label": "Précision publique",
-            "name": "soc_recit_location_precision",
-            "aria-label": "",
-            "type": "radio",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_recit_map_enabled",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "choices": {
-                "exact": "Lieu exact",
-                "city": "Ville ou secteur",
-                "region": "Région"
-            },
-            "default_value": "region",
-            "return_format": "value",
-            "allow_null": 0,
-            "other_choice": 0,
-            "layout": "horizontal",
-            "save_other_choice": 0
-        },
-        {
-            "key": "field_soc_recit_city",
-            "label": "Ville ou secteur",
-            "name": "soc_recit_city",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_recit_map_enabled",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_soc_recit_country",
-            "label": "Pays",
-            "name": "soc_recit_country",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_soc_recit_map_enabled",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
         }
     ],
     "location": [
@@ -499,5 +189,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785326975
+    "modified": 1785335524
 }

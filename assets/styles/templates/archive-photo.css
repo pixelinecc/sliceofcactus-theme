@@ -1,43 +1,15 @@
 /**
- * Photo archive: rubrique chips and series grid.
+ * Photo archive: series grid.
  *
  * Adapted from sliceofcactus-astro/src/pages/photo/index.astro
  * and sliceofcactus-astro/public/css/style.css. The shared magazine-hub
- * chrome (runhead, masthead, view-toggle, sommaire) lives in
- * assets/styles/components/magazine-hub.css.
+ * chrome (runhead, masthead, view-toggle, sommaire, rubchips filter) lives
+ * in assets/styles/components/magazine-hub.css.
  *
  * The custom cursor and per-narration accent overrides are intentionally
  * left out: the archive uses the default (cactus green) universe, and the
  * cursor is a separate, not-yet-migrated transversal feature.
  */
-
-.rubchips {
-	display: flex;
-	flex-wrap: wrap;
-	gap: .6rem;
-	margin: 1.4rem 0 .2rem;
-}
-
-.rubchips button {
-	padding: .5rem .95rem;
-	border: 1px solid rgb(255 255 255 / 35%);
-	border-radius: 40px;
-	background: transparent;
-	color: var(--paper);
-	font-family: var(--font-mono);
-	font-size: .72rem;
-	letter-spacing: .08em;
-	text-transform: uppercase;
-	cursor: pointer;
-	transition: background .3s, color .3s, border-color .3s;
-}
-
-.rubchips button:hover,
-.rubchips button.is-active {
-	border-color: var(--paper);
-	background: var(--paper);
-	color: var(--ink);
-}
 
 .serie-grid {
 	display: grid;
@@ -150,8 +122,7 @@
 
 @media (prefers-reduced-motion: reduce) {
 	.serie-cell__media img,
-	.serie-cell__title::after,
-	.rubchips button {
+	.serie-cell__title::after {
 		transition-duration: .01ms;
 	}
 }

@@ -6,25 +6,36 @@
             "key": "field_soc_creation_intro",
             "label": "Introduction",
             "name": "soc_creation_intro",
+            "aria-label": "",
             "type": "textarea",
             "instructions": "Introduction courte, 300 caractères recommandés.",
             "required": 1,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "maxlength": 300,
             "rows": 4,
-            "new_lines": ""
+            "new_lines": "",
+            "placeholder": ""
         },
         {
             "key": "field_soc_creation_previews",
             "label": "Aperçus",
             "name": "soc_creation_previews",
+            "aria-label": "",
             "type": "gallery",
             "instructions": "Images de la création, ordonnées.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "return_format": "id",
             "library": "all",
             "min": "",
@@ -43,22 +54,32 @@
             "key": "field_soc_creation_book",
             "label": "Informations du carnet",
             "name": "soc_creation_book",
+            "aria-label": "",
             "type": "group",
             "instructions": "À renseigner pour un coloriage : livre d’origine du carnet.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "layout": "block",
             "sub_fields": [
                 {
                     "key": "field_soc_creation_book_title",
                     "label": "Titre du livre",
                     "name": "title",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
-                    "wrapper": { "width": "", "class": "", "id": "" },
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
                     "default_value": "",
                     "maxlength": "",
                     "placeholder": "Mon livre de coloriage",
@@ -69,11 +90,16 @@
                     "key": "field_soc_creation_book_author",
                     "label": "Auteur",
                     "name": "author",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
-                    "wrapper": { "width": "50", "class": "", "id": "" },
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
                     "default_value": "",
                     "maxlength": "",
                     "placeholder": "",
@@ -84,11 +110,16 @@
                     "key": "field_soc_creation_book_publisher",
                     "label": "Éditeur",
                     "name": "publisher",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
-                    "wrapper": { "width": "50", "class": "", "id": "" },
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
                     "default_value": "",
                     "maxlength": "",
                     "placeholder": "",
@@ -99,11 +130,16 @@
                     "key": "field_soc_creation_book_cover",
                     "label": "Jaquette",
                     "name": "cover",
+                    "aria-label": "",
                     "type": "image",
                     "instructions": "Image de couverture du livre.",
                     "required": 0,
                     "conditional_logic": 0,
-                    "wrapper": { "width": "", "class": "", "id": "" },
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
                     "return_format": "id",
                     "library": "all",
                     "min_width": "",
@@ -118,38 +154,38 @@
             ]
         },
         {
-            "key": "field_soc_creation_resonances",
-            "label": "Résonances",
-            "name": "soc_creation_resonances",
-            "type": "taxonomy",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "taxonomy": "resonance",
-            "add_term": 0,
-            "save_terms": 1,
-            "load_terms": 1,
-            "return_format": "id",
-            "field_type": "multi_select",
-            "allow_null": 1,
-            "multiple": 1
-        },
-        {
             "key": "field_soc_creation_next",
             "label": "Continuer avec cette création",
             "name": "soc_creation_next",
+            "aria-label": "",
             "type": "relationship",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
-            "post_type": [ "creation" ],
-            "post_status": [ "publish", "draft", "pending", "private" ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "creation"
+            ],
+            "post_status": [
+                "publish",
+                "draft",
+                "pending",
+                "private"
+            ],
             "taxonomy": "",
-            "filters": [ "search" ],
+            "filters": [
+                "search"
+            ],
             "return_format": "id",
             "min": "",
             "max": 1,
-            "elements": [ "featured_image" ],
+            "elements": [
+                "featured_image"
+            ],
             "bidirectional": 0,
             "bidirectional_target": []
         }
@@ -172,5 +208,8 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1785254304
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1785326959
 }

@@ -17,7 +17,7 @@ $total  = count( $photos );
 <main id="main-content" class="soc-photo-archive rubrique-page">
 
 	<div class="mag-runhead">
-		<span><?php esc_html_e( 'Slice of Cactus — Photo', 'sliceofcactus' ); ?></span>
+		<span><?php esc_html_e( 'Slice of Cactus — Photos', 'sliceofcactus' ); ?></span>
 		<span><?php esc_html_e( 'Label 36 poses', 'sliceofcactus' ); ?></span>
 		<span><?php esc_html_e( 'voyage · lifestyle · noir & blanc', 'sliceofcactus' ); ?></span>
 	</div>

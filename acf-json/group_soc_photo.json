@@ -3,53 +3,9 @@
     "title": "Photo — Données éditoriales",
     "fields": [
         {
-            "key": "field_soc_photo_intro",
-            "label": "Introduction",
-            "name": "soc_photo_intro",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "Introduction courte, 300 caractères recommandés.",
-            "required": 1,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": 300,
-            "rows": 4,
-            "new_lines": "",
-            "placeholder": ""
-        },
-        {
-            "key": "field_soc_photo_resonances",
-            "label": "Résonances",
-            "name": "soc_photo_resonances",
-            "aria-label": "",
-            "type": "taxonomy",
-            "instructions": "Trois résonances au maximum sont recommandées.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "taxonomy": "resonance",
-            "add_term": 0,
-            "save_terms": 1,
-            "load_terms": 1,
-            "return_format": "id",
-            "field_type": "multi_select",
-            "allow_null": 1,
-            "multiple": 1,
-            "bidirectional_target": []
-        },
-        {
             "key": "field_soc_photo_next",
-            "label": "photo suivante",
-            "name": "soc_photo_next",
+            "label": "Récit associé",
+            "name": "soc_photo_recits",
             "aria-label": "",
             "type": "relationship",
             "instructions": "",
@@ -61,7 +17,7 @@
                 "id": ""
             },
             "post_type": [
-                "photo"
+                "recit"
             ],
             "post_status": [
                 "publish",
@@ -75,7 +31,8 @@
             ],
             "return_format": "id",
             "min": "",
-            "max": 1,
+            "max": "",
+            "allow_in_bindings": 1,
             "elements": [
                 "featured_image"
             ],
@@ -213,24 +170,6 @@
             ]
         },
         {
-            "key": "field_soc_photo_date",
-            "label": "Date du projet",
-            "name": "soc_photo_date",
-            "aria-label": "",
-            "type": "date_picker",
-            "instructions": "Mois et année du projet photographique.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "display_format": "F Y",
-            "return_format": "Y-m",
-            "first_day": 1
-        },
-        {
             "key": "field_soc_photo_color",
             "label": "Couleur dominante",
             "name": "soc_photo_color",
@@ -280,9 +219,14 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "#12B26A",
+                    "default_value": "",
                     "enable_opacity": 0,
-                    "return_format": "string"
+                    "return_format": "string",
+                    "allow_in_bindings": 1,
+                    "show_custom_palette": 0,
+                    "show_color_wheel": 1,
+                    "custom_palette_source": "",
+                    "palette_colors": ""
                 }
             ]
         }
@@ -308,5 +252,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1738091600
+    "modified": 1785328274
 }

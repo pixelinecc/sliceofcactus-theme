@@ -78,26 +78,6 @@ function soc_get_photo_narrations( int $post_id = 0 ): array {
 }
 
 /**
- * Gets the short introduction of a photo.
- *
- * @param int $post_id Optional photo ID. Defaults to the current post.
- * @return string
- */
-function soc_get_photo_intro( int $post_id = 0 ): string {
-	$post_id = $post_id ?: get_the_ID();
-
-	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
-		return '';
-	}
-
-	$intro = function_exists( 'get_field' )
-		? get_field( 'soc_photo_intro', $post_id )
-		: get_post_meta( $post_id, 'soc_photo_intro', true );
-
-	return is_string( $intro ) ? trim( $intro ) : '';
-}
-
-/**
  * Gets the location of a photo series.
  *
  * @param int $post_id Optional photo ID. Defaults to the current post.
@@ -120,7 +100,7 @@ function soc_get_photo_location( int $post_id = 0 ): array {
 }
 
 /**
- * Gets the project year of a photo series.
+ * Gets the project year of a photo series, from its publish date.
  *
  * @param int $post_id Optional photo ID. Defaults to the current post.
  * @return string Four-digit year, or an empty string when unset.
@@ -132,11 +112,7 @@ function soc_get_photo_year( int $post_id = 0 ): string {
 		return '';
 	}
 
-	$date = function_exists( 'get_field' )
-		? get_field( 'soc_photo_date', $post_id )
-		: get_post_meta( $post_id, 'soc_photo_date', true );
-
-	return is_string( $date ) && '' !== $date ? substr( $date, 0, 4 ) : '';
+	return get_the_date( 'Y', $post_id );
 }
 
 /**
@@ -646,6 +622,30 @@ function soc_get_recit_related_creations( int $post_id = 0 ): array {
 	}
 
 	$ids = function_exists( 'get_field' ) ? (array) get_field( 'soc_recit_creations', $post_id ) : array();
+	$ids = array_filter( array_map( 'absint', $ids ) );
+
+	return array_values(
+		array_filter(
+			array_map( 'get_post', $ids ),
+			static fn( $post ): bool => $post instanceof WP_Post && 'publish' === $post->post_status
+		)
+	);
+}
+
+/**
+ * Gets the récits associated with a photo series, published only.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return WP_Post[]
+ */
+function soc_get_photo_related_recits( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$ids = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_recits', $post_id ) : array();
 	$ids = array_filter( array_map( 'absint', $ids ) );
 
 	return array_values(

@@ -17,7 +17,6 @@ $post_id          = get_the_ID();
 $narrations       = soc_get_photo_narrations( $post_id );
 $active_narration = ! empty( $narrations ) ? $narrations[0] : null;
 $archive_url      = get_post_type_archive_link( 'photo' );
-$intro            = soc_get_photo_intro( $post_id );
 $resonances       = get_the_terms( $post_id, 'resonance' );
 $resonances       = is_array( $resonances ) ? $resonances : array();
 $location         = soc_get_photo_location( $post_id );
@@ -30,12 +29,13 @@ if ( $uses_cover ) {
 	$image_count = 1;
 }
 
-$film_count  = $image_count > 0 ? (int) ceil( $image_count / 36 ) : 0;
-$title_html  = esc_html( get_the_title() );
-$title_html  = preg_replace( '/,\s*/u', ',<br>', $title_html, 1 );
-$suggestions = soc_get_photo_suggestions( $post_id, 6 );
-$sheet_id    = 'soc-photo-sheet-' . $post_id;
-$lightbox_id = 'soc-photo-lightbox-' . $post_id;
+$film_count     = $image_count > 0 ? (int) ceil( $image_count / 36 ) : 0;
+$title_html     = esc_html( get_the_title() );
+$title_html     = preg_replace( '/,\s*/u', ',<br>', $title_html, 1 );
+$suggestions    = soc_get_photo_suggestions( $post_id, 6 );
+$related_recits = soc_get_photo_related_recits( $post_id );
+$sheet_id       = 'soc-photo-sheet-' . $post_id;
+$lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'soc-photo soc-photo--contact-sheet' ); ?>>
 	<header class="serie-hero">
@@ -121,8 +121,8 @@ $lightbox_id = 'soc-photo-lightbox-' . $post_id;
 			</div>
 		<?php endif; ?>
 
-		<?php if ( '' !== $intro ) : ?>
-			<p class="serie-hero__lead"><?php echo esc_html( $intro ); ?></p>
+		<?php if ( '' !== trim( get_the_content( null, false, $post_id ) ) ) : ?>
+			<div class="serie-hero__lead"><?php the_content(); ?></div>
 		<?php endif; ?>
 	</header>
 
@@ -163,6 +163,17 @@ $lightbox_id = 'soc-photo-lightbox-' . $post_id;
 			<?php endif; ?>
 		</div>
 	</section>
+
+	<?php if ( ! empty( $related_recits ) ) : ?>
+		<p class="linked-note is-on">
+			<?php esc_html_e( 'Cette série est racontée dans :', 'sliceofcactus' ); ?>
+			<?php foreach ( $related_recits as $index => $recit ) : ?>
+				<?php echo 0 < $index ? ', ' : ' '; ?>
+				<a href="<?php echo esc_url( get_permalink( $recit ) ); ?>"><?php echo esc_html( get_the_title( $recit ) ); ?></a>
+			<?php endforeach; ?>
+			.
+		</p>
+	<?php endif; ?>
 
 	<?php if ( ! empty( $suggestions ) ) : ?>
 		<section class="more-series" aria-labelledby="<?php echo esc_attr( 'soc-more-photos-' . $post_id ); ?>">

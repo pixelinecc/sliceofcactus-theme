@@ -246,6 +246,27 @@
 	opacity: .65;
 }
 
+.linked-note {
+	display: none;
+	max-width: var(--maxw);
+	margin: 0 auto;
+	padding: 1.4rem var(--gutter) 0;
+	color: rgb(255 255 255 / 75%);
+	font-family: var(--font-display);
+	font-style: italic;
+	font-size: 1.05rem;
+	text-align: center;
+}
+
+.linked-note.is-on {
+	display: block;
+}
+
+.linked-note a {
+	border-bottom: 1px solid var(--paper);
+	color: var(--paper);
+}
+
 .serie-resonances {
 	display: flex;
 	flex-wrap: wrap;

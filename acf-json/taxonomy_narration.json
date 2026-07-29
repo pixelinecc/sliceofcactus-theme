@@ -60,7 +60,7 @@
     "rewrite": {
         "permalink_rewrite": "taxonomy_key",
         "with_front": "1",
-        "rewrite_hierarchical": "0"
+        "rewrite_hierarchical": "1"
     },
     "query_var": "post_type_key",
     "query_var_name": "",
@@ -73,5 +73,5 @@
     "meta_box_sanitize_cb": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785254235
+    "modified": 1785326468
 }

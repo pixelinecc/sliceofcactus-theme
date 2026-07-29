@@ -17,8 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Gets the photos displayed after a single photo.
  *
- * A manually selected soc_photo_next item is kept first. Remaining positions
- * reproduce the exploratory suggestions of the Astro source.
+ * Random draw among photos sharing at least one narration with the current
+ * series, matching the shuffled `others` pool of sliceofcactus-astro's
+ * photo/[id].astro (no manual curation).
  *
  * @param int $post_id Optional current photo ID.
  * @param int $limit   Maximum number of results.
@@ -32,53 +33,32 @@ function soc_get_photo_suggestions( int $post_id = 0, int $limit = 6 ): array {
 		return array();
 	}
 
-	$suggestion_ids = array();
-	$manual_next    = get_post_meta( $post_id, 'soc_photo_next', true );
+	$narration_ids = wp_list_pluck( soc_get_photo_narrations( $post_id ), 'term_id' );
 
-	if ( ! is_array( $manual_next ) ) {
-		$manual_next = $manual_next ? array( $manual_next ) : array();
+	if ( empty( $narration_ids ) ) {
+		return array();
 	}
 
-	foreach ( $manual_next as $next_id ) {
-		$next_id = absint( $next_id );
-
-		if (
-			$next_id
-			&& $next_id !== $post_id
-			&& 'photo' === get_post_type( $next_id )
-			&& 'publish' === get_post_status( $next_id )
-		) {
-			$suggestion_ids[] = $next_id;
-			break;
-		}
-	}
-
-	$remaining = $limit - count( $suggestion_ids );
-
-	if ( $remaining > 0 ) {
-		$random_ids = get_posts(
-			array(
-				'post_type'           => 'photo',
-				'post_status'         => 'publish',
-				'posts_per_page'      => $remaining,
-				'post__not_in'        => array_merge( array( $post_id ), $suggestion_ids ),
-				'orderby'             => 'rand',
-				'fields'              => 'ids',
-				'ignore_sticky_posts' => true,
-				'no_found_rows'       => true,
-				'suppress_filters'    => false,
-			)
-		);
-
-		$suggestion_ids = array_merge( $suggestion_ids, array_map( 'absint', $random_ids ) );
-	}
-
-	return array_values(
-		array_filter(
-			array_map( 'get_post', $suggestion_ids ),
-			static fn( $post ): bool => $post instanceof WP_Post
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'photo',
+			'post_status'         => 'publish',
+			'posts_per_page'      => $limit,
+			'post__not_in'        => array( $post_id ),
+			'orderby'             => 'rand',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'narration',
+					'field'    => 'term_id',
+					'terms'    => $narration_ids,
+				),
+			),
 		)
 	);
+
+	return $query->posts;
 }
 
 /**
@@ -86,7 +66,7 @@ function soc_get_photo_suggestions( int $post_id = 0, int $limit = 6 ): array {
  *
  * Mirrors the RUBRIQUES filter of sliceofcactus-astro/src/pages/photo/index.astro:
  * every narration except the two standalone collections (Projet 52, Color Your Life),
- * limited to series with a cover image, most recent project date first.
+ * limited to series with a cover image, most recent publish date first.
  *
  * @return WP_Post[]
  */
@@ -96,6 +76,8 @@ function soc_get_photo_archive_series(): array {
 			'post_type'           => 'photo',
 			'post_status'         => 'publish',
 			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
 			'ignore_sticky_posts' => true,
 			'no_found_rows'       => true,
 			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
@@ -109,28 +91,12 @@ function soc_get_photo_archive_series(): array {
 		)
 	);
 
-	$photos = array_values(
+	return array_values(
 		array_filter(
 			$query->posts,
 			static fn( WP_Post $photo ): bool => soc_get_photo_cover_id( $photo->ID ) > 0
 		)
 	);
-
-	usort(
-		$photos,
-		static function ( WP_Post $a, WP_Post $b ): int {
-			$date_a = function_exists( 'get_field' )
-				? get_field( 'soc_photo_date', $a->ID )
-				: get_post_meta( $a->ID, 'soc_photo_date', true );
-			$date_b = function_exists( 'get_field' )
-				? get_field( 'soc_photo_date', $b->ID )
-				: get_post_meta( $b->ID, 'soc_photo_date', true );
-
-			return strcmp( (string) $date_b, (string) $date_a );
-		}
-	);
-
-	return $photos;
 }
 
 /**
@@ -408,6 +374,8 @@ function soc_get_voyage_map_destinations(): array {
 			'post_type'           => 'photo',
 			'post_status'         => 'publish',
 			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
 			'ignore_sticky_posts' => true,
 			'no_found_rows'       => true,
 			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
@@ -443,23 +411,6 @@ function soc_get_voyage_map_destinations(): array {
 
 		$destinations[ $key ]['series'][] = $photo;
 	}
-
-	foreach ( $destinations as &$destination ) {
-		usort(
-			$destination['series'],
-			static function ( WP_Post $a, WP_Post $b ): int {
-				$date_a = function_exists( 'get_field' )
-					? get_field( 'soc_photo_date', $a->ID )
-					: get_post_meta( $a->ID, 'soc_photo_date', true );
-				$date_b = function_exists( 'get_field' )
-					? get_field( 'soc_photo_date', $b->ID )
-					: get_post_meta( $b->ID, 'soc_photo_date', true );
-
-				return strcmp( (string) $date_b, (string) $date_a );
-			}
-		);
-	}
-	unset( $destination );
 
 	return array_values( $destinations );
 }

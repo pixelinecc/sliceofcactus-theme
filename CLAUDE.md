@@ -1,28 +1,26 @@
 # Slice of Cactus — Instructions Claude Code
 
-## Mission
+## Référence du projet
 
-Migrer le projet **sliceofcactus-astro** vers le thème **sliceofcactus-theme**.
+Le thème WordPress est désormais la référence officielle de Slice of Cactus.
 
-Le projet Astro est la référence fonctionnelle, éditoriale et visuelle.
+Le projet Astro est conservé uniquement comme archive historique.
 
-Le thème WordPress est la destination.
+Il ne doit être consulté que lorsqu'un comportement ou un choix de conception passé doit être vérifié.
 
-L'objectif est de reproduire fidèlement le projet Astro dans WordPress.
-
-Ne pas réinventer le site.
+Toute nouvelle fonctionnalité est conçue directement pour WordPress.
 
 ---
 
 # Philosophie
 
-Toujours privilégier :
+Les décisions d'architecture sont figées.
 
-Astro → adaptation → WordPress
+Ne pas remettre en question les choix structurels du projet sans demande explicite.
 
-Jamais :
+Avant de proposer une modification d'architecture, se demander si elle répond à un besoin réel ou si elle complexifie inutilement le projet.
 
-Astro → nouvelle idée → nouvelle architecture.
+Toujours privilégier la solution WordPress native la plus simple.
 
 ---
 
@@ -69,17 +67,43 @@ C'est la seule évolution fonctionnelle par rapport au projet Astro.
 
 ---
 
-# Règles de migration
+# Mon rôle
 
-Toujours chercher d'abord si le code existe déjà dans Astro.
+Céline est la conceptrice du projet.
 
-Si oui :
+Les choix concernant :
 
-- le réutiliser
-- l'adapter
-- éviter toute réécriture inutile
+- les CPT ;
+- les taxonomies ;
+- les champs ACF ;
+- les relations ;
+- les templates ;
+- les URLs ;
+- l'organisation du thème ;
 
-Ne jamais créer un composant si son équivalent Astro existe déjà.
+sont des décisions fonctionnelles. Ne pas les remettre en question sauf demande explicite d'une réflexion d'architecture.
+
+---
+
+# Rôle de Claude Code
+
+Assister le développement du thème :
+
+- implémenter les fonctionnalités ;
+- simplifier le code lorsque c'est possible ;
+- détecter les bugs ;
+- proposer des améliorations de qualité ;
+- respecter les conventions déjà en place.
+
+Éviter d'introduire :
+
+- des abstractions inutiles ;
+- des couches supplémentaires ;
+- des règles de rewrite ;
+- des helpers génériques ;
+- des mécanismes anticipant des besoins hypothétiques.
+
+Chaque ajout doit répondre à un besoin concret.
 
 ---
 
@@ -91,14 +115,13 @@ Ne jamais commencer un nouveau lot sans validation du précédent.
 
 Pour chaque lot :
 
-1. analyser Astro
-2. analyser le thème WordPress
-3. modifier uniquement les fichiers concernés
-4. tester
-5. comparer avec Astro
-6. proposer un commit
+1. analyser le thème WordPress existant
+2. modifier uniquement les fichiers concernés
+3. tester
+4. proposer un commit
 
 ---
+
 ## Principe de simplicité
 
 Toujours utiliser en priorité les fonctionnalités natives de WordPress.
@@ -127,6 +150,7 @@ Pour chaque ajout structurel, expliquer :
 1. le besoin concret ;
 2. pourquoi WordPress natif ne suffit pas ;
 3. le coût de maintenance ajouté.
+
 ---
 
 # ACF
@@ -185,7 +209,7 @@ Co-localiser CSS + JS + PHP dans un dossier `components/` n'apporte aucun béné
 
 # CSS
 
-Réutiliser le CSS Astro autant que possible.
+Respecter le design system existant (`assets/styles/settings/tokens.css` et les fichiers déjà en place).
 
 Conserver les noms de classes lorsqu'ils restent cohérents.
 
@@ -195,13 +219,9 @@ Ne pas réécrire un composant CSS déjà fonctionnel.
 
 # JavaScript
 
-Conserver la logique Astro lorsqu'elle fonctionne.
+Conserver la logique déjà en place lorsqu'elle fonctionne.
 
-Adapter uniquement :
-
-- les sélecteurs
-- les données
-- les hooks WordPress
+Adapter uniquement ce qui est nécessaire à la nouvelle fonctionnalité.
 
 ---
 
@@ -219,7 +239,7 @@ Ne jamais modifier plusieurs fonctionnalités dans le même commit.
 
 Ne jamais utiliser le dépôt Foundations.
 
-Il ne fait pas partie de cette migration.
+Il ne fait pas partie de ce projet.
 
 ---
 
@@ -228,7 +248,6 @@ Il ne fait pas partie de cette migration.
 Toujours privilégier la solution :
 
 - la plus simple
-- la plus proche d'Astro
 - la plus facile à maintenir
 
 Ne jamais complexifier le projet sans raison.

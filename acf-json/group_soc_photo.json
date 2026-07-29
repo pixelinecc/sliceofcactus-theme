@@ -40,6 +40,43 @@
             "bidirectional_target": []
         },
         {
+            "key": "field_6a69f5119c0be",
+            "label": "Création associée",
+            "name": "soc_photo_creations",
+            "aria-label": "",
+            "type": "relationship",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "creation"
+            ],
+            "post_status": [
+                "publish",
+                "draft",
+                "pending",
+                "private"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": "",
+            "allow_in_bindings": 1,
+            "elements": [
+                "featured_image"
+            ],
+            "bidirectional": 0,
+            "bidirectional_target": []
+        },
+        {
             "key": "field_soc_photo_gallery",
             "label": "Galerie",
             "name": "soc_photo_gallery",
@@ -252,5 +289,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785328274
+    "modified": 1785328940
 }

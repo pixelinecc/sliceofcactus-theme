@@ -3,26 +3,6 @@
     "title": "Création — Données éditoriales",
     "fields": [
         {
-            "key": "field_soc_creation_intro",
-            "label": "Introduction",
-            "name": "soc_creation_intro",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "Introduction courte, 300 caractères recommandés.",
-            "required": 1,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": 300,
-            "rows": 4,
-            "new_lines": "",
-            "placeholder": ""
-        },
-        {
             "key": "field_soc_creation_previews",
             "label": "Aperçus",
             "name": "soc_creation_previews",
@@ -152,42 +132,6 @@
                     "preview_size": "thumbnail"
                 }
             ]
-        },
-        {
-            "key": "field_soc_creation_next",
-            "label": "Continuer avec cette création",
-            "name": "soc_creation_next",
-            "aria-label": "",
-            "type": "relationship",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "post_type": [
-                "creation"
-            ],
-            "post_status": [
-                "publish",
-                "draft",
-                "pending",
-                "private"
-            ],
-            "taxonomy": "",
-            "filters": [
-                "search"
-            ],
-            "return_format": "id",
-            "min": "",
-            "max": 1,
-            "elements": [
-                "featured_image"
-            ],
-            "bidirectional": 0,
-            "bidirectional_target": []
         }
     ],
     "location": [
@@ -211,5 +155,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785326959
+    "modified": 1785329421
 }

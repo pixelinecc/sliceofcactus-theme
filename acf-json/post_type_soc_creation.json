@@ -7,28 +7,39 @@
     "advanced_configuration": true,
     "import_source": "",
     "import_date": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "labels": {
         "name": "Créations",
         "singular_name": "Création",
         "menu_name": "Créations",
         "all_items": "Toutes les créations",
-        "add_new": "Ajouter",
-        "add_new_item": "Ajouter une création",
         "edit_item": "Modifier la création",
-        "new_item": "Nouvelle création",
         "view_item": "Voir la création",
         "view_items": "Voir les créations",
+        "add_new_item": "Ajouter une création",
+        "add_new": "Ajouter",
+        "new_item": "Nouvelle création",
+        "parent_item_colon": "",
         "search_items": "Rechercher des créations",
         "not_found": "Aucune création trouvée",
         "not_found_in_trash": "Aucune création trouvée dans la corbeille",
         "archives": "Archives des créations",
+        "attributes": "",
         "featured_image": "Image principale",
         "set_featured_image": "Définir l’image principale",
         "remove_featured_image": "Retirer l’image principale",
         "use_featured_image": "Utiliser comme image principale",
+        "insert_into_item": "",
+        "uploaded_to_this_item": "",
+        "filter_items_list": "",
+        "filter_by_date": "",
         "items_list_navigation": "Navigation de la liste des créations",
         "items_list": "Liste des créations",
         "item_published": "Création publiée.",
+        "item_published_privately": "",
+        "item_reverted_to_draft": "",
+        "item_scheduled": "",
         "item_updated": "Création mise à jour.",
         "item_link": "Lien de la création",
         "item_link_description": "Un lien vers une création."
@@ -45,10 +56,13 @@
     "show_in_nav_menus": true,
     "show_in_rest": true,
     "rest_base": "",
-    "rest_namespace": "wp/v2",
+    "rest_namespace": "wp\/v2",
     "rest_controller_class": "WP_REST_Posts_Controller",
     "menu_position": 22,
-    "menu_icon": "dashicons-art",
+    "menu_icon": {
+        "type": "dashicons",
+        "value": "dashicons-art"
+    },
     "rename_capabilities": false,
     "singular_capability_name": "post",
     "plural_capability_name": "posts",
@@ -56,8 +70,8 @@
         "title",
         "editor",
         "thumbnail",
-        "excerpt",
-        "revisions"
+        "revisions",
+        "excerpt"
     ],
     "taxonomies": [
         "resonance",
@@ -69,9 +83,9 @@
     "rewrite": {
         "permalink_rewrite": "custom_permalink",
         "slug": "creations",
-        "feeds": false,
-        "pages": true,
-        "with_front": false
+        "with_front": "0",
+        "feeds": "0",
+        "pages": "1"
     },
     "query_var": "post_type_key",
     "query_var_name": "",
@@ -79,5 +93,5 @@
     "delete_with_user": false,
     "register_meta_box_cb": "",
     "enter_title_here": "Titre de la création",
-    "modified": 1785196800
+    "modified": 1785329521
 }

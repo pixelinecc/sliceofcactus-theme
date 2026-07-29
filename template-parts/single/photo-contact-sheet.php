@@ -32,10 +32,11 @@ if ( $uses_cover ) {
 $film_count     = $image_count > 0 ? (int) ceil( $image_count / 36 ) : 0;
 $title_html     = esc_html( get_the_title() );
 $title_html     = preg_replace( '/,\s*/u', ',<br>', $title_html, 1 );
-$suggestions    = soc_get_photo_suggestions( $post_id, 6 );
-$related_recits = soc_get_photo_related_recits( $post_id );
-$sheet_id       = 'soc-photo-sheet-' . $post_id;
-$lightbox_id    = 'soc-photo-lightbox-' . $post_id;
+$suggestions       = soc_get_photo_suggestions( $post_id, 6 );
+$related_recits    = soc_get_photo_related_recits( $post_id );
+$related_creations = soc_get_photo_related_creations( $post_id );
+$sheet_id          = 'soc-photo-sheet-' . $post_id;
+$lightbox_id       = 'soc-photo-lightbox-' . $post_id;
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'soc-photo soc-photo--contact-sheet' ); ?>>
 	<header class="serie-hero">
@@ -170,6 +171,17 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 			<?php foreach ( $related_recits as $index => $recit ) : ?>
 				<?php echo 0 < $index ? ', ' : ' '; ?>
 				<a href="<?php echo esc_url( get_permalink( $recit ) ); ?>"><?php echo esc_html( get_the_title( $recit ) ); ?></a>
+			<?php endforeach; ?>
+			.
+		</p>
+	<?php endif; ?>
+
+	<?php if ( ! empty( $related_creations ) ) : ?>
+		<p class="linked-note is-on">
+			<?php esc_html_e( 'Créations associées :', 'sliceofcactus' ); ?>
+			<?php foreach ( $related_creations as $index => $creation ) : ?>
+				<?php echo 0 < $index ? ', ' : ' '; ?>
+				<a href="<?php echo esc_url( get_permalink( $creation ) ); ?>"><?php echo esc_html( get_the_title( $creation ) ); ?></a>
 			<?php endforeach; ?>
 			.
 		</p>

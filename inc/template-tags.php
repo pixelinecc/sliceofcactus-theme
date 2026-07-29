@@ -290,11 +290,7 @@ function soc_get_creation_intro( int $post_id = 0 ): string {
 		return '';
 	}
 
-	$intro = function_exists( 'get_field' )
-		? get_field( 'soc_creation_intro', $post_id )
-		: get_post_meta( $post_id, 'soc_creation_intro', true );
-
-	return is_string( $intro ) ? trim( $intro ) : '';
+	return trim( wp_strip_all_tags( get_the_excerpt( $post_id ) ) );
 }
 
 /**
@@ -646,6 +642,30 @@ function soc_get_photo_related_recits( int $post_id = 0 ): array {
 	}
 
 	$ids = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_recits', $post_id ) : array();
+	$ids = array_filter( array_map( 'absint', $ids ) );
+
+	return array_values(
+		array_filter(
+			array_map( 'get_post', $ids ),
+			static fn( $post ): bool => $post instanceof WP_Post && 'publish' === $post->post_status
+		)
+	);
+}
+
+/**
+ * Gets the creations associated with a photo series, published only.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return WP_Post[]
+ */
+function soc_get_photo_related_creations( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$ids = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_creations', $post_id ) : array();
 	$ids = array_filter( array_map( 'absint', $ids ) );
 
 	return array_values(

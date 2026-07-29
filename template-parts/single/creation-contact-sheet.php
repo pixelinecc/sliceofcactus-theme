@@ -14,19 +14,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$post_id      = get_the_ID();
-$medium       = soc_get_creation_medium( $post_id );
-$is_coloriage = $medium && 'coloriage' === $medium->slug;
-$technique    = soc_get_creation_technique_label( $post_id );
-$book         = soc_get_creation_book( $post_id );
-$accroche     = soc_get_creation_intro( $post_id );
-$resonances   = get_the_terms( $post_id, 'resonance' );
-$resonances   = is_array( $resonances ) ? $resonances : array();
-$gallery_ids  = soc_get_creation_gallery_ids( $post_id );
-$suggestions  = soc_get_creation_suggestions( $post_id );
-$accent_color = soc_get_creation_accent_color( $post_id );
-$sheet_id     = 'soc-creation-sheet-' . $post_id;
-$lightbox_id  = 'soc-creation-lightbox-' . $post_id;
+$post_id        = get_the_ID();
+$medium         = soc_get_creation_medium( $post_id );
+$is_coloriage   = $medium && 'coloriage' === $medium->slug;
+$technique      = soc_get_creation_technique_label( $post_id );
+$book           = soc_get_creation_book( $post_id );
+$accroche       = soc_get_creation_intro( $post_id );
+$resonances     = get_the_terms( $post_id, 'resonance' );
+$resonances     = is_array( $resonances ) ? $resonances : array();
+$gallery_ids    = soc_get_creation_gallery_ids( $post_id );
+$suggestions    = soc_get_creation_suggestions( $post_id );
+$related_recits = soc_get_creation_related_recits( $post_id );
+$accent_color   = soc_get_creation_accent_color( $post_id );
+$sheet_id       = 'soc-creation-sheet-' . $post_id;
+$lightbox_id    = 'soc-creation-lightbox-' . $post_id;
 
 if ( $is_coloriage ) {
 	$drop_source  = get_the_title();
@@ -247,6 +248,17 @@ $drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $drop_source, 0, 1 ) 
 				<?php endforeach; ?>
 			</div>
 		</section>
+	<?php endif; ?>
+
+	<?php if ( ! empty( $related_recits ) ) : ?>
+		<p class="linked-note is-on">
+			<?php esc_html_e( 'Cette création est racontée dans :', 'sliceofcactus' ); ?>
+			<?php foreach ( $related_recits as $index => $recit ) : ?>
+				<?php echo 0 < $index ? ', ' : ' '; ?>
+				<a href="<?php echo esc_url( get_permalink( $recit ) ); ?>"><?php echo esc_html( get_the_title( $recit ) ); ?></a>
+			<?php endforeach; ?>
+			.
+		</p>
 	<?php endif; ?>
 
 	<?php if ( ! empty( $resonances ) ) : ?>

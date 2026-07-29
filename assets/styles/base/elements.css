@@ -4,7 +4,18 @@
 
 body {
 	overflow-x: hidden;
-	background: var(--page-background);
+	/*
+	 * Inlined instead of var(--page-background): a custom property that
+	 * itself references --accent/--accent-deep did not reliably pick up
+	 * the per-narration and per-rubrique body class overrides declared
+	 * further down the cascade. Referencing --accent/--accent-deep
+	 * directly here resolves them at this exact element, so overrides
+	 * apply correctly.
+	 */
+	background:
+		radial-gradient(115% 85% at 82% 8%, rgb(255 255 255 / 10%), transparent 55%),
+		radial-gradient(100% 95% at 4% 100%, var(--accent-deep), transparent 62%),
+		var(--accent);
 	background-attachment: fixed;
 	color: var(--paper);
 }

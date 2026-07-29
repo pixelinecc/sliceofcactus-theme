@@ -94,6 +94,10 @@ body.page-template-page-projet-52-php {
 	padding-bottom: 3rem;
 }
 
+.p52-grid[hidden] {
+	display: none;
+}
+
 .wk {
 	position: relative;
 	aspect-ratio: 1 / 1;

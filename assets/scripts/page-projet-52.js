@@ -2,7 +2,7 @@
  * Projet 52: year switching and lightbox.
  *
  * Adapted from sliceofcactus-astro/src/pages/projet-52.astro. Unlike Astro,
- * every year's grid is server-rendered from real photo posts (see
+ * every year's grid is server-rendered from a real photo gallery (see
  * page-projet-52.php) — this script only toggles which grid is visible and
  * drives a lightbox over the currently visible one, instead of generating
  * placeholder markup from a JS config.

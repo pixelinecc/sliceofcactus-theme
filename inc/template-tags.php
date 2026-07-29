@@ -132,6 +132,24 @@ function soc_get_photo_year( int $post_id = 0 ): string {
 }
 
 /**
+ * Gets the ordered gallery images of a photo series.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return int[] Attachment IDs.
+ */
+function soc_get_photo_gallery_ids( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$gallery = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_gallery', $post_id ) : array();
+
+	return array_values( array_filter( array_map( 'absint', $gallery ) ) );
+}
+
+/**
  * Gets the number of poses (images) of a photo series.
  *
  * Counts the soc_photo_gallery images, matching the single-photo template,
@@ -142,13 +160,7 @@ function soc_get_photo_year( int $post_id = 0 ): string {
  */
 function soc_get_photo_pose_count( int $post_id = 0 ): int {
 	$post_id = $post_id ?: get_the_ID();
-
-	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
-		return 0;
-	}
-
-	$gallery = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_gallery', $post_id ) : array();
-	$count   = count( array_filter( array_map( 'absint', $gallery ) ) );
+	$count   = count( soc_get_photo_gallery_ids( $post_id ) );
 
 	return $count > 0 ? $count : ( has_post_thumbnail( $post_id ) ? 1 : 0 );
 }
@@ -171,8 +183,7 @@ function soc_get_photo_cover_id( int $post_id = 0 ): int {
 		return (int) get_post_thumbnail_id( $post_id );
 	}
 
-	$gallery = function_exists( 'get_field' ) ? (array) get_field( 'soc_photo_gallery', $post_id ) : array();
-	$gallery = array_filter( array_map( 'absint', $gallery ) );
+	$gallery = soc_get_photo_gallery_ids( $post_id );
 
 	return ! empty( $gallery ) ? (int) reset( $gallery ) : 0;
 }

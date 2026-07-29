@@ -4,8 +4,9 @@
  *
  * Migrated from sliceofcactus-astro/src/pages/projet-52.astro. Astro's
  * version has no real data (a hardcoded YEARS config feeding placeholder
- * images) — here every week is a real "photo" post tagged with the
- * narration "projet-52", grouped by soc_get_projet52_years().
+ * images) — here one "photo" post per year is tagged with the narration
+ * "projet-52", its ordered soc_photo_gallery images filling the weeks in
+ * sequence, grouped by soc_get_projet52_years().
  *
  * @package SliceOfCactus
  */
@@ -81,28 +82,34 @@ $default_year = ! empty( $years ) ? array_key_first( $years ) : null;
 				data-p52-grid
 				<?php echo $year !== $default_year ? 'hidden' : ''; ?>
 			>
-				<?php foreach ( $data['weeks'] as $week => $photo ) : ?>
+				<?php foreach ( $data['weeks'] as $week => $attachment_id ) : ?>
 					<?php $week_label = sprintf( 'S%02d', $week ); ?>
-					<?php if ( $photo instanceof WP_Post ) : ?>
+					<?php if ( null !== $attachment_id ) : ?>
 						<?php
-						$cover_id = soc_get_photo_cover_id( $photo->ID );
-						$caption  = sprintf(
-							/* translators: 1: week number, 2: year. */
-							__( 'Semaine %1$d · %2$s', 'sliceofcactus' ),
-							$week,
-							get_the_title( $photo )
-						);
+						$image_alt = trim( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) );
+						$caption   = '' !== $image_alt
+							? sprintf(
+								/* translators: 1: week number, 2: image description. */
+								__( 'Semaine %1$d · %2$s', 'sliceofcactus' ),
+								$week,
+								$image_alt
+							)
+							: sprintf(
+								/* translators: %d: week number. */
+								__( 'Semaine %d', 'sliceofcactus' ),
+								$week
+							);
 						?>
 						<button
 							type="button"
 							class="wk wk--full"
-							data-full="<?php echo esc_url( wp_get_attachment_image_url( $cover_id, 'large' ) ); ?>"
+							data-full="<?php echo esc_url( wp_get_attachment_image_url( $attachment_id, 'large' ) ); ?>"
 							data-caption="<?php echo esc_attr( $caption ); ?>"
 							aria-label="<?php echo esc_attr( $caption ); ?>"
 						>
 							<?php
 							echo wp_get_attachment_image(
-								$cover_id,
+								$attachment_id,
 								'medium',
 								false,
 								array(

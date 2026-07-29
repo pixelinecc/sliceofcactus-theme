@@ -34,25 +34,21 @@ if ( empty( $site_name_words ) ) {
 <footer class="footer" id="contact">
 	<div class="footer__top">
 		<div class="footer__brand">
-			<?php if ( has_custom_logo() ) : ?>
-				<?php the_custom_logo(); ?>
-			<?php else : ?>
-				<a
-					class="footer__logo"
-					href="<?php echo esc_url( home_url( '/' ) ); ?>"
-					rel="home"
-					aria-label="<?php echo esc_attr( $site_name ); ?>"
-					<?php echo is_front_page() ? 'aria-current="page"' : ''; ?>
-				>
-					<span class="footer__logo-text" aria-hidden="true">
-						<?php foreach ( $site_name_words as $word_index => $site_name_word ) : ?>
-							<span<?php echo 1 === $word_index ? ' class="is-outline"' : ''; ?>>
-								<?php echo esc_html( $site_name_word ); ?>
-							</span>
-						<?php endforeach; ?>
-					</span>
-				</a>
-			<?php endif; ?>
+			<a
+				class="footer__logo"
+				href="<?php echo esc_url( home_url( '/' ) ); ?>"
+				rel="home"
+				aria-label="<?php echo esc_attr( $site_name ); ?>"
+				<?php echo is_front_page() ? 'aria-current="page"' : ''; ?>
+			>
+				<span class="footer__logo-text" aria-hidden="true">
+					<?php foreach ( $site_name_words as $word_index => $site_name_word ) : ?>
+						<span<?php echo 1 === $word_index ? ' class="is-outline"' : ''; ?>>
+							<?php echo esc_html( $site_name_word ); ?>
+						</span>
+					<?php endforeach; ?>
+				</span>
+			</a>
 
 			<p class="footer__tag">
 				Atelier d'images — photo <em>36 poses</em>, dessin &amp; coloriage.

@@ -57,7 +57,6 @@
 }
 
 .nav__logo .is-outline {
-	color: transparent;
 	-webkit-text-fill-color: transparent;
 	-webkit-text-stroke: 1.2px currentcolor;
 }

@@ -24,13 +24,9 @@
 	max-width: 34ch;
 }
 
-.footer__logo,
-.footer .custom-logo-link {
+.footer__logo {
 	display: block;
 	width: fit-content;
-}
-
-.footer__logo {
 	color: var(--paper);
 	font-family: var(--font-head);
 	font-size: clamp(2.6rem, 5vw, 4.2rem);
@@ -48,11 +44,6 @@
 	color: transparent;
 	-webkit-text-fill-color: transparent;
 	-webkit-text-stroke: 1.5px var(--flash);
-}
-
-.footer .custom-logo {
-	width: auto;
-	max-height: 10.35rem;
 }
 
 .footer__tag {

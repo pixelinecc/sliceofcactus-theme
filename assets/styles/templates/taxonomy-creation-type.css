@@ -8,7 +8,10 @@
  * lives in assets/styles/components/magazine-hub.css; the per-rubrique
  * accent variables live in assets/styles/templates/single-creation.css.
  */
-
+body.post-type-archive-creation {
+	--accent: #8D423F;
+	--accent-deep: #7a2b13;
+}
 .colo-intro {
 	max-width: 60ch;
 	margin: .4rem 0 1.6rem;

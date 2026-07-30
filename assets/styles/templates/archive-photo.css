@@ -10,7 +10,10 @@
  * left out: the archive uses the default (cactus green) universe, and the
  * cursor is a separate, not-yet-migrated transversal feature.
  */
-
+body.post-type-archive-photo {
+	--accent: #8b8d3f;
+	--accent-deep: #64662c;
+}
 .serie-grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);

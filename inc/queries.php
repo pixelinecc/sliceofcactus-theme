@@ -173,8 +173,8 @@ function soc_get_creation_related_recits( int $post_id = 0 ): array {
 			'meta_query'          => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'     => 'soc_recit_creations',
-					'value'   => $post_id,
-					'compare' => '=',
+					'value'   => '"' . $post_id . '"',
+					'compare' => 'LIKE',
 				),
 			),
 		)
@@ -211,8 +211,8 @@ function soc_get_photo_related_recits( int $post_id = 0 ): array {
 			'meta_query'          => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'     => 'soc_recit_photos',
-					'value'   => $post_id,
-					'compare' => '=',
+					'value'   => '"' . $post_id . '"',
+					'compare' => 'LIKE',
 				),
 			),
 		)

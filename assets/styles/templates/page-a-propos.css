@@ -1,0 +1,331 @@
+/**
+ * Page À propos: same family as archive-creation.php / page-projet-52.php —
+ * .mag-runhead and .mag-masthead (assets/styles/components/magazine-hub.css)
+ * sit unmodified on the body's own accent-gradient background
+ * (assets/styles/base/elements.css). Only this page's own --accent /
+ * --accent-deep pair lives here; every other rubrique page proves that's
+ * the only body-level override this pattern needs.
+ *
+ * Everything below inherited var(--paper) text and rgb(255 255 255 / n%)
+ * secondary tones from that same gradient — not var(--ink), which only
+ * applies where a page deliberately flips to a flat paper body (récits).
+ * .article__resonance-card is the one piece reused from that paper world
+ * (single-recit.css) for "Trois formes": its own var(--paper-2) card
+ * background carries its ink-toned text regardless of what's behind it.
+ */
+
+body.page-template-page-a-propos-php {
+	/* Darkened by the same ~28% the other templates apply from their own
+	   --accent to their own --accent-deep (e.g. archive-recit.css,
+	   single-photo.css, single-creation.css). */
+	--accent: #efa9ed;
+	--accent-deep: #ac7aab;
+}
+
+.about-body {
+    max-width: 640px;
+    margin: 7rem auto;
+    padding: 0 var(--gutter);
+    color: var(--paper);
+    font-size: 2.1rem;
+    line-height: 1.25;
+    font-family: var(--font-display);
+}
+
+.about-body p {
+	margin-bottom: 1.3rem;
+}
+
+.about-body p:last-child {
+	margin-bottom: 0;
+}
+
+.about-kicker {
+    font-family: var(--font-head);
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    letter-spacing: .01em;
+    line-height: .95;
+    text-transform: uppercase;
+}
+
+/* La démarche: sticky visual whose gradient and big number swap to match
+   whichever .about-sequence-item is in view (assets/scripts/page-a-propos.js).
+   Runs at a third of a full-page scrollytelling scale (min-height/max-height
+   below) — this is one aside inside a short editorial page, not a section
+   meant to carry the whole scroll. */
+.about-sequence {
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	padding: 3rem var(--gutter);
+	background: var(--ink);
+	color: var(--paper);
+}
+.about-sequence__in { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(30px, 6vw, 90px); align-items: start; }
+
+.about-sequence__sticky { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
+.about-sequence__visual {
+    aspect-ratio: 1; border-radius: 4px; position: relative; overflow: hidden; max-height: 46vh;
+    background-size: cover; background-position: center; transition: background .8s var(--ease);
+}
+.about-sequence__big {
+    position: absolute; inset: 0; display: grid; place-items: center; font-weight: 900;
+    font-size: clamp(6rem, 16vw, 14rem); letter-spacing: -.05em; color: rgba(255, 255, 255, .16); transition: opacity .5s;
+}
+.about-sequence__heading { font-weight: 800; letter-spacing: -.03em; line-height: 1; font-size: clamp(1.6rem, 3vw, 2.4rem); }
+
+.about-sequence__list { display: flex; flex-direction: column; }
+.about-sequence-item {
+    min-height: 90vh; display: flex; flex-direction: column; justify-content: center; padding: 40px 0;
+    border-top: 1px solid rgba(251, 250, 246, .16);
+}
+.about-sequence-item .no { font-family: var(--mono); font-size: .78rem; color: var(--cyan); letter-spacing: .1em; margin-bottom: 18px; }
+.about-sequence-item h3 {
+	margin-bottom: 24px;
+	font-family: var(--font-head);
+	font-weight: 400;
+	font-size: clamp(2.2rem, 5.5vw, 4.6rem);
+	line-height: .95;
+	letter-spacing: .01em;
+	text-transform: uppercase;
+}
+.about-sequence-item h3 em { font-family: var(--serif); font-style: italic; font-weight: 500; color: var(--magenta); }
+.about-sequence-item p { font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.6; color: rgba(251, 250, 246, .74); max-width: 48ch; }
+
+@media (max-width: 860px) {
+    .about-sequence__in { grid-template-columns: 1fr; }
+    .about-sequence__sticky { position: relative; height: auto; padding: var(--sec) 0 20px; }
+    .about-sequence__visual { max-height: 240px; }
+    .about-sequence-item { min-height: auto; padding: 48px 0; }
+}
+
+/* Trois formes: .universe/.upanel* (assets/styles/components/panels.css) —
+   same panels as the front page's "Trois univers" section. This override
+   just trims .universe's own 7rem top padding to match this page's
+   established 4rem rhythm between sections. */
+.about-forms.universe {
+	padding-top: 4rem;
+}
+
+/* Résonances: a mosaic of dark cards (same solid --ink as .about-sequence —
+   a deliberate echo between the two dark sections on this page). All
+   text-only, all paper-toned — no per-term color, no imagery: just up to 3
+   real posts already tagged with this résonance (any CPT, pooled and
+   sorted by date, not one-per-type), each shown as its type then its
+   title. Cards with 2+ real previews span two grid rows — the only
+   "hierarchy" here is how much is actually tagged, not an editorial
+   ranking. */
+.about-resonances-section {
+	max-width: var(--maxw);
+	margin: 4rem auto 0;
+	padding: 0 var(--gutter);
+}
+
+.about-resonances-lead {
+	max-width: 60ch;
+	margin-bottom: 2rem;
+	color: rgb(255 255 255 / 88%);
+	font-family: var(--font-display);
+	font-style: italic;
+	font-size: 1.4rem;
+	line-height: 1.5;
+}
+
+.about-resonances {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+	grid-auto-rows: 1fr;
+	gap: 2.2rem;
+}
+
+.rmosaic-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+	padding: 2.6rem 2.4rem 2.8rem;
+	border-top: 4px solid var(--flash);
+	background: var(--ink);
+}
+
+.rmosaic-card--tall {
+	grid-row: span 2;
+}
+
+.rmosaic-card__name {
+	color: var(--paper);
+	font-family: var(--font-head);
+	font-size: clamp(2.1rem, 3.6vw, 2.7rem);
+	line-height: .95;
+	text-transform: uppercase;
+}
+
+.rmosaic-card__intro {
+	color: rgb(255 255 255 / 82%);
+	font-family: var(--font-display);
+	font-style: italic;
+	font-size: 1.2rem;
+	line-height: 1.5;
+}
+
+.rmosaic-card__list {
+	display: flex;
+	flex-direction: column;
+	gap: .7rem;
+	margin-top: auto;
+	padding-top: .6rem;
+	list-style: none;
+}
+
+.rmosaic-card__list a {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: .1rem .6rem;
+}
+
+.rmosaic-card__kind {
+	color: var(--flash);
+	font-family: var(--font-mono);
+	font-size: .8rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+
+.rmosaic-card__title {
+	color: var(--paper);
+	font-family: var(--font-display);
+	font-size: 1.15rem;
+	line-height: 1.3;
+	border-bottom: 1px solid rgb(251 238 218 / 35%);
+}
+
+.rmosaic-card__list a:hover .rmosaic-card__title,
+.rmosaic-card__list a:focus-visible .rmosaic-card__title {
+	border-color: var(--paper);
+}
+
+.rmosaic-card__cta {
+	margin-top: .3rem;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .78rem;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+	transition: opacity .3s;
+}
+
+.rmosaic-card__cta:hover,
+.rmosaic-card__cta:focus-visible {
+	opacity: .7;
+}
+
+@media (max-width: 700px) {
+	.about-resonances {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.rmosaic-card--tall {
+		grid-row: span 1;
+	}
+}
+
+@media (max-width: 480px) {
+	.about-resonances {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.rmosaic-card__cta {
+		transition-duration: .01ms;
+	}
+}
+
+.about-invite {
+	max-width: 640px;
+	margin: 4.5rem auto 0;
+	padding: 2.6rem var(--gutter) clamp(3.4rem, 6vw, 4.4rem);
+	border-top: 1px solid rgb(255 255 255 / 26%);
+	text-align: center;
+}
+
+.about-invite__line {
+	max-width: 32ch;
+	margin: 0 auto;
+	color: var(--paper);
+	font-family: var(--font-display);
+	font-style: italic;
+	font-size: clamp(1.3rem, 3vw, 1.7rem);
+	line-height: 1.3;
+	text-wrap: balance;
+}
+
+.about-invite__links {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 1rem;
+	margin-top: 1.8rem;
+}
+
+.about-invite__link {
+	display: inline-flex;
+	align-items: center;
+	gap: .5em;
+	padding: .8em 1.4em;
+	border: 1.5px solid rgb(255 255 255 / 45%);
+	border-radius: 2px;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .7rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	transition: background .3s, color .3s, border-color .3s, transform .3s var(--ease);
+}
+
+.about-invite__link:hover,
+.about-invite__link:focus-visible {
+	border-color: var(--paper);
+	background: var(--paper);
+	color: var(--accent-deep);
+	transform: translateY(-2px);
+}
+
+.about-invite__link.is-solid {
+	background: var(--paper);
+	color: var(--accent-deep);
+}
+
+.about-invite__link.is-solid:hover,
+.about-invite__link.is-solid:focus-visible {
+	background: var(--flash);
+	border-color: var(--flash);
+	color: var(--ink);
+}
+
+@media (max-width: 900px) {
+	.about-demarche__steps {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.about-forms__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 600px) {
+	.about-demarche__steps {
+		grid-template-columns: 1fr;
+	}
+
+	.about-forms__grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	a.about-forms__card,
+	.about-invite__link {
+		transition-duration: .01ms;
+	}
+}

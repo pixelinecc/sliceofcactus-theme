@@ -409,192 +409,17 @@
 
 /* ---------- SECTION HEAD ---------- */
 
-.section-head {
-	position: relative;
-	max-width: var(--maxw);
-	margin: 0 auto;
-	padding: 0 clamp(1.2rem, 4vw, 3rem);
-}
-
+/*
+ * .section-head itself, and the "univers" panels below (.universe,
+ * .upanel*), now live in assets/styles/components/panels.css — shared with
+ * page-a-propos.php's "Trois formes". This override stays here: it's
+ * specific to this page's own .explore/.home-recits section wrappers.
+ */
 .explore > .section-head,
 .home-recits > .section-head {
 	max-width: none;
 	margin: 0;
 	padding: 0;
-}
-
-.section-head__num {
-	display: block;
-	color: rgb(255 255 255 / 45%);
-	font-family: var(--font-head);
-	font-size: clamp(3.4rem, 9vw, 7rem);
-	line-height: 1;
-}
-
-.section-head__title {
-	font-family: var(--font-head);
-	font-size: clamp(2.4rem, 6vw, 4.4rem);
-	letter-spacing: .01em;
-	line-height: .95;
-	text-transform: uppercase;
-}
-
-.section-head__sub {
-	margin-top: .6rem;
-	color: rgb(255 255 255 / 82%);
-	font-size: 1.1rem;
-}
-
-.section-head__sub em {
-	color: var(--paper);
-	font-style: italic;
-	font-weight: 700;
-}
-
-/* ---------- UNIVERS ---------- */
-
-.universe {
-	position: relative;
-	width: 100vw;
-	margin-left: calc(50% - 50vw);
-	padding: 7rem 0 0;
-}
-
-.universe__panels {
-	display: flex;
-	height: min(78vh, 720px);
-	margin-top: 2rem;
-}
-
-.upanel {
-	position: relative;
-	isolation: isolate;
-	display: flex;
-	flex: 1;
-	flex-direction: column;
-	justify-content: flex-end;
-	overflow: hidden;
-	padding: clamp(1.6rem, 3vw, 2.6rem);
-	color: #fff;
-	transition: flex .6s var(--ease);
-}
-
-.upanel__bg {
-	position: absolute;
-	z-index: -2;
-	inset: 0;
-	background: var(--img) center / cover no-repeat;
-	filter: grayscale(.35) brightness(.68);
-	transition: transform 1.1s var(--ease), filter .6s var(--ease);
-	transform: scale(1.06);
-}
-
-.upanel::after {
-	position: absolute;
-	z-index: -1;
-	inset: 0;
-	background: linear-gradient(180deg, transparent 28%, rgb(10 8 7 / 86%));
-	content: "";
-	transition: background .6s;
-}
-
-.upanel::before {
-	position: absolute;
-	z-index: 1;
-	top: 0;
-	left: 0;
-	width: 5px;
-	height: 100%;
-	background: var(--c);
-	content: "";
-	transition: transform .6s var(--ease);
-	transform: scaleY(0);
-	transform-origin: bottom;
-}
-
-.upanel__num {
-	position: absolute;
-	top: 1.5rem;
-	right: 1.7rem;
-	color: var(--flash);
-	font-family: var(--font-mono);
-	font-size: .78rem;
-	letter-spacing: .2em;
-	opacity: .7;
-}
-
-.upanel__k {
-	font-family: var(--font-mono);
-	font-size: .7rem;
-	letter-spacing: .16em;
-	text-transform: uppercase;
-	opacity: .88;
-}
-
-.upanel__t {
-	margin: .25rem 0;
-	font-family: var(--font-head);
-	font-size: clamp(2.4rem, 4.4vw, 4.2rem);
-	line-height: .88;
-	text-transform: uppercase;
-}
-
-.upanel__d {
-	max-width: 34ch;
-	max-height: 0;
-	overflow: hidden;
-	font-family: var(--font-display);
-	font-size: 1.05rem;
-	line-height: 1.45;
-	opacity: 0;
-	transition: max-height .6s var(--ease), opacity .5s var(--ease), margin .6s;
-}
-
-.upanel__cta {
-	display: inline-flex;
-	align-items: center;
-	gap: .5rem;
-	max-height: 0;
-	overflow: hidden;
-	font-family: var(--font-mono);
-	font-size: .76rem;
-	letter-spacing: .1em;
-	text-transform: uppercase;
-	opacity: 0;
-	transition: max-height .6s var(--ease), opacity .5s var(--ease), margin .6s;
-}
-
-.universe__panels:hover .upanel {
-	flex: .72;
-}
-
-.universe__panels .upanel:hover {
-	flex: 2.4;
-}
-
-.upanel:hover .upanel__bg {
-	filter: grayscale(0) brightness(.82);
-	transform: scale(1);
-}
-
-.upanel:hover::after {
-	background: linear-gradient(180deg, transparent 8%, rgb(10 8 7 / 80%));
-}
-
-.upanel:hover::before {
-	transform: scaleY(1);
-}
-
-.upanel:hover .upanel__d {
-	max-height: 130px;
-	margin-top: .8rem;
-	opacity: 1;
-}
-
-.upanel:hover .upanel__cta {
-	max-height: 40px;
-	margin-top: 1rem;
-	opacity: 1;
 }
 
 /* ---------- EXPLORER AUTREMENT ---------- */
@@ -999,9 +824,6 @@
 	}
 
 	.pola,
-	.upanel,
-	.upanel__bg,
-	.upanel::before,
 	.xtile,
 	.xtile__bg,
 	.xtile__bar,

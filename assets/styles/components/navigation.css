@@ -40,6 +40,16 @@
 	transition: background .3s, color .3s;
 }
 
+.nav__links .soc-primary-menu > .soc-menu-item--cta.current-menu-item > a,
+.nav__links .soc-primary-menu > .soc-menu-item--cta.current-menu-parent > a,
+.nav__links .soc-primary-menu > .soc-menu-item--cta.current-menu-ancestor > a,
+.nav__links .soc-primary-menu > .soc-menu-item--cta.current_page_item > a,
+.nav__links .soc-primary-menu > .soc-menu-item--cta > a[aria-current="page"] {
+	background: var(--flash);
+	color: var(--ink);
+	text-decoration: none;
+}
+
 .nav:not(.is-solid) .nav__links a {
 	color: var(--paper);
 }

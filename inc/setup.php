@@ -24,6 +24,10 @@ function soc_setup(): void {
 	add_theme_support( 'align-wide' );
 	add_theme_support( 'wp-block-styles' );
 	add_theme_support( 'editor-styles' );
+
+	// Gives bespoke page templates (e.g. page-a-propos.php) a native, editable
+	// masthead subtitle without a dedicated ACF field.
+	add_post_type_support( 'page', 'excerpt' );
 	add_editor_style(
 		array(
 			'assets/styles/settings/tokens.css',

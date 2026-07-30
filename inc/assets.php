@@ -27,7 +27,7 @@ function soc_enqueue_assets(): void {
 		$style_version
 	);
 
-	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'creation' ) || is_post_type_archive( 'recit' ) || is_tax( 'creation_type' ) || is_tax( 'resonance' ) || is_page_template( 'page-projet-52.php' ) || is_page_template( 'page-color-your-life.php' ) || is_page_template( 'page-voyage-carte.php' );
+	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'creation' ) || is_post_type_archive( 'recit' ) || is_tax( 'creation_type' ) || is_tax( 'resonance' ) || is_page_template( 'page-projet-52.php' ) || is_page_template( 'page-color-your-life.php' ) || is_page_template( 'page-voyage-carte.php' ) || is_page_template( 'page-a-propos.php' );
 	$magazine_hub_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_magazine_hub ) {
@@ -41,6 +41,26 @@ function soc_enqueue_assets(): void {
 				(string) filemtime( $magazine_hub_style_path )
 			);
 			$magazine_hub_deps[] = 'sliceofcactus-magazine-hub';
+		}
+	}
+
+	// Section-head + "univers" panels (assets/styles/components/panels.css):
+	// built for the front page, reused as-is by page-a-propos.php's "Trois
+	// formes" — see that file's own docblock.
+	$needs_panels = is_front_page() || is_page_template( 'page-a-propos.php' );
+	$panels_deps  = array( 'sliceofcactus' );
+
+	if ( $needs_panels ) {
+		$panels_style_path = get_theme_file_path( '/assets/styles/components/panels.css' );
+
+		if ( is_readable( $panels_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-panels',
+				get_theme_file_uri( '/assets/styles/components/panels.css' ),
+				array( 'sliceofcactus' ),
+				(string) filemtime( $panels_style_path )
+			);
+			$panels_deps[] = 'sliceofcactus-panels';
 		}
 	}
 
@@ -145,6 +165,35 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
+	if ( is_page_template( 'page-a-propos.php' ) ) {
+		// Reuses single-recit.css wholesale (.article, .article__masthead*,
+		// .article__body, .article__resonance-card) instead of redefining
+		// that markup a second time — see page-a-propos.php's own docblock.
+		$about_recit_style_path = get_theme_file_path( '/assets/styles/templates/single-recit.css' );
+		$about_deps             = $magazine_hub_deps;
+
+		if ( is_readable( $about_recit_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-single-recit',
+				get_theme_file_uri( '/assets/styles/templates/single-recit.css' ),
+				$magazine_hub_deps,
+				(string) filemtime( $about_recit_style_path )
+			);
+			$about_deps[] = 'sliceofcactus-single-recit';
+		}
+
+		$about_style_path = get_theme_file_path( '/assets/styles/templates/page-a-propos.css' );
+
+		if ( is_readable( $about_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-page-a-propos',
+				get_theme_file_uri( '/assets/styles/templates/page-a-propos.css' ),
+				array_merge( $about_deps, $panels_deps ),
+				(string) filemtime( $about_style_path )
+			);
+		}
+	}
+
 	if ( is_page_template( 'page-projet-52.php' ) ) {
 		$p52_style_path = get_theme_file_path( '/assets/styles/templates/page-projet-52.css' );
 
@@ -198,7 +247,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-front-page',
 				get_theme_file_uri( '/assets/styles/templates/front-page.css' ),
-				$lightbox_deps,
+				array_merge( $lightbox_deps, $panels_deps ),
 				(string) filemtime( $front_page_style_path )
 			);
 		}
@@ -274,6 +323,21 @@ function soc_enqueue_assets(): void {
 				true
 			);
 			wp_script_add_data( 'sliceofcactus-archive-creation', 'strategy', 'defer' );
+		}
+	}
+
+	if ( is_page_template( 'page-a-propos.php' ) ) {
+		$about_script_path = get_theme_file_path( '/assets/scripts/page-a-propos.js' );
+
+		if ( is_readable( $about_script_path ) ) {
+			wp_enqueue_script(
+				'sliceofcactus-page-a-propos',
+				get_theme_file_uri( '/assets/scripts/page-a-propos.js' ),
+				array(),
+				(string) filemtime( $about_script_path ),
+				true
+			);
+			wp_script_add_data( 'sliceofcactus-page-a-propos', 'strategy', 'defer' );
 		}
 	}
 

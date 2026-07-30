@@ -227,3 +227,52 @@ body.post-type-archive-recit .mag-runhead > span:last-child {
 		columns: 1;
 	}
 }
+
+.journal-pagination {
+	margin-top: 1.4rem;
+	padding-top: 1.8rem;
+	border-top: 1px solid rgb(20 18 16 / 22%);
+}
+
+.journal-pagination .page-numbers {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: .4rem 1rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.journal-pagination a.page-numbers,
+.journal-pagination span.page-numbers {
+	display: inline-block;
+	padding: .35rem .5rem;
+	color: var(--grey);
+	font-family: var(--font-mono);
+	font-size: .78rem;
+	letter-spacing: .06em;
+	text-decoration: none;
+}
+
+.journal-pagination a.page-numbers:hover,
+.journal-pagination a.page-numbers:focus-visible {
+	color: var(--accent);
+}
+
+.journal-pagination span.page-numbers.current {
+	color: var(--ink);
+	font-weight: 700;
+	border-bottom: 2px solid var(--accent);
+}
+
+.journal-pagination .page-numbers.dots {
+	color: rgb(20 18 16 / 35%);
+}
+
+.journal-pagination .page-numbers.prev,
+.journal-pagination .page-numbers.next {
+	text-transform: uppercase;
+	letter-spacing: .1em;
+}

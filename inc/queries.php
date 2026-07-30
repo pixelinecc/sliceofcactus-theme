@@ -363,6 +363,25 @@ function soc_get_recit_archive_items(): array {
 }
 
 /**
+ * Paginates the récits archive's main query at 12 per page.
+ *
+ * archive-recit.php reads the main loop directly (have_posts()/the_post())
+ * instead of a second WP_Query, so WordPress's own pagination — paginate_links(),
+ * out-of-range 404s — works for free; this just sets the page size, since the
+ * site's default "posts per page" setting is meant for the blog, not this
+ * archive.
+ *
+ * @param WP_Query $query The main query.
+ * @return void
+ */
+function soc_set_recit_archive_query( WP_Query $query ): void {
+	if ( ! is_admin() && $query->is_main_query() && is_post_type_archive( 'recit' ) ) {
+		$query->set( 'posts_per_page', 12 );
+	}
+}
+add_action( 'pre_get_posts', 'soc_set_recit_archive_query' );
+
+/**
  * Gets the Projet 52 grid: one gallery image per week, grouped by calendar
  * year.
  *

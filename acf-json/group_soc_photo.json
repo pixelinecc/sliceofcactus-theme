@@ -133,6 +133,84 @@
             ]
         },
         {
+            "key": "field_soc_photo_period",
+            "label": "Mois / année du voyage",
+            "name": "soc_photo_period",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Date à laquelle les photographies ou le voyage ont été réalisés, si différente de la date de publication. Laisser vide pour afficher l’année de publication. Le mois est facultatif : renseigner l’année seule si le mois exact n’est pas connu.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_soc_photo_period_month",
+                    "label": "Mois",
+                    "name": "month",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "1": "Janvier",
+                        "2": "Février",
+                        "3": "Mars",
+                        "4": "Avril",
+                        "5": "Mai",
+                        "6": "Juin",
+                        "7": "Juillet",
+                        "8": "Août",
+                        "9": "Septembre",
+                        "10": "Octobre",
+                        "11": "Novembre",
+                        "12": "Décembre"
+                    },
+                    "default_value": "",
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 1,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "create_options": 0,
+                    "save_options": 0
+                },
+                {
+                    "key": "field_soc_photo_period_year",
+                    "label": "Année",
+                    "name": "year",
+                    "aria-label": "",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "min": 1826,
+                    "max": 2100,
+                    "step": 1,
+                    "placeholder": "2005",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
             "key": "field_soc_photo_color",
             "label": "Couleur dominante",
             "name": "soc_photo_color",
@@ -215,5 +293,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785336352
+    "modified": 1785397116
 }

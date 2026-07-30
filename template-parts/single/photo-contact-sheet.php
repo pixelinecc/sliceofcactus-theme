@@ -21,7 +21,8 @@ $intro            = soc_get_photo_intro( $post_id );
 $resonances       = get_the_terms( $post_id, 'resonance' );
 $resonances       = is_array( $resonances ) ? $resonances : array();
 $location         = soc_get_photo_location( $post_id );
-$photo_year       = soc_get_photo_year( $post_id );
+$photo_date       = soc_get_photo_date_label( $post_id );
+$photo_date_label = soc_get_photo_month( $post_id ) > 0 ? __( 'Date :', 'sliceofcactus' ) : __( 'Année :', 'sliceofcactus' );
 $gallery_ids      = function_exists( 'get_field' ) ? array_filter( array_map( 'absint', (array) get_field( 'soc_photo_gallery', $post_id ) ) ) : array();
 $image_count      = count( $gallery_ids );
 $uses_cover       = 0 === $image_count && has_post_thumbnail( $post_id );
@@ -75,7 +76,7 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 
 		<h1 class="serie-hero__title"><?php echo wp_kses( $title_html, array( 'br' => array() ) ); ?></h1>
 
-		<?php if ( $image_count > 0 || ! empty( $location ) || '' !== $photo_year ) : ?>
+		<?php if ( $image_count > 0 || ! empty( $location ) || '' !== $photo_date ) : ?>
 			<div class="serie-hero__meta">
 				<?php if ( $image_count > 0 ) : ?>
 					<?php if ( $film_count > 1 ) : ?>
@@ -113,10 +114,10 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 					</span>
 				<?php endif; ?>
 
-				<?php if ( '' !== $photo_year ) : ?>
+				<?php if ( '' !== $photo_date ) : ?>
 					<span>
-						<?php esc_html_e( 'Année :', 'sliceofcactus' ); ?>
-						<b><?php echo esc_html( $photo_year ); ?></b>
+						<?php echo esc_html( $photo_date_label ); ?>
+						<b><?php echo esc_html( $photo_date ); ?></b>
 					</span>
 				<?php endif; ?>
 			</div>

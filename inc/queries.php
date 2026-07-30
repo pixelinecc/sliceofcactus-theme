@@ -66,7 +66,8 @@ function soc_get_photo_suggestions( int $post_id = 0, int $limit = 6 ): array {
  *
  * Mirrors the RUBRIQUES filter of sliceofcactus-astro/src/pages/photo/index.astro:
  * every narration except the two standalone collections (Projet 52, Color Your Life),
- * limited to series with a cover image, most recent publish date first.
+ * limited to series with a cover image, most recent photo_year first (falling
+ * back to publish date for series and ties, via soc_get_photo_year()).
  *
  * @return WP_Post[]
  */
@@ -91,12 +92,45 @@ function soc_get_photo_archive_series(): array {
 		)
 	);
 
-	return array_values(
+	$photos = array_values(
 		array_filter(
 			$query->posts,
 			static fn( WP_Post $photo ): bool => soc_get_photo_cover_id( $photo->ID ) > 0
 		)
 	);
+
+	usort( $photos, 'soc_compare_photos_by_year_desc' );
+
+	return $photos;
+}
+
+/**
+ * Compares two photo series by editorial date (soc_get_photo_year(),
+ * soc_get_photo_month()), most recent first. Within the same year, a known
+ * month ranks above an unspecified one (0), since it carries more precision
+ * — not because it is chronologically later. Publish date breaks remaining
+ * ties, including when neither series has a soc_photo_period override.
+ *
+ * @param WP_Post $a First photo series.
+ * @param WP_Post $b Second photo series.
+ * @return int
+ */
+function soc_compare_photos_by_year_desc( WP_Post $a, WP_Post $b ): int {
+	$year_a = (int) soc_get_photo_year( $a->ID );
+	$year_b = (int) soc_get_photo_year( $b->ID );
+
+	if ( $year_a !== $year_b ) {
+		return $year_b <=> $year_a;
+	}
+
+	$month_a = soc_get_photo_month( $a->ID );
+	$month_b = soc_get_photo_month( $b->ID );
+
+	if ( $month_a !== $month_b ) {
+		return $month_b <=> $month_a;
+	}
+
+	return strtotime( $b->post_date ) <=> strtotime( $a->post_date );
 }
 
 /**
@@ -427,8 +461,10 @@ function soc_get_color_your_life_series(): array {
  * Gets the destinations shown on the voyage map, grouped by location name.
  *
  * Mirrors sliceofcactus-astro's voyage-carte.astro: every "voyage" series
- * with a location, grouped by location name, series sorted most recent
- * first within each destination.
+ * with a location, grouped by location name, series sorted by most recent
+ * photo_year first within each destination (falling back to publish date,
+ * via soc_get_photo_year()) — this is the photographic chronology of the
+ * trip, not necessarily the order series were published in.
  *
  * @return array<int, array{name: string, country: string, lat: float, lon: float, series: WP_Post[]}>
  */
@@ -475,6 +511,11 @@ function soc_get_voyage_map_destinations(): array {
 
 		$destinations[ $key ]['series'][] = $photo;
 	}
+
+	foreach ( $destinations as &$destination ) {
+		usort( $destination['series'], 'soc_compare_photos_by_year_desc' );
+	}
+	unset( $destination );
 
 	return array_values( $destinations );
 }

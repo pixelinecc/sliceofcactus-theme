@@ -116,7 +116,46 @@ function soc_get_photo_location( int $post_id = 0 ): array {
 }
 
 /**
- * Gets the project year of a photo series, from its publish date.
+ * Gets the soc_photo_period ACF override of a photo series: the editorial
+ * month/year the photographs or the trip actually happened, when it differs
+ * from the post's publish date.
+ *
+ * Kept distinct from the WordPress publish date on purpose: a series can be
+ * published today about a trip made in 2005 without antedating post_date,
+ * which would break SEO signals like datePublished. The month is only
+ * returned alongside a valid year — a month picked without a year would be
+ * meaningless.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return array{year?: int, month?: int} Empty when no valid year override is set.
+ */
+function soc_get_photo_period_override( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return array();
+	}
+
+	$period = function_exists( 'get_field' ) ? get_field( 'soc_photo_period', $post_id ) : null;
+	$year   = is_array( $period ) ? ( $period['year'] ?? null ) : null;
+
+	if ( ! is_numeric( $year ) || (int) $year < 1826 || (int) $year > 2100 ) {
+		return array();
+	}
+
+	$override = array( 'year' => (int) $year );
+	$month    = $period['month'] ?? null;
+
+	if ( is_numeric( $month ) && (int) $month >= 1 && (int) $month <= 12 ) {
+		$override['month'] = (int) $month;
+	}
+
+	return $override;
+}
+
+/**
+ * Gets the editorial year of a photo series: the soc_photo_period override
+ * when set, otherwise the post's publish date.
  *
  * @param int $post_id Optional photo ID. Defaults to the current post.
  * @return string Four-digit year, or an empty string when unset.
@@ -128,7 +167,49 @@ function soc_get_photo_year( int $post_id = 0 ): string {
 		return '';
 	}
 
-	return get_the_date( 'Y', $post_id );
+	$override = soc_get_photo_period_override( $post_id );
+
+	return isset( $override['year'] ) ? (string) $override['year'] : get_the_date( 'Y', $post_id );
+}
+
+/**
+ * Gets the editorial month (1-12) of a photo series, from its soc_photo_period
+ * override. Never derived from the publish date: unlike the year, there is
+ * no meaningful publish-date fallback for the month of an undated trip.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return int 1-12, or 0 when unset.
+ */
+function soc_get_photo_month( int $post_id = 0 ): int {
+	$override = soc_get_photo_period_override( $post_id );
+
+	return $override['month'] ?? 0;
+}
+
+/**
+ * Gets the human-readable editorial date label of a photo series, e.g.
+ * "Janv. 2005" when the month is known, or just "2005" otherwise (whether
+ * from a soc_photo_period override or the fallback publish year).
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_photo_date_label( int $post_id = 0 ): string {
+	$year = soc_get_photo_year( $post_id );
+
+	if ( '' === $year ) {
+		return '';
+	}
+
+	$month = soc_get_photo_month( $post_id );
+
+	if ( 0 === $month ) {
+		return $year;
+	}
+
+	$months = soc_get_month_abbreviations();
+
+	return $months[ $month - 1 ] . ' ' . $year;
 }
 
 /**
@@ -524,6 +605,28 @@ function soc_creation_body_classes( array $classes ): array {
 add_filter( 'body_class', 'soc_creation_body_classes' );
 
 /**
+ * Gets the short French month abbreviations, indexed 0 (janvier) to 11 (décembre).
+ *
+ * @return string[]
+ */
+function soc_get_month_abbreviations(): array {
+	return array(
+		__( 'janv.', 'sliceofcactus' ),
+		__( 'févr.', 'sliceofcactus' ),
+		__( 'mars', 'sliceofcactus' ),
+		__( 'avr.', 'sliceofcactus' ),
+		__( 'mai', 'sliceofcactus' ),
+		__( 'juin', 'sliceofcactus' ),
+		__( 'juil.', 'sliceofcactus' ),
+		__( 'août', 'sliceofcactus' ),
+		__( 'sept.', 'sliceofcactus' ),
+		__( 'oct.', 'sliceofcactus' ),
+		__( 'nov.', 'sliceofcactus' ),
+		__( 'déc.', 'sliceofcactus' ),
+	);
+}
+
+/**
  * Formats a Y-m-d date as a short French month label.
  *
  * Ports the frMonth() helper of sliceofcactus-astro's recits pages.
@@ -540,22 +643,8 @@ function soc_format_recit_date( string $date ): string {
 
 	list( $year, $month ) = $parts;
 
-	$months = array(
-		__( 'janv.', 'sliceofcactus' ),
-		__( 'févr.', 'sliceofcactus' ),
-		__( 'mars', 'sliceofcactus' ),
-		__( 'avr.', 'sliceofcactus' ),
-		__( 'mai', 'sliceofcactus' ),
-		__( 'juin', 'sliceofcactus' ),
-		__( 'juil.', 'sliceofcactus' ),
-		__( 'août', 'sliceofcactus' ),
-		__( 'sept.', 'sliceofcactus' ),
-		__( 'oct.', 'sliceofcactus' ),
-		__( 'nov.', 'sliceofcactus' ),
-		__( 'déc.', 'sliceofcactus' ),
-	);
-
-	$index = (int) $month - 1;
+	$months = soc_get_month_abbreviations();
+	$index  = (int) $month - 1;
 
 	return isset( $months[ $index ] ) ? $months[ $index ] . ' ' . $year : $date;
 }

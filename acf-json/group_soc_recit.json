@@ -3,30 +3,12 @@
     "title": "Récit — Données éditoriales",
     "fields": [
         {
-            "key": "field_soc_recit_tab_identity",
-            "label": "Identité éditoriale",
-            "name": "",
-            "aria-label": "",
-            "type": "tab",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": false,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "placement": "top",
-            "endpoint": 0,
-            "selected": 0
-        },
-        {
             "key": "field_soc_recit_hero_layout",
             "label": "Présentation du hero",
             "name": "soc_recit_hero_layout",
             "aria-label": "",
             "type": "radio",
-            "instructions": "",
+            "instructions": "Sans photo à la une, le récit prend toujours la présentation \"Planche insérée\" (sans la planche).",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -35,64 +17,16 @@
                 "id": ""
             },
             "choices": {
-                "wide": "Large",
-                "full": "Pleine largeur",
-                "portrait": "Portrait",
-                "contained": "Contenu"
+                "plate": "Planche insérée",
+                "cover": "Photo en bannière",
+                "margin": "Photo en marge"
             },
-            "default_value": "wide",
+            "default_value": "plate",
             "return_format": "value",
             "allow_null": 0,
             "other_choice": 0,
             "layout": "vertical",
             "save_other_choice": 0
-        },
-        {
-            "key": "field_soc_recit_status",
-            "label": "Statut éditorial",
-            "name": "soc_recit_status",
-            "aria-label": "",
-            "type": "select",
-            "instructions": "",
-            "required": 1,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "choices": {
-                "complete": "Complet",
-                "fragment": "Fragment",
-                "ongoing": "En cours"
-            },
-            "default_value": "complete",
-            "return_format": "value",
-            "multiple": 0,
-            "allow_null": 0,
-            "ui": 0,
-            "ajax": 0,
-            "placeholder": "",
-            "create_options": 0,
-            "save_options": 0
-        },
-        {
-            "key": "field_soc_recit_tab_relations",
-            "label": "Relations",
-            "name": "",
-            "aria-label": "",
-            "type": "tab",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": false,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "placement": "top",
-            "endpoint": 0,
-            "selected": 0
         },
         {
             "key": "field_soc_recit_creations",
@@ -189,5 +123,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785335524
+    "modified": 1785413739
 }

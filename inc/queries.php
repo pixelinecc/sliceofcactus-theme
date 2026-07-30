@@ -815,3 +815,67 @@ function soc_get_resonance_items( WP_Term $term, string $post_type ): array {
 
 	return $query->posts;
 }
+
+/**
+ * Gets the other published posts (any type) sharing each of a post's
+ * résonance terms, grouped by term.
+ *
+ * Powers the "Résonne avec" cards on the single récit template: each term
+ * carries its own soc_resonance_color (ACF field on the resonance taxonomy),
+ * and terms with no other post attached are dropped rather than shown empty.
+ *
+ * @param int $post_id Optional post ID. Defaults to the current post.
+ * @return array<int, array{term: WP_Term, color: string, items: array<int, array{post: WP_Post, kind: string}>}>
+ */
+function soc_get_resonance_groups( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id ) {
+		return array();
+	}
+
+	$terms = get_the_terms( $post_id, 'resonance' );
+
+	if ( ! is_array( $terms ) || empty( $terms ) ) {
+		return array();
+	}
+
+	$kinds = array(
+		'recit'    => __( 'Récit', 'sliceofcactus' ),
+		'photo'    => __( 'Photo', 'sliceofcactus' ),
+		'creation' => __( 'Création', 'sliceofcactus' ),
+	);
+
+	$groups = array();
+
+	foreach ( $terms as $term ) {
+		$items = array();
+
+		foreach ( $kinds as $post_type => $kind_label ) {
+			foreach ( soc_get_resonance_items( $term, $post_type ) as $item ) {
+				if ( $item->ID === $post_id ) {
+					continue;
+				}
+
+				$items[] = array(
+					'post' => $item,
+					'kind' => $kind_label,
+				);
+			}
+		}
+
+		if ( empty( $items ) ) {
+			continue;
+		}
+
+		$color = function_exists( 'get_field' ) ? get_field( 'soc_resonance_color', 'resonance_' . $term->term_id ) : '';
+
+		$groups[] = array(
+			'term'  => $term,
+			'color' => is_string( $color ) ? $color : '',
+			'items' => $items,
+		);
+	}
+
+	return $groups;
+}

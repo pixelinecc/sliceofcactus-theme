@@ -678,7 +678,8 @@ function soc_get_recit_date_label( int $post_id = 0 ): string {
 }
 
 /**
- * Gets the hero image layout of a récit: wide, full, portrait or contained.
+ * Gets the hero layout of a récit: plate (inserted in the body), cover
+ * (photo as masthead background) or margin (photo tucked beside the text).
  *
  * @param int $post_id Optional récit ID. Defaults to the current post.
  * @return string
@@ -686,9 +687,29 @@ function soc_get_recit_date_label( int $post_id = 0 ): string {
 function soc_get_recit_hero_layout( int $post_id = 0 ): string {
 	$post_id = $post_id ?: get_the_ID();
 	$layout  = function_exists( 'get_field' ) ? get_field( 'soc_recit_hero_layout', $post_id ) : '';
-	$allowed = array( 'wide', 'full', 'portrait', 'contained' );
+	$allowed = array( 'plate', 'cover', 'margin' );
 
-	return in_array( $layout, $allowed, true ) ? $layout : 'wide';
+	return in_array( $layout, $allowed, true ) ? $layout : 'plate';
+}
+
+/**
+ * Gets the estimated reading time of a récit, from its word count at a
+ * conservative 200 words/minute.
+ *
+ * @param int $post_id Optional récit ID. Defaults to the current post.
+ * @return int Minutes, at least 1 (0 if not a récit).
+ */
+function soc_get_recit_reading_minutes( int $post_id = 0 ): int {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'recit' !== get_post_type( $post_id ) ) {
+		return 0;
+	}
+
+	$text  = wp_strip_all_tags( get_post_field( 'post_content', $post_id ) );
+	$words = preg_split( '/\s+/u', trim( $text ), -1, PREG_SPLIT_NO_EMPTY );
+
+	return max( 1, (int) ceil( count( $words ) / 200 ) );
 }
 
 /**

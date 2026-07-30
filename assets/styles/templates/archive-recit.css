@@ -11,37 +11,100 @@ body.post-type-archive-recit,
 body.single-recit {
 	--accent: #2b4a6f;
 	--accent-deep: #1b3149;
-}
-
-body.post-type-archive-recit .mag-runhead {
-	border-bottom: 1px solid rgb(20 18 16 / 22%);
-	background: transparent;
-	color: var(--grey);
-}
-
-body.post-type-archive-recit .mag-runhead b {
+	background: var(--paper);
 	color: var(--ink);
 }
 
+/*
+ * The header's typography is paper-toned to float over the dark hero of
+ * every other template. Récits have no dark hero — the page is paper from
+ * the first pixel — so instead of re-tinting that typography, the header
+ * gets the same dark backing as the footer and keeps its original colors.
+ * Only the .is-solid (scrolled) state needs a nudge: it has no color rule
+ * of its own, so it normally just inherits the body text color, which is
+ * now ink for récits and would vanish against this dark bar.
+ */
+body.post-type-archive-recit .nav,
+body.single-recit .nav {
+	background: var(--accent);
+}
+
+body.post-type-archive-recit .nav.is-solid .nav__logo,
+body.post-type-archive-recit .nav.is-solid .custom-logo-link,
+body.post-type-archive-recit .nav.is-solid .nav__links a,
+body.single-recit .nav.is-solid .nav__logo,
+body.single-recit .nav.is-solid .custom-logo-link,
+body.single-recit .nav.is-solid .nav__links a {
+	color: var(--paper);
+}
+
+body.post-type-archive-recit .nav.is-solid .nav__burger span,
+body.single-recit .nav.is-solid .nav__burger span {
+	background: var(--paper);
+}
+
+/*
+ * The footer's typography is all paper-toned, meant to sit on the dark body
+ * background every other template keeps. Récits switched that background to
+ * paper, so the footer needs its own dark backing to stay legible — simpler
+ * than re-tinting every footer color for one template.
+ */
+body.post-type-archive-recit .footer,
+body.single-recit .footer {
+	background: var(--accent);
+}
+
+body.post-type-archive-recit .mag-runhead {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	justify-content: normal;
+	border-bottom: 1px solid rgb(251 238 218 / 22%);
+	background: var(--accent);
+	color: rgb(251 238 218 / 75%);
+}
+
+body.post-type-archive-recit .mag-runhead b {
+	color: var(--paper);
+}
+
+/* Grid instead of the shared flex/space-between: the middle label needs to
+   sit on the true viewport center, matching the RÉCITS masthead centered
+   below it — space-between only centers it when both side labels are the
+   same width, which "Slice of Cactus — Récits" and "N récits" never are. */
+body.post-type-archive-recit .mag-runhead > span:first-child {
+	justify-self: start;
+}
+
+body.post-type-archive-recit .mag-runhead > span:nth-child(2) {
+	justify-self: center;
+}
+
+body.post-type-archive-recit .mag-runhead > span:last-child {
+	justify-self: end;
+}
+
 .journal-name {
-	margin-top: 1.6rem;
-	padding: 1.2rem 0;
-	border-top: 3px double var(--ink);
-	border-bottom: 3px double var(--ink);
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	padding: 5.2rem var(--gutter) 1.2rem;
+	border-bottom: 3px double var(--paper);
+	background: var(--accent);
+	color: var(--paper);
 	text-align: center;
 }
 
 .journal-name h1 {
-	font-family: var(--font-display);
+	font-family: var(--font-head);
 	font-weight: 900;
 	font-size: clamp(3rem, 10vw, 6.5rem);
 	line-height: .9;
-	letter-spacing: -.01em;
+	letter-spacing: .01em;
+	text-transform: uppercase;
 }
 
 .journal-name .sub {
 	margin-top: .35rem;
-	color: #3a352e;
+	color: rgb(251 238 218 / 80%);
 	font-family: var(--font-display);
 	font-style: italic;
 	font-size: 1.1rem;
@@ -52,8 +115,8 @@ body.post-type-archive-recit .mag-runhead b {
 	flex-wrap: wrap;
 	justify-content: space-between;
 	gap: 1rem;
-	margin-top: .9rem;
-	color: var(--accent);
+	margin-top: 2.9rem;
+	color: rgb(251 238 218 / 65%);
 	font-family: var(--font-mono);
 	font-size: .66rem;
 	letter-spacing: .18em;
@@ -64,7 +127,7 @@ body.post-type-archive-recit .mag-runhead b {
 	display: block;
 	max-width: 720px;
 	margin: 0 auto;
-	padding: 2.2rem 0 1.8rem;
+	padding: 4.2rem 0 4.8rem;
 	border-bottom: 1px solid rgb(20 18 16 / 22%);
 	color: var(--ink);
 	text-align: center;
@@ -85,13 +148,13 @@ body.post-type-archive-recit .mag-runhead b {
 	margin: 0 auto;
 	color: #3a352e;
 	font-family: var(--font-display);
-	font-size: 1.18rem;
-	line-height: 1.6;
+	font-size: 1.48rem;
+	line-height: 1.2;
 }
 
 .journal-lead__more {
 	display: inline-block;
-	margin-top: .8rem;
+	margin-top: 1.8rem;
 	padding-bottom: .15rem;
 	border-bottom: 2px solid var(--accent);
 	font-family: var(--font-mono);
@@ -151,8 +214,8 @@ body.post-type-archive-recit .mag-runhead b {
 .entry__ex {
 	color: #4a443c;
 	font-family: var(--font-display);
-	font-size: 1rem;
-	line-height: 1.5;
+	font-size: 1.1rem;
+    line-height: 1.2;
 }
 
 .entry:hover .entry__t {

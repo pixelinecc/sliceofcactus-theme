@@ -78,8 +78,60 @@ body.single-photo.soc-narration-lifestyle {
 }
 
 .contact-sheet {
+	position: relative;
 	padding: 3rem var(--gutter) 4rem;
 	background: var(--ink);
+}
+
+.serie-recit-stamp {
+	position: absolute;
+	z-index: 2;
+	top: -3.6rem;
+	right: var(--gutter);
+	max-width: 280px;
+	padding: 1rem 1.2rem;
+	border: 1px solid rgb(20 18 16 / 35%);
+	border-radius: 2px;
+	background: var(--flash);
+	box-shadow: 0 14px 28px -16px rgb(20 18 16 / 70%);
+	transform: rotate(-3deg);
+	transition: transform .3s var(--ease);
+}
+
+.serie-recit-stamp::before {
+	position: absolute;
+	inset: 4px;
+	border: 1px solid rgb(20 18 16 / 18%);
+	content: "";
+	pointer-events: none;
+}
+
+.serie-recit-stamp:hover {
+	transform: rotate(0deg);
+}
+
+.serie-recit-stamp__label {
+	display: block;
+	margin-bottom: .35rem;
+	color: rgb(20 18 16 / 75%);
+	font-family: var(--font-mono);
+	font-size: .68rem;
+	letter-spacing: .2em;
+	text-transform: uppercase;
+}
+
+.serie-recit-stamp a {
+	color: var(--ink);
+	font-family: var(--font-display);
+	font-size: 1.05rem;
+	font-style: italic;
+	line-height: 1.3;
+	text-decoration: none;
+	border-bottom: 1px solid rgb(20 18 16 / 45%);
+}
+
+.serie-recit-stamp a:hover {
+	border-color: var(--ink);
 }
 
 .contact-sheet__head {
@@ -251,11 +303,22 @@ body.single-photo.soc-narration-lifestyle {
 	}
 }
 
+@media (max-width: 700px) {
+	.serie-recit-stamp {
+		position: static;
+		max-width: none;
+		margin: 0 auto 1.6rem;
+		transform: none;
+		text-align: center;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.serie-hero__back,
 	.sheet-grid .pose,
 	.sheet-grid .pose img,
-	.more-series__plate {
+	.more-series__plate,
+	.serie-recit-stamp {
 		transition-duration: .01ms;
 	}
 

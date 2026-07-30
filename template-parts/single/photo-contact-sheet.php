@@ -128,6 +128,15 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 	</header>
 
 	<section class="contact-sheet" aria-labelledby="<?php echo esc_attr( $sheet_id . '-title' ); ?>">
+		<?php if ( ! empty( $related_recits ) ) : ?>
+			<p class="serie-recit-stamp">
+				<span class="serie-recit-stamp__label">
+					<?php esc_html_e( 'Raconté dans', 'sliceofcactus' ); ?>
+				</span>
+				<a href="<?php echo esc_url( get_permalink( $related_recits[0] ) ); ?>"><?php echo esc_html( get_the_title( $related_recits[0] ) ); ?></a>
+			</p>
+		<?php endif; ?>
+
 		<div class="contact-sheet__head">
 			<h2 id="<?php echo esc_attr( $sheet_id . '-title' ); ?>">
 				<?php esc_html_e( 'Planche-contact', 'sliceofcactus' ); ?>

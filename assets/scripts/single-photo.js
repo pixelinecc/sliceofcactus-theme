@@ -26,7 +26,19 @@
 		const closeButton = lightbox.querySelector('.lightbox__close');
 		const previousButton = lightbox.querySelector('.lightbox__nav--prev');
 		const nextButton = lightbox.querySelector('.lightbox__nav--next');
-		const focusableControls = [closeButton, previousButton, nextButton].filter(Boolean);
+		const strip = lightbox.querySelector('.lightbox__strip');
+		const stripButtons = Array.from(lightbox.querySelectorAll('.lightbox__strip__item'));
+		const stripPrevButton = lightbox.querySelector('.lightbox__strip-nav--prev');
+		const stripNextButton = lightbox.querySelector('.lightbox__strip-nav--next');
+		const focusableControls = [
+			closeButton,
+			previousButton,
+			nextButton,
+			stripPrevButton,
+			...stripButtons,
+			stripNextButton,
+		].filter(Boolean);
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		let currentIndex = 0;
 		let previouslyFocused = null;
 		let resizeFrame = 0;
@@ -73,7 +85,10 @@
 
 			return {
 				alt: image?.alt || '',
-				src: image?.currentSrc || image?.src || '',
+				// image.src is the requested 'large' attachment size; image.currentSrc would
+				// instead reflect whatever smaller srcset candidate the browser picked to
+				// render the small grid thumbnail, which is too low-res for the lightbox.
+				src: image?.src || '',
 			};
 		});
 
@@ -112,6 +127,23 @@
 			lightboxImage.src = items[currentIndex].src;
 			lightboxImage.alt = items[currentIndex].alt;
 			lightboxCaption.textContent = `Pose ${String(currentIndex + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
+
+			stripButtons.forEach((button, index) => {
+				const isActive = index === currentIndex;
+
+				button.classList.toggle('is-active', isActive);
+
+				if (isActive) {
+					button.setAttribute('aria-current', 'true');
+					button.scrollIntoView({
+						behavior: reduceMotion ? 'auto' : 'smooth',
+						block: 'nearest',
+						inline: 'center',
+					});
+				} else {
+					button.removeAttribute('aria-current');
+				}
+			});
 		};
 
 		const open = (index) => {
@@ -149,6 +181,21 @@
 		closeButton?.addEventListener('click', close);
 		previousButton?.addEventListener('click', () => show(currentIndex - 1));
 		nextButton?.addEventListener('click', () => show(currentIndex + 1));
+		stripButtons.forEach((button, index) => {
+			button.addEventListener('click', () => show(index));
+		});
+		stripPrevButton?.addEventListener('click', () => {
+			strip?.scrollBy({
+				left: -strip.clientWidth * 0.8,
+				behavior: reduceMotion ? 'auto' : 'smooth',
+			});
+		});
+		stripNextButton?.addEventListener('click', () => {
+			strip?.scrollBy({
+				left: strip.clientWidth * 0.8,
+				behavior: reduceMotion ? 'auto' : 'smooth',
+			});
+		});
 		lightbox.addEventListener('click', (event) => {
 			if (event.target === lightbox) {
 				close();

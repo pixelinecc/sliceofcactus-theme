@@ -247,7 +247,7 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 
 <?php if ( $image_count > 0 ) : ?>
 	<div
-		class="lightbox"
+		class="lightbox<?php echo $image_count > 1 ? ' lightbox--filmstrip' : ''; ?>"
 		id="<?php echo esc_attr( $lightbox_id ); ?>"
 		role="dialog"
 		aria-modal="true"
@@ -261,5 +261,35 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 			<figcaption></figcaption>
 		</figure>
 		<button class="lightbox__nav lightbox__nav--next" type="button" aria-label="<?php esc_attr_e( 'Photo suivante', 'sliceofcactus' ); ?>">›</button>
+
+		<?php if ( $image_count > 1 ) : ?>
+			<div class="lightbox__strip-wrap">
+				<button class="lightbox__strip-nav lightbox__strip-nav--prev" type="button" aria-label="<?php esc_attr_e( 'Défiler les vignettes vers la gauche', 'sliceofcactus' ); ?>">‹</button>
+
+				<div class="lightbox__strip" role="group" aria-label="<?php esc_attr_e( 'Navigation entre les poses', 'sliceofcactus' ); ?>">
+					<?php foreach ( array_values( $gallery_ids ) as $index => $attachment_id ) : ?>
+						<button
+							class="lightbox__strip__item"
+							type="button"
+							aria-label="<?php echo esc_attr( sprintf( __( 'Aller à la pose %s', 'sliceofcactus' ), number_format_i18n( $index + 1 ) ) ); ?>"
+						>
+							<?php
+							echo wp_get_attachment_image(
+								$attachment_id,
+								'thumbnail',
+								false,
+								array(
+									'loading' => 'lazy',
+									'alt'     => '',
+								)
+							);
+							?>
+						</button>
+					<?php endforeach; ?>
+				</div>
+
+				<button class="lightbox__strip-nav lightbox__strip-nav--next" type="button" aria-label="<?php esc_attr_e( 'Défiler les vignettes vers la droite', 'sliceofcactus' ); ?>">›</button>
+			</div>
+		<?php endif; ?>
 	</div>
 <?php endif; ?>

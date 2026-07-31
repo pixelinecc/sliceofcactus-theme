@@ -106,11 +106,9 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 15 — Finition — `inc/blocks.php` / `inc/patterns.php` (scaffolding sans effet)
-- [ ] Corrigé
-**Problème constaté** : ces fichiers scannent `/blocks/*/block.json` et enregistrent une catégorie de patterns, mais aucun dossier `/blocks` ni `/patterns` n'existe dans le thème.
-**Impact réel** : aucun actuellement (no-op silencieux).
-**Correction recommandée** : garder si des blocks/patterns custom sont prévus prochainement, sinon retirer.
-**Ampleur** : minime. **Certitude** : confirmé.
+- [x] Décidé — conservés tels quels
+**Problème constaté** : ces fichiers scannent `/blocks/*/block.json` et enregistrent une catégorie de patterns, mais aucun dossier `/blocks` ni `/patterns` n'existe dans le thème (no-op silencieux, aucun impact actuel).
+**Décision avec Céline** : usage possible plus tard pour la rédaction des récits (pas certain) — on garde le scaffolding en l'état, sans action de code.
 
 ### 16 — Finition — `assets/styles/settings/tokens.css` (alias couleur hérités d'Astro)
 - [x] Corrigé — `var(--coral)`/`var(--salmon)` remplacés par `var(--accent)` dans les 4 fichiers concernés, les 3 alias supprimés de `tokens.css`.

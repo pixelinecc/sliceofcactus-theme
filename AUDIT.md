@@ -41,7 +41,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 5 — Important — `assets/styles/templates/page-a-propos.css` (sélecteurs morts)
-- [ ] Corrigé
+- [x] Corrigé — les trois blocs de règles obsolètes ont été supprimés (les deux media queries ne contenaient qu'eux, entièrement retirées ; `.about-invite__link` conservé dans la règle `prefers-reduced-motion`).
 **Problème constaté** : `.about-demarche__steps`, `.about-forms__grid`, `.about-forms__card` (lignes ~306–329, dont une règle `prefers-reduced-motion`) ne correspondent à aucun élément du markup réel de `page-a-propos.php`, qui utilise `.about-sequence-item` et `.universe__panels`/`.upanel`.
 **Impact réel** : aucun (code mort), résidu d'une version antérieure de la page.
 **Correction recommandée** : supprimer ces trois blocs de règles obsolètes.

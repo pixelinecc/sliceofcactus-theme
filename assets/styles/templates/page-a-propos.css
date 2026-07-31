@@ -302,28 +302,7 @@ body.page-template-page-a-propos-php {
 	color: var(--ink);
 }
 
-@media (max-width: 900px) {
-	.about-demarche__steps {
-		grid-template-columns: repeat(2, 1fr);
-	}
-
-	.about-forms__grid {
-		grid-template-columns: 1fr 1fr;
-	}
-}
-
-@media (max-width: 600px) {
-	.about-demarche__steps {
-		grid-template-columns: 1fr;
-	}
-
-	.about-forms__grid {
-		grid-template-columns: 1fr;
-	}
-}
-
 @media (prefers-reduced-motion: reduce) {
-	a.about-forms__card,
 	.about-invite__link {
 		transition-duration: .01ms;
 	}

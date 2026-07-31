@@ -13,10 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$post_id          = get_the_ID();
-$narrations       = soc_get_photo_narrations( $post_id );
-$active_narration = ! empty( $narrations ) ? $narrations[0] : null;
-$archive_url      = get_post_type_archive_link( 'photo' );
+$post_id            = get_the_ID();
+$narrations         = soc_get_photo_narrations( $post_id );
+$active_narration   = ! empty( $narrations ) ? $narrations[0] : null;
+$is_color_your_life = has_term( 'color-your-life', 'narration', $post_id );
+$archive_url        = $is_color_your_life ? home_url( '/color-your-life/' ) : get_post_type_archive_link( 'photo' );
 $intro            = soc_get_photo_intro( $post_id );
 $resonances       = get_the_terms( $post_id, 'resonance' );
 $resonances       = is_array( $resonances ) ? $resonances : array();
@@ -43,13 +44,17 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 	<header class="serie-hero">
 		<?php if ( $archive_url ) : ?>
 			<a class="serie-hero__back" href="<?php echo esc_url( $archive_url ); ?>">
-				<?php
-				printf(
-					/* translators: %s: narration name. */
-					esc_html__( '← %s · 36 poses', 'sliceofcactus' ),
-					esc_html( $active_narration ? $active_narration->name : __( 'Photo', 'sliceofcactus' ) )
-				);
-				?>
+				<?php if ( $is_color_your_life ) : ?>
+					<?php esc_html_e( '← Color Your Life', 'sliceofcactus' ); ?>
+				<?php else : ?>
+					<?php
+					printf(
+						/* translators: %s: narration name. */
+						esc_html__( '← %s · 36 poses', 'sliceofcactus' ),
+						esc_html( $active_narration ? $active_narration->name : __( 'Photo', 'sliceofcactus' ) )
+					);
+					?>
+				<?php endif; ?>
 			</a>
 		<?php endif; ?>
 

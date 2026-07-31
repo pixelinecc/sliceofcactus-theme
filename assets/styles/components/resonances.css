@@ -23,7 +23,7 @@ body.tax-resonance {
  */
 .soc-resonances .view-toggle,
 .soc-resonance-archive .view-toggle {
-	background: rgb(255 188 121 / 43%);
+	background: var(--paper);
 }
 
 .resonance-row {

@@ -15,7 +15,6 @@
 	if ( preloader && preCount ) {
 		if ( window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) {
 			preloader.classList.add( 'is-done' );
-			document.body.classList.add( 'is-loaded' );
 		} else {
 			let count = 0;
 			const tick = window.setInterval( () => {
@@ -26,7 +25,6 @@
 					window.clearInterval( tick );
 					window.setTimeout( () => {
 						preloader.classList.add( 'is-done' );
-						document.body.classList.add( 'is-loaded' );
 					}, 350 );
 				}
 			}, 42 );

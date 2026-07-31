@@ -131,7 +131,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime (mais risquée si migration). **Certitude** : confirmé.
 
 ### 18 — Optionnel — `assets/scripts/front-page.js` (`.is-loaded`)
-- [ ] Corrigé
+- [x] Corrigé — les deux appels `document.body.classList.add('is-loaded')` supprimés.
 **Problème constaté** : le préchargeur ajoute `document.body.classList.add('is-loaded')`, mais aucune règle CSS dans tout le thème ne lit cette classe.
 **Correction recommandée** : supprimer cette ligne, ou l'exploiter si un usage était prévu.
 **Ampleur** : minime. **Certitude** : confirmé.

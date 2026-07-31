@@ -6,17 +6,14 @@
  * magazine-hub chrome now live in assets/styles/components/magazine-hub.css;
  * the generic .lightbox chrome lives in
  * assets/styles/components/lightbox.css.
+ *
+ * Per-narration --accent/--accent-deep used to be hardcoded here
+ * (soc-narration-voyage, soc-narration-lifestyle); every narration's accent
+ * now comes from its own soc_narration_accent ACF field instead, printed
+ * inline by soc_photo_accent_style() (inc/template-tags.php) — a new
+ * narration gets its own color entirely from the admin, no CSS change
+ * needed.
  */
-
-body.single-photo.soc-narration-voyage {
-	--accent: #27513e;
-	--accent-deep: #193528;
-}
-
-body.single-photo.soc-narration-lifestyle {
-	--accent: #e11d74;
-	--accent-deep: #9d1457;
-}
 
 .serie-hero {
 	max-width: var(--maxw);

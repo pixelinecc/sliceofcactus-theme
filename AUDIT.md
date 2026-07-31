@@ -86,12 +86,13 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Correction recommandée** : renommer en `$instagram_dessin_url`.
 **Ampleur** : minime. **Certitude** : confirmé.
 
-### 12 — Finition — `assets/styles/templates/single-photo.css` (accents de narration incomplets)
-- [ ] Corrigé
-**Problème constaté** : seules les narrations "voyage" et "lifestyle" ont un `--accent`/`--accent-deep` dédié, alors que les textes du site annoncent des séries « voyage, lifestyle, portraits, noir & blanc ».
-**Impact réel** : si des termes de narration "portrait" et "noir-blanc" existent réellement, ces séries s'afficheraient avec l'accent vert par défaut plutôt qu'une teinte dédiée — à vérifier dans l'admin.
-**Correction recommandée** : si les termes existent, ajouter leurs variables d'accent sur le même modèle.
-**Ampleur** : minime. **Certitude** : à vérifier visuellement/dans WordPress.
+### 12 — Finition → Refonte — accents de narration
+- [x] Corrigé (architecture changée)
+**Vérifié dans l'admin** : les narrations existantes sont `voyage`, `lifestyle`, `portraits`, `projet-52`, `color-your-life` — pas de terme "noir & blanc". `portraits` existe bien et n'avait effectivement pas d'accent dédié.
+**Constat initial** : seules "voyage" et "lifestyle" avaient un `--accent`/`--accent-deep` codé en dur dans `single-photo.css`, ce qui demande une modification de code à chaque nouvelle narration.
+**Correction appliquée** (décision prise avec Céline, au-delà du simple correctif) : nouveau champ ACF `soc_narration_accent` (color_picker) sur la taxonomie Narration (`acf-json/group_soc_narration.json`), sur le même modèle que `soc_resonance_color`. `inc/template-tags.php` : nouvelle fonction `soc_get_narration_accent_color()` + `soc_get_photo_effective_accent_color()` (couleur propre à la photo → couleur de sa narration → défaut vert), utilisée par `soc_photo_accent_style()` et `soc_photo_theme_color_meta()`. Les règles CSS codées en dur `.soc-narration-voyage`/`.soc-narration-lifestyle` ont été retirées de `single-photo.css`.
+**Action requise dans l'admin après déploiement** : renseigner la couleur d'accent sur les termes existants pour ne pas perdre leur teinte actuelle — Voyage `#27513e`, Lifestyle `#e11d74`. Portraits (et toute narration future) peut recevoir sa propre couleur directement dans l'admin, sans intervention de code.
+**Ampleur** : modérée (nouveau champ + logique PHP). **Certitude** : confirmé.
 
 ### 13 — Finition — `acf-json/taxonomy_narration.json` (`with_front`)
 - [ ] Corrigé

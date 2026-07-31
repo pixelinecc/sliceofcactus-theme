@@ -392,6 +392,43 @@ function soc_darken_hex( string $hex, float $amount = 0.35 ): string {
 }
 
 /**
+ * Gets the default accent color of a narration (soc_narration_accent ACF
+ * field on the narration taxonomy), e.g. the distinct tone given to
+ * "voyage" or "lifestyle" series. Lets editors add a narration and give it
+ * its own color entirely from the admin, with no theme code change needed.
+ *
+ * @param WP_Term $term Narration term.
+ * @return string Hex color, or an empty string when unset.
+ */
+function soc_get_narration_accent_color( WP_Term $term ): string {
+	$color = function_exists( 'get_field' ) ? get_field( 'soc_narration_accent', 'narration_' . $term->term_id ) : null;
+
+	return is_string( $color ) ? trim( $color ) : '';
+}
+
+/**
+ * Gets the effective accent color of a photo series: its own soc_photo_color
+ * override when set, otherwise its first narration's soc_narration_accent
+ * default.
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return string Hex color, or an empty string when neither is set.
+ */
+function soc_get_photo_effective_accent_color( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+	$color   = soc_get_photo_color( $post_id );
+
+	if ( '' !== $color ) {
+		return $color;
+	}
+
+	$narrations = soc_get_photo_narrations( $post_id );
+	$narration  = ! empty( $narrations ) ? $narrations[0] : null;
+
+	return $narration ? soc_get_narration_accent_color( $narration ) : '';
+}
+
+/**
  * Prints the mobile browser theme-color meta tag for a single photo.
  *
  * Mirrors the per-series themeColor prop of sliceofcactus-astro/src/layouts/Base.astro,
@@ -402,28 +439,27 @@ function soc_photo_theme_color_meta(): void {
 		return;
 	}
 
-	$color = soc_get_photo_color();
+	$color = soc_get_photo_effective_accent_color();
 
 	printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( '' !== $color ? $color : '#12B26A' ) );
 }
 add_action( 'wp_head', 'soc_photo_theme_color_meta' );
 
 /**
- * Prints --accent/--accent-deep on the body for a single photo with a
- * dominant color set (soc_photo_color ACF field), overriding the
- * hardcoded per-narration accent (soc-narration-voyage, soc-narration-lifestyle...)
- * from single-photo.css. Both custom properties drive the whole-page
+ * Prints --accent/--accent-deep on the body for a single photo, from its own
+ * dominant color (soc_photo_color ACF field) or, failing that, its
+ * narration's default accent (soc_narration_accent ACF field on the
+ * narration taxonomy). Both custom properties drive the whole-page
  * background wash in assets/styles/base/elements.css, so the override is
  * scoped to this post's body class and !important, otherwise a more
- * specific narration selector on the same body tag (e.g. a photo tagged
- * both "voyage" and "color-your-life") would win instead.
+ * specific selector on the same body tag would win instead.
  */
 function soc_photo_accent_style(): void {
 	if ( ! is_singular( 'photo' ) ) {
 		return;
 	}
 
-	$color = soc_get_photo_color();
+	$color = soc_get_photo_effective_accent_color();
 
 	if ( '' === $color ) {
 		return;

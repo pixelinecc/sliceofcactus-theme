@@ -359,7 +359,7 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
-	if ( is_post_type_archive( 'creation' ) ) {
+	if ( is_post_type_archive( 'creation' ) || is_tax( 'creation_type' ) ) {
 		$creation_archive_script_path = get_theme_file_path( '/assets/scripts/archive-creation.js' );
 
 		if ( is_readable( $creation_archive_script_path ) ) {

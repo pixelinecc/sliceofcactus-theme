@@ -88,7 +88,11 @@ $total         = count( $items );
 		<h2>
 			<?php echo $is_coloriage ? esc_html__( 'Les livres à colorier', 'sliceofcactus' ) : esc_html__( 'Les techniques', 'sliceofcactus' ); ?>
 		</h2>
-		<span>
+		<span
+			id="soc-creation-count"
+			data-noun-singular="<?php echo esc_attr( $is_coloriage ? __( 'livre', 'sliceofcactus' ) : __( 'technique', 'sliceofcactus' ) ); ?>"
+			data-noun-plural="<?php echo esc_attr( $is_coloriage ? __( 'livres', 'sliceofcactus' ) : __( 'techniques', 'sliceofcactus' ) ); ?>"
+		>
 			<?php
 			if ( $is_coloriage ) {
 				printf(
@@ -115,7 +119,9 @@ $total         = count( $items );
 		?>
 	</p>
 
-	<section class="book-grid">
+	<div class="rubchips" id="soc-medium-chips"></div>
+
+	<section class="book-grid" id="soc-creation-grid">
 		<?php foreach ( $items as $item ) : ?>
 			<?php
 			$cover_id    = soc_get_creation_cover_id( $item->ID );
@@ -126,6 +132,7 @@ $total         = count( $items );
 			<a
 				class="book-card"
 				href="<?php echo esc_url( get_permalink( $item ) ); ?>"
+				data-mediums="<?php echo esc_attr( soc_get_creation_mediums_json( $item->ID ) ); ?>"
 			>
 				<div class="book-card__cover">
 					<span class="book-card__badge">

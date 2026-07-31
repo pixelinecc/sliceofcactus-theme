@@ -92,8 +92,7 @@ $total = count( $items );
 			<a
 				class="book-card"
 				href="<?php echo esc_url( get_permalink( $item ) ); ?>"
-				data-medium="<?php echo esc_attr( $technique ? $technique->slug : '' ); ?>"
-				data-medium-label="<?php echo esc_attr( $technique ? $technique->name : '' ); ?>"
+				data-mediums="<?php echo esc_attr( soc_get_creation_mediums_json( $item->ID ) ); ?>"
 			>
 				<div class="book-card__cover">
 					<span class="book-card__badge">

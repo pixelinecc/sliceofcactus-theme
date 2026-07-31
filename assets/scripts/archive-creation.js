@@ -4,7 +4,9 @@
  * No Astro equivalent (new unified /creations/ page). Adapted from
  * assets/scripts/archive-photo.js: labels come from data attributes
  * rendered per card (WP terms already carry their display name) instead
- * of a hardcoded map.
+ * of a hardcoded map. A card can carry several medium terms (a série
+ * mixing feutres and aquarelle, say), so mediums travel as a JSON array
+ * per card instead of a single slug/label pair.
  */
 
 (() => {
@@ -24,15 +26,25 @@
 		return;
 	}
 
+	const mediumsByCard = new Map();
 	const labels = new Map();
 
 	cards.forEach((card) => {
-		const slug = card.dataset.medium;
-		const label = card.dataset.mediumLabel;
+		let mediums = [];
 
-		if (slug && label && !labels.has(slug)) {
-			labels.set(slug, label);
+		try {
+			mediums = JSON.parse(card.dataset.mediums || '[]');
+		} catch (error) {
+			mediums = [];
 		}
+
+		mediumsByCard.set(card, mediums);
+
+		mediums.forEach(({ slug, label }) => {
+			if (slug && label && !labels.has(slug)) {
+				labels.set(slug, label);
+			}
+		});
 	});
 
 	let currentFilter = 'toutes';
@@ -40,7 +52,7 @@
 	const render = () => {
 		const visible = currentFilter === 'toutes'
 			? cards
-			: cards.filter((card) => card.dataset.medium === currentFilter);
+			: cards.filter((card) => mediumsByCard.get(card).some(({ slug }) => slug === currentFilter));
 
 		cards.forEach((card) => {
 			card.style.display = 'none';
@@ -52,7 +64,9 @@
 
 		if (count) {
 			const visibleCount = visible.length;
-			count.textContent = `${String(visibleCount).padStart(2, '0')} contenu${visibleCount > 1 ? 's' : ''}`;
+			const singular = count.dataset.nounSingular || 'contenu';
+			const plural = count.dataset.nounPlural || 'contenus';
+			count.textContent = `${String(visibleCount).padStart(2, '0')} ${visibleCount > 1 ? plural : singular}`;
 		}
 	};
 

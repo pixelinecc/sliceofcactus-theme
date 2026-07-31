@@ -116,7 +116,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: .6rem;
-	margin: 1.4rem 0 .2rem;
+	margin: 1.4rem 0;
 }
 
 .rubchips button {

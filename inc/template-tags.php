@@ -509,6 +509,42 @@ function soc_get_creation_technique_label( int $post_id = 0 ): string {
 }
 
 /**
+ * Gets every medium (technique) term of a creation as a JSON string, for
+ * the client-side filter chips.
+ *
+ * A creation can carry several medium terms (e.g. a série mixing feutres
+ * and aquarelle) — unlike soc_get_creation_technique_label(), which only
+ * ever surfaces the first one for display, the filter chips need every
+ * term so a card doesn't drop out of a medium's filtered view.
+ *
+ * @param int $post_id Optional creation ID. Defaults to the current post.
+ * @return string JSON array of {slug, label} objects.
+ */
+function soc_get_creation_mediums_json( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
+		return '[]';
+	}
+
+	$terms = get_the_terms( $post_id, 'medium' );
+
+	if ( ! is_array( $terms ) ) {
+		return '[]';
+	}
+
+	return (string) wp_json_encode(
+		array_map(
+			static fn( WP_Term $term ): array => array(
+				'slug'  => $term->slug,
+				'label' => $term->name,
+			),
+			$terms
+		)
+	);
+}
+
+/**
  * Gets the book/carnet info of a creation (coloriage only).
  *
  * @param int $post_id Optional creation ID. Defaults to the current post.

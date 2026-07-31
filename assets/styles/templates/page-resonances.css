@@ -1,0 +1,147 @@
+/**
+ * Résonances: one horizontal-scroll row per term.
+ *
+ * No dedicated --accent/--accent-deep override here: taxonomy-resonance.php
+ * (the destination of every "Tout voir" link and view-toggle tab) has none
+ * either, reusing the generic default from assets/styles/settings/tokens.css
+ * — kept consistent between the parent list and each row's own page rather
+ * than clashing.
+ *
+ * .view-switch/.view-toggle above the rows and .more-series__card/
+ * .more-series__thumb/.more-series__cap for each item are reused as-is
+ * (assets/styles/components/magazine-hub.css) — only the row/track/nav
+ * chrome around them is new.
+ */
+
+.resonance-row {
+	margin-top: 3rem;
+}
+
+.resonance-row__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 1rem 1.5rem;
+	padding: 1rem 0 .4rem;
+	border-top: 2px solid rgb(255 255 255 / 32%);
+}
+
+.resonance-row__intro {
+	max-width: 60ch;
+}
+
+.resonance-row__title {
+	color: var(--paper);
+	font-family: var(--font-head);
+	font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+	letter-spacing: .02em;
+	text-transform: uppercase;
+}
+
+.resonance-row__desc {
+	margin-top: .4rem;
+	color: rgb(255 255 255 / 75%);
+	font-family: var(--font-display);
+	font-size: .95rem;
+	line-height: 1.5;
+}
+
+.resonance-row__actions {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	gap: 1.4rem;
+}
+
+.resonance-row__more {
+	display: inline-flex;
+	align-items: center;
+	gap: .35rem;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: color .3s;
+}
+
+.resonance-row__more span {
+	display: inline-block;
+	transition: transform .3s var(--ease);
+}
+
+.resonance-row__more:hover,
+.resonance-row__more:focus-visible {
+	color: var(--flash);
+}
+
+.resonance-row__more:hover span,
+.resonance-row__more:focus-visible span {
+	transform: translateX(3px);
+}
+
+.resonance-row__nav {
+	display: flex;
+	flex-shrink: 0;
+	gap: .5rem;
+}
+
+.resonance-row__nav-btn {
+	width: 38px;
+	height: 38px;
+	padding: 0;
+	border: 2px solid var(--paper);
+	border-radius: 50%;
+	background: none;
+	color: var(--paper);
+	font-size: 1.2rem;
+	cursor: pointer;
+	transition: background .3s, border-color .3s, color .3s;
+}
+
+.resonance-row__nav-btn:hover,
+.resonance-row__nav-btn:focus-visible {
+	border-color: var(--flash);
+	background: var(--flash);
+	color: var(--ink);
+}
+
+.resonance-row__track {
+	display: flex;
+	gap: 1.4rem;
+	margin-top: 1.4rem;
+	padding-bottom: .5rem;
+	overflow-x: auto;
+	scroll-snap-type: x proximity;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+.resonance-row__track::-webkit-scrollbar {
+	display: none;
+}
+
+.resonance-row__card {
+	flex: 0 0 auto;
+	width: 260px;
+	scroll-snap-align: start;
+}
+
+@media (max-width: 560px) {
+	.resonance-row__card {
+		width: 210px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.resonance-row__track {
+		scroll-behavior: auto;
+	}
+
+	.resonance-row__nav-btn {
+		transition-duration: .01ms;
+	}
+}

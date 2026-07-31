@@ -901,3 +901,80 @@ function soc_get_resonance_groups( int $post_id = 0 ): array {
 
 	return $groups;
 }
+
+/**
+ * Gets every résonance term with at least one published post, each with its
+ * most recent posts mixed across post types, most recent first.
+ *
+ * Powers the "Résonances" parent page (page-resonances.php): one row per
+ * term. Unlike soc_get_resonance_groups(), which scopes to a single post's
+ * own terms for the "Résonne avec" cards, this covers every term site-wide.
+ *
+ * @param int $limit Maximum items per row.
+ * @return array<int, array{term: WP_Term, items: array<int, array{post: WP_Post, kind: string, cover_id: int}>}>
+ */
+function soc_get_resonance_rows( int $limit = 8 ): array {
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'resonance',
+			'hide_empty' => true,
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+		)
+	);
+
+	if ( ! is_array( $terms ) || empty( $terms ) ) {
+		return array();
+	}
+
+	$kinds = array(
+		'photo'    => __( 'Photo', 'sliceofcactus' ),
+		'creation' => __( 'Création', 'sliceofcactus' ),
+		'recit'    => __( 'Récit', 'sliceofcactus' ),
+	);
+
+	$rows = array();
+
+	foreach ( $terms as $term ) {
+		if ( ! $term instanceof WP_Term ) {
+			continue;
+		}
+
+		$items = array();
+
+		foreach ( $kinds as $post_type => $kind_label ) {
+			foreach ( soc_get_resonance_items( $term, $post_type ) as $post ) {
+				if ( 'photo' === $post_type ) {
+					$cover_id = soc_get_photo_cover_id( $post->ID );
+				} elseif ( 'creation' === $post_type ) {
+					$cover_id = soc_get_creation_cover_id( $post->ID );
+				} else {
+					$cover_id = absint( get_post_thumbnail_id( $post->ID ) );
+				}
+
+				$items[] = array(
+					'post'     => $post,
+					'kind'     => $kind_label,
+					'cover_id' => $cover_id,
+				);
+			}
+		}
+
+		if ( empty( $items ) ) {
+			continue;
+		}
+
+		usort(
+			$items,
+			static fn( array $a, array $b ): int
+				=> strtotime( $b['post']->post_date ) <=> strtotime( $a['post']->post_date )
+		);
+
+		$rows[] = array(
+			'term'  => $term,
+			'items' => array_slice( $items, 0, max( 1, $limit ) ),
+		);
+	}
+
+	return $rows;
+}

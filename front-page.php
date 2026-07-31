@@ -315,18 +315,9 @@ $home_recits = soc_get_home_recits( 3 );
 			<span class="section-head__num">04</span>
 		</div>
 		<div class="manifeste__text">
-			<p data-reveal><span class="drop">N</span><?php esc_html_e( 'ous croyons à la lenteur. À l\'image que l\'on choisit plutôt qu\'à celle que l\'on collectionne. Trente-six poses, c\'est assez pour raconter, trop peu pour se disperser.', 'sliceofcactus' ); ?></p>
+			<p data-reveal><span class="drop">J</span><?php esc_html_e( 'e crois à la lenteur. À l\'image que l\'on choisit plutôt qu\'à celle que l\'on collectionne. Trente-six poses, c\'est assez pour raconter, trop peu pour se disperser.', 'sliceofcactus' ); ?></p>
 			<p data-reveal><?php esc_html_e( 'Ici, pas de flux infini. Une galerie qui se visite comme un musée, se feuillette comme un magazine, respire comme une session au petit matin.', 'sliceofcactus' ); ?></p>
 			<p data-reveal class="manifeste__sign">— <strong><?php esc_html_e( '36 poses', 'sliceofcactus' ); ?></strong>, <?php esc_html_e( 'le label photo de Slice of Cactus', 'sliceofcactus' ); ?></p>
-			<p data-reveal><?php esc_html_e( 'Il existe des instants qui passent presque inaperçus.', 'sliceofcactus' ); ?></p>
-			<p data-reveal><?php esc_html_e( 'Une lumière qui change. Une fleur au bord d\'un chemin. Une silhouette au loin. Le vent dans les herbes. Le calme après la pluie. Un mur couvert de couleurs. Un regard, un geste, une présence.', 'sliceofcactus' ); ?></p>
-			<p data-reveal><?php esc_html_e( 'Ce sont ces fragments qui composent cet espace.', 'sliceofcactus' ); ?></p>
-			<p data-reveal><?php esc_html_e( 'Les voyages y côtoient le quotidien. La photographie dialogue avec le dessin, le coloriage et les mots. Chaque création prolonge une émotion, une rencontre ou une curiosité.', 'sliceofcactus' ); ?></p>
-			<p data-reveal><?php esc_html_e( 'Ici, il n\'est pas question de tout montrer.', 'sliceofcactus' ); ?></p>
-			<p data-reveal><?php esc_html_e( 'Seulement de rassembler ce qui mérite qu\'on s\'y attarde.', 'sliceofcactus' ); ?></p>
-			<p data-reveal><?php esc_html_e( 'Les carnets racontent des lieux. Les collections relient des instants éloignés dans le temps. L\'atelier donne une autre forme aux images.', 'sliceofcactus' ); ?></p>
-			<p data-reveal><?php esc_html_e( 'Slice of Cactus est une invitation à ralentir, à observer et à laisser les détails raconter le reste.', 'sliceofcactus' ); ?></p>
-			<p data-reveal><?php esc_html_e( 'Bienvenue.', 'sliceofcactus' ); ?></p>
 		</div>
 	</section>
 

@@ -95,11 +95,8 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : modérée (nouveau champ + logique PHP). **Certitude** : confirmé.
 
 ### 13 — Finition — `acf-json/taxonomy_narration.json` (`with_front`)
-- [ ] Corrigé
-**Problème constaté** : seule la taxonomie `narration` a `"with_front": "1"` ; les trois autres (`creation_type`, `medium`, `resonance`) ont `"0"`.
-**Impact réel** : probablement sans effet tant qu'aucune "page des articles" n'est assignée, mais c'est une incohérence de configuration.
-**Correction recommandée** : aligner sur `"0"` puis reflusher les permaliens.
-**Ampleur** : minime. **Certitude** : à vérifier.
+- [x] Corrigé — aligné sur `"0"`, comme les trois autres taxonomies. Confirmé sans effet visible (l'URL réelle testée par Céline, `/narration/voyage/`, ne changeait déjà rien à ce comportement) ; penser à ré-enregistrer les permaliens (Réglages → Permaliens → Enregistrer) après déploiement par bonne pratique.
+**Note au passage (hors scope, non corrigée)** : ce même fichier a les mêmes fautes de grammaire que celles corrigées au point #9 pour le CPT Photo (« Tous les Narration », « Aucun narration trouvé »…) — à traiter si besoin dans un point séparé.
 
 ### 14 — Finition — Absence de `search.php`
 - [ ] Corrigé

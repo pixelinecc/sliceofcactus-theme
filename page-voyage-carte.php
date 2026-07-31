@@ -8,6 +8,11 @@
  * script (assets/scripts/page-voyage-carte.js) just reads them from the
  * DOM, matching how the rest of the theme's JS works.
  *
+ * Destinations are grouped by country (soc_get_voyage_map_destinations()):
+ * the country chips filter which points show on the map, and reveal that
+ * country's series as a plain-text list above the chips — the map markers
+ * stay per point (a country has no single lat/lon of its own).
+ *
  * @package SliceOfCactus
  */
 
@@ -17,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-$destinations = soc_get_voyage_map_destinations();
+$countries = soc_get_voyage_map_destinations();
 ?>
 <main id="main-content" class="soc-voyage-carte rubrique-page">
 
@@ -52,68 +57,118 @@ $destinations = soc_get_voyage_map_destinations();
 	<div class="map-wrap" data-reveal>
 		<div id="leaflet-map" class="soc-leaflet-map"></div>
 
-		<?php if ( ! empty( $destinations ) ) : ?>
+		<?php if ( ! empty( $countries ) ) : ?>
+			<div class="dest-articles" id="destArticles" hidden></div>
+
 			<div class="dest-chips" id="destChips">
-				<?php foreach ( $destinations as $destination ) : ?>
-					<button
-						type="button"
-						data-dest-name="<?php echo esc_attr( $destination['name'] ); ?>"
-						data-lat="<?php echo esc_attr( $destination['lat'] ); ?>"
-						data-lon="<?php echo esc_attr( $destination['lon'] ); ?>"
-					>
-						<?php echo esc_html( $destination['name'] ); ?>
+				<button type="button" data-country-slug="" class="is-active">
+					<?php esc_html_e( 'Tous les pays', 'sliceofcactus' ); ?>
+				</button>
+				<?php foreach ( $countries as $country ) : ?>
+					<button type="button" data-country-slug="<?php echo esc_attr( $country['slug'] ); ?>">
+						<?php echo esc_html( $country['name'] ); ?>
 					</button>
 				<?php endforeach; ?>
 			</div>
 
-			<?php foreach ( $destinations as $destination ) : ?>
-				<template class="soc-dest-popup" data-dest-name="<?php echo esc_attr( $destination['name'] ); ?>">
-					<strong class="soc-dest-popup__title">
-						<?php echo esc_html( $destination['name'] ); ?>
-						<?php if ( count( $destination['series'] ) > 1 ) : ?>
-							·
-							<?php
-							printf(
-								/* translators: %s: number of series. */
-								esc_html( _n( '%s série', '%s séries', count( $destination['series'] ), 'sliceofcactus' ) ),
-								esc_html( number_format_i18n( count( $destination['series'] ) ) )
-							);
-							?>
-						<?php endif; ?>
-					</strong>
-					<?php foreach ( $destination['series'] as $photo ) : ?>
-						<?php
-						$cover_id = soc_get_photo_cover_id( $photo->ID );
-						$poses    = soc_get_photo_pose_count( $photo->ID );
-						?>
-						<a class="soc-dest-popup__serie" href="<?php echo esc_url( get_permalink( $photo ) ); ?>">
-							<?php if ( $cover_id ) : ?>
+			<?php foreach ( $countries as $country ) : ?>
+				<?php foreach ( $country['points'] as $point ) : ?>
+					<template
+						class="soc-dest-popup"
+						data-country-slug="<?php echo esc_attr( $country['slug'] ); ?>"
+						data-lat="<?php echo esc_attr( $point['lat'] ); ?>"
+						data-lon="<?php echo esc_attr( $point['lon'] ); ?>"
+					>
+						<strong class="soc-dest-popup__title">
+							<?php echo esc_html( $point['name'] ); ?>
+							<?php if ( count( $point['series'] ) > 1 ) : ?>
+								·
 								<?php
-								echo wp_get_attachment_image(
-									$cover_id,
-									'thumbnail',
-									false,
-									array(
-										'alt'     => '',
-										'loading' => 'lazy',
-									)
+								printf(
+									/* translators: %s: number of series. */
+									esc_html( _n( '%s série', '%s séries', count( $point['series'] ), 'sliceofcactus' ) ),
+									esc_html( number_format_i18n( count( $point['series'] ) ) )
 								);
 								?>
 							<?php endif; ?>
-							<span>
-								<strong><?php echo esc_html( get_the_title( $photo ) ); ?></strong>
-								<span>
+						</strong>
+						<?php foreach ( $point['series'] as $photo ) : ?>
+							<?php
+							$cover_id = soc_get_photo_cover_id( $photo->ID );
+							$poses    = soc_get_photo_pose_count( $photo->ID );
+							?>
+							<a class="soc-dest-popup__serie" href="<?php echo esc_url( get_permalink( $photo ) ); ?>">
+								<?php if ( $cover_id ) : ?>
 									<?php
-									printf(
-										/* translators: %s: number of poses. */
-										esc_html( _n( '%s pose', '%s poses', $poses, 'sliceofcactus' ) ),
-										esc_html( number_format_i18n( $poses ) )
+									echo wp_get_attachment_image(
+										$cover_id,
+										'thumbnail',
+										false,
+										array(
+											'alt'     => '',
+											'loading' => 'lazy',
+										)
 									);
 									?>
+								<?php endif; ?>
+								<span>
+									<strong><?php echo esc_html( get_the_title( $photo ) ); ?></strong>
+									<span>
+										<?php
+										printf(
+											/* translators: %s: number of poses. */
+											esc_html( _n( '%s pose', '%s poses', $poses, 'sliceofcactus' ) ),
+											esc_html( number_format_i18n( $poses ) )
+										);
+										?>
+									</span>
 								</span>
-							</span>
-						</a>
-					<?php endforeach; ?>
+							</a>
+						<?php endforeach; ?>
+					</template>
+				<?php endforeach; ?>
+
+				<template class="soc-country-articles" data-country-slug="<?php echo esc_attr( $country['slug'] ); ?>">
+					<h2 class="dest-articles__title"><?php echo esc_html( $country['name'] ); ?></h2>
+					<ul class="dest-articles__list">
+						<?php foreach ( $country['series'] as $photo ) : ?>
+							<?php
+							$point_name = soc_get_photo_location( $photo->ID )['name'] ?? '';
+							$poses      = soc_get_photo_pose_count( $photo->ID );
+							$cover_id   = soc_get_photo_cover_id( $photo->ID );
+							?>
+							<li>
+								<a href="<?php echo esc_url( get_permalink( $photo ) ); ?>">
+									<?php if ( $cover_id ) : ?>
+										<?php
+										echo wp_get_attachment_image(
+											$cover_id,
+											'thumbnail',
+											false,
+											array(
+												'alt'     => '',
+												'loading' => 'lazy',
+											)
+										);
+										?>
+									<?php endif; ?>
+									<span>
+										<strong><?php echo esc_html( get_the_title( $photo ) ); ?></strong>
+										<span>
+											<?php
+											echo esc_html( $point_name ? $point_name . ' · ' : '' );
+											printf(
+												/* translators: %s: number of poses. */
+												esc_html( _n( '%s pose', '%s poses', $poses, 'sliceofcactus' ) ),
+												esc_html( number_format_i18n( $poses ) )
+											);
+											?>
+										</span>
+									</span>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
 				</template>
 			<?php endforeach; ?>
 		<?php endif; ?>

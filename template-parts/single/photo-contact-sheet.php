@@ -22,6 +22,7 @@ $intro            = soc_get_photo_intro( $post_id );
 $resonances       = get_the_terms( $post_id, 'resonance' );
 $resonances       = is_array( $resonances ) ? $resonances : array();
 $location         = soc_get_photo_location( $post_id );
+$country          = soc_get_photo_country( $post_id );
 $photo_date       = soc_get_photo_date_label( $post_id );
 $photo_date_label = soc_get_photo_month( $post_id ) > 0 ? __( 'Date :', 'sliceofcactus' ) : __( 'Année :', 'sliceofcactus' );
 $gallery_ids      = function_exists( 'get_field' ) ? array_filter( array_map( 'absint', (array) get_field( 'soc_photo_gallery', $post_id ) ) ) : array();
@@ -111,8 +112,8 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 						<b>
 							<?php
 							echo esc_html( $location['name'] );
-							if ( ! empty( $location['country'] ) ) {
-								echo esc_html( ', ' . $location['country'] );
+							if ( $country ) {
+								echo esc_html( ', ' . $country->name );
 							}
 							?>
 						</b>

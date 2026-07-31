@@ -56,33 +56,13 @@
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "50",
+                        "width": "100",
                         "class": "",
                         "id": ""
                     },
                     "default_value": "",
                     "maxlength": "",
                     "placeholder": "Paris",
-                    "prepend": "",
-                    "append": ""
-                },
-                {
-                    "key": "field_soc_photo_location_country",
-                    "label": "Pays",
-                    "name": "country",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "France",
                     "prepend": "",
                     "append": ""
                 },
@@ -293,5 +273,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785488032
+    "modified": 1785509859
 }

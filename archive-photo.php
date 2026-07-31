@@ -72,6 +72,7 @@ $total  = count( $photos );
 			$narrations = soc_get_photo_narrations( $photo->ID );
 			$narration  = ! empty( $narrations ) ? $narrations[0] : null;
 			$location   = soc_get_photo_location( $photo->ID );
+			$country    = soc_get_photo_country( $photo->ID );
 			$poses      = soc_get_photo_pose_count( $photo->ID );
 			$cover_id   = soc_get_photo_cover_id( $photo->ID );
 			$no         = str_pad( (string) ( $index + 1 ), 2, '0', STR_PAD_LEFT );
@@ -80,7 +81,7 @@ $total  = count( $photos );
 			if ( ! empty( $location ) ) {
 				$place = implode(
 					' · ',
-					array_filter( array( $location['country'] ?? '', $location['name'] ?? '' ) )
+					array_filter( array( $country ? $country->name : '', $location['name'] ?? '' ) )
 				);
 			} else {
 				$place = $narration ? $narration->name : '';

@@ -499,15 +499,19 @@ function soc_get_color_your_life_series(): array {
 }
 
 /**
- * Gets the destinations shown on the voyage map, grouped by location name.
+ * Gets the countries shown on the voyage map, each with its geolocated
+ * points (one per distinct location name) and the flat list of every
+ * series it contains.
  *
- * Mirrors sliceofcactus-astro's voyage-carte.astro: every "voyage" series
- * with a location, grouped by location name, series sorted by most recent
- * photo_year first within each destination (falling back to publish date,
- * via soc_get_photo_year()) — this is the photographic chronology of the
- * trip, not necessarily the order series were published in.
+ * A "voyage" series is only placed on the map once it carries both a
+ * location (name + coordinates) and a "pays" term: the country is what
+ * the map now groups and filters by, so a series without one can't be
+ * placed. Series within a country (and within each point) are sorted by
+ * most recent photo_year first, falling back to publish date via
+ * soc_get_photo_year() — the photographic chronology of the trip, not
+ * necessarily the order series were published in.
  *
- * @return array<int, array{name: string, country: string, lat: float, lon: float, series: WP_Post[]}>
+ * @return array<int, array{name: string, slug: string, points: array<int, array{name: string, lat: float, lon: float, series: WP_Post[]}>, series: WP_Post[]}>
  */
 function soc_get_voyage_map_destinations(): array {
 	$query = new WP_Query(
@@ -529,36 +533,55 @@ function soc_get_voyage_map_destinations(): array {
 		)
 	);
 
-	$destinations = array();
+	$countries = array();
 
 	foreach ( $query->posts as $photo ) {
 		$location = soc_get_photo_location( $photo->ID );
+		$country  = soc_get_photo_country( $photo->ID );
 
-		if ( empty( $location ) || ! is_numeric( $location['latitude'] ?? '' ) || ! is_numeric( $location['longitude'] ?? '' ) ) {
+		if ( ! $country || empty( $location ) || ! is_numeric( $location['latitude'] ?? '' ) || ! is_numeric( $location['longitude'] ?? '' ) ) {
 			continue;
 		}
 
-		$key = $location['name'];
-
-		if ( ! isset( $destinations[ $key ] ) ) {
-			$destinations[ $key ] = array(
-				'name'    => $location['name'],
-				'country' => $location['country'] ?? '',
-				'lat'     => (float) $location['latitude'],
-				'lon'     => (float) $location['longitude'],
-				'series'  => array(),
+		if ( ! isset( $countries[ $country->slug ] ) ) {
+			$countries[ $country->slug ] = array(
+				'name'   => $country->name,
+				'slug'   => $country->slug,
+				'points' => array(),
+				'series' => array(),
 			);
 		}
 
-		$destinations[ $key ]['series'][] = $photo;
+		$point_key = $location['name'];
+
+		if ( ! isset( $countries[ $country->slug ]['points'][ $point_key ] ) ) {
+			$countries[ $country->slug ]['points'][ $point_key ] = array(
+				'name'   => $location['name'],
+				'lat'    => (float) $location['latitude'],
+				'lon'    => (float) $location['longitude'],
+				'series' => array(),
+			);
+		}
+
+		$countries[ $country->slug ]['points'][ $point_key ]['series'][] = $photo;
+		$countries[ $country->slug ]['series'][]                         = $photo;
 	}
 
-	foreach ( $destinations as &$destination ) {
-		usort( $destination['series'], 'soc_compare_photos_by_year_desc' );
-	}
-	unset( $destination );
+	foreach ( $countries as &$country ) {
+		usort( $country['series'], 'soc_compare_photos_by_year_desc' );
 
-	return array_values( $destinations );
+		foreach ( $country['points'] as &$point ) {
+			usort( $point['series'], 'soc_compare_photos_by_year_desc' );
+		}
+		unset( $point );
+
+		$country['points'] = array_values( $country['points'] );
+	}
+	unset( $country );
+
+	uasort( $countries, static fn( array $a, array $b ): int => strcasecmp( $a['name'], $b['name'] ) );
+
+	return array_values( $countries );
 }
 
 /**

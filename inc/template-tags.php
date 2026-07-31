@@ -97,7 +97,7 @@ function soc_get_photo_intro( int $post_id = 0 ): string {
  * Gets the location of a photo series.
  *
  * @param int $post_id Optional photo ID. Defaults to the current post.
- * @return array{name?: string, country?: string, latitude?: float, longitude?: float}
+ * @return array{name?: string, latitude?: float, longitude?: float}
  */
 function soc_get_photo_location( int $post_id = 0 ): array {
 	$post_id = $post_id ?: get_the_ID();
@@ -113,6 +113,24 @@ function soc_get_photo_location( int $post_id = 0 ): array {
 	}
 
 	return $location;
+}
+
+/**
+ * Gets the country term of a photo series (first "pays" term).
+ *
+ * @param int $post_id Optional photo ID. Defaults to the current post.
+ * @return WP_Term|null
+ */
+function soc_get_photo_country( int $post_id = 0 ): ?WP_Term {
+	$post_id = $post_id ?: get_the_ID();
+
+	if ( ! $post_id || 'photo' !== get_post_type( $post_id ) ) {
+		return null;
+	}
+
+	$terms = get_the_terms( $post_id, 'pays' );
+
+	return is_array( $terms ) && ! empty( $terms ) ? $terms[0] : null;
 }
 
 /**

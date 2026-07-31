@@ -105,6 +105,7 @@
 .lightbox__strip {
 	display: flex;
 	flex: 1;
+	justify-content: safe center;
 	gap: .5rem;
 	overflow-x: auto;
 	scrollbar-width: none;

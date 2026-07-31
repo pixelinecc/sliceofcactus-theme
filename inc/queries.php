@@ -452,18 +452,40 @@ function soc_get_projet52_years(): array {
 /**
  * Gets the photo series shown on the Color Your Life page, sorted by hue.
  *
- * Mirrors sliceofcactus-astro's color-your-life.astro: the same series as
- * the Photo archive (soc_get_photo_archive_series — same three rubriques,
- * cover image required), further limited to series with a dominant color,
- * ordered around the color wheel instead of by date.
+ * Unlike soc_get_photo_archive_series() (which excludes the narration
+ * "color-your-life" so it doesn't double up as a regular rubrique on the
+ * Photo archive), this page is the one place that narration is meant to
+ * surface — including series tagged *only* "color-your-life" with no other
+ * narration. Only Projet 52 (a different format entirely) stays excluded.
+ * Requires a cover image and a dominant color, ordered around the color
+ * wheel instead of by date.
  *
  * @return WP_Post[]
  */
 function soc_get_color_your_life_series(): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'photo',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'narration',
+					'field'    => 'slug',
+					'terms'    => array( 'projet-52' ),
+					'operator' => 'NOT IN',
+				),
+			),
+		)
+	);
+
 	$series = array_values(
 		array_filter(
-			soc_get_photo_archive_series(),
-			static fn( WP_Post $photo ): bool => '' !== soc_get_photo_color( $photo->ID )
+			$query->posts,
+			static fn( WP_Post $photo ): bool
+				=> soc_get_photo_cover_id( $photo->ID ) > 0 && '' !== soc_get_photo_color( $photo->ID )
 		)
 	);
 

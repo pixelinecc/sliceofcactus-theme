@@ -22,6 +22,11 @@ body.soc-rubrique-coloriage {
 	--accent-deep: #5b27b0;
 }
 
+.soc-creation > .mag-sommaire {
+	margin-left: var(--gutter);
+	margin-right: var(--gutter);
+}
+
 .book-credit {
 	display: flex;
 	align-items: center;

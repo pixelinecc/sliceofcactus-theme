@@ -30,8 +30,6 @@ $sheet_id       = 'soc-creation-sheet-' . $post_id;
 $lightbox_id    = 'soc-creation-lightbox-' . $post_id;
 
 if ( $is_coloriage ) {
-	$drop_source  = get_the_title();
-	$lead_text    = ! empty( $book['title'] ) ? $book['title'] : $accroche;
 	$card_by      = __( 'feutres & crayons', 'sliceofcactus' );
 	$sommaire_sub = sprintf(
 		/* translators: %s: creation title. */
@@ -39,19 +37,15 @@ if ( $is_coloriage ) {
 		get_the_title()
 	);
 } else {
-	$drop_source  = '' !== $technique ? $technique : __( 'Dessin', 'sliceofcactus' );
-	$lead_text    = '' !== $technique
-		? sprintf(
-			/* translators: %s: technique name. */
-			__( 'Technique : %s.', 'sliceofcactus' ),
-			$technique
-		)
-		: '';
 	$card_by      = '' !== $technique ? $technique : __( 'dessin', 'sliceofcactus' );
 	$sommaire_sub = '' !== $technique ? $technique : __( 'Dessin', 'sliceofcactus' );
 }
 
-$drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $drop_source, 0, 1 ) : substr( $drop_source, 0, 1 );
+$techniques     = get_the_terms( $post_id, 'medium' );
+$technique_list = is_array( $techniques ) ? implode( ', ', wp_list_pluck( $techniques, 'name' ) ) : '';
+
+$drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $accroche, 0, 1 ) : substr( $accroche, 0, 1 );
+$lead_rest   = function_exists( 'mb_substr' ) ? mb_substr( $accroche, 1 ) : substr( $accroche, 1 );
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'rubrique-page colo soc-creation' ); ?>>
 	<div class="mag-runhead">
@@ -84,16 +78,16 @@ $drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $drop_source, 0, 1 ) 
 	<header class="mag-masthead">
 		<h1 class="mag-masthead__title">
 			<?php the_title(); ?>
-			<?php if ( '' !== $accroche ) : ?>
-				<em><?php echo esc_html( $accroche ); ?></em>
+			<?php if ( '' !== $technique_list ) : ?>
+				<em><?php echo esc_html( $technique_list ); ?></em>
 			<?php endif; ?>
 		</h1>
 
-		<?php if ( '' !== $lead_text ) : ?>
+		<?php if ( '' !== $accroche ) : ?>
 			<div class="mag-masthead__lead">
 				<p>
 					<span class="drop"><?php echo esc_html( $drop_letter ); ?></span>
-					<?php echo esc_html( $lead_text ); ?>
+					<?php echo esc_html( $lead_rest ); ?>
 				</p>
 			</div>
 		<?php endif; ?>

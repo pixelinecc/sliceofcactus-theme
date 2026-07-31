@@ -76,7 +76,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 10 — Finition — `footer.php` (commentaire Pinterest orphelin)
-- [ ] Corrigé
+- [x] Corrigé — commentaire supprimé.
 **Problème constaté** : un commentaire `// TODO: remplacer par l'URL Pinterest réelle...` précède `$instagram_url`, mais aucun lien Pinterest n'existe nulle part dans le footer.
 **Impact réel** : source de confusion pour une future intervention.
 **Correction recommandée** : supprimer le commentaire orphelin, ou ajouter le lien Pinterest s'il est toujours prévu.

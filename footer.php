@@ -30,7 +30,6 @@ $footer_columns   = array(
 	),
 );
 $contact_email    = 'bonjour@sliceofcactus.fr';
-// TODO: remplacer par l'URL Pinterest réelle une fois le compte créé/confirmé.
 $instagram_url    = 'https://www.instagram.com/sliceofcactus/';
 $instagramdessin_url    = 'https://www.instagram.com/traitducameleon/';
 $latest_recits    = soc_get_home_recits( 1 );

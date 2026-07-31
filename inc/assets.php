@@ -64,7 +64,7 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
-	$needs_lightbox = is_singular( 'photo' ) || is_singular( 'creation' ) || is_front_page();
+	$needs_lightbox = is_singular( 'photo' ) || is_singular( 'creation' ) || is_front_page() || is_page_template( 'page-projet-52.php' );
 	$lightbox_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_lightbox ) {
@@ -201,7 +201,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-page-projet-52',
 				get_theme_file_uri( '/assets/styles/templates/page-projet-52.css' ),
-				$magazine_hub_deps,
+				array_merge( $magazine_hub_deps, $lightbox_deps ),
 				(string) filemtime( $p52_style_path )
 			);
 		}
@@ -266,6 +266,24 @@ function soc_enqueue_assets(): void {
 		wp_script_add_data( 'sliceofcactus-interactions', 'strategy', 'defer' );
 	}
 
+	$lightbox_script_deps = array();
+
+	if ( $needs_lightbox ) {
+		$lightbox_script_path = get_theme_file_path( '/assets/scripts/components/lightbox.js' );
+
+		if ( is_readable( $lightbox_script_path ) ) {
+			wp_enqueue_script(
+				'sliceofcactus-lightbox',
+				get_theme_file_uri( '/assets/scripts/components/lightbox.js' ),
+				array(),
+				(string) filemtime( $lightbox_script_path ),
+				true
+			);
+			wp_script_add_data( 'sliceofcactus-lightbox', 'strategy', 'defer' );
+			$lightbox_script_deps[] = 'sliceofcactus-lightbox';
+		}
+	}
+
 	if ( is_singular( 'photo' ) ) {
 		$photo_script_path = get_theme_file_path( '/assets/scripts/single-photo.js' );
 
@@ -273,7 +291,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_script(
 				'sliceofcactus-single-photo',
 				get_theme_file_uri( '/assets/scripts/single-photo.js' ),
-				array(),
+				$lightbox_script_deps,
 				(string) filemtime( $photo_script_path ),
 				true
 			);
@@ -288,7 +306,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_script(
 				'sliceofcactus-single-creation',
 				get_theme_file_uri( '/assets/scripts/single-creation.js' ),
-				array(),
+				$lightbox_script_deps,
 				(string) filemtime( $creation_script_path ),
 				true
 			);
@@ -348,7 +366,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_script(
 				'sliceofcactus-page-projet-52',
 				get_theme_file_uri( '/assets/scripts/page-projet-52.js' ),
-				array(),
+				$lightbox_script_deps,
 				(string) filemtime( $p52_script_path ),
 				true
 			);
@@ -401,7 +419,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_script(
 				'sliceofcactus-front-page',
 				get_theme_file_uri( '/assets/scripts/front-page.js' ),
-				array(),
+				$lightbox_script_deps,
 				(string) filemtime( $front_page_script_path ),
 				true
 			);

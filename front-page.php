@@ -269,7 +269,7 @@ $home_recits = soc_get_home_recits( 3 );
 					<em>« <?php echo esc_html( $filmstrip_title ); ?> »</em> — <?php echo esc_html( $filmstrip_kicker ); ?> · <?php esc_html_e( 'le label photo de Slice of Cactus', 'sliceofcactus' ); ?>
 				</p>
 			</div>
-			<div class="filmstrip" id="filmstrip">
+			<div class="filmstrip" id="filmstrip" data-lightbox="lightbox">
 				<?php foreach ( $filmstrip_images as $index => $image_id ) : ?>
 					<a
 						class="frame"
@@ -352,14 +352,51 @@ $home_recits = soc_get_home_recits( 3 );
 </main>
 
 <?php if ( ! empty( $filmstrip_images ) ) : ?>
-	<div class="lightbox" id="lightbox" aria-hidden="true">
-		<button class="lightbox__close" id="lightboxClose" type="button" aria-label="<?php esc_attr_e( 'Fermer', 'sliceofcactus' ); ?>">✕</button>
-		<button class="lightbox__nav lightbox__nav--prev" id="lbPrev" type="button" aria-label="<?php esc_attr_e( 'précédent', 'sliceofcactus' ); ?>">‹</button>
+	<div
+		class="lightbox<?php echo count( $filmstrip_images ) > 1 ? ' lightbox--filmstrip' : ''; ?>"
+		id="lightbox"
+		role="dialog"
+		aria-modal="true"
+		aria-label="<?php esc_attr_e( 'Visionneuse de la série à la une', 'sliceofcactus' ); ?>"
+		aria-hidden="true"
+	>
+		<button class="lightbox__close" type="button" aria-label="<?php esc_attr_e( 'Fermer', 'sliceofcactus' ); ?>">×</button>
+		<button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="<?php esc_attr_e( 'Image précédente', 'sliceofcactus' ); ?>">‹</button>
 		<figure class="lightbox__fig">
-			<img src="" alt="" id="lightboxImg">
-			<figcaption id="lightboxCap"></figcaption>
+			<img alt="">
+			<figcaption></figcaption>
 		</figure>
-		<button class="lightbox__nav lightbox__nav--next" id="lbNext" type="button" aria-label="<?php esc_attr_e( 'suivant', 'sliceofcactus' ); ?>">›</button>
+		<button class="lightbox__nav lightbox__nav--next" type="button" aria-label="<?php esc_attr_e( 'Image suivante', 'sliceofcactus' ); ?>">›</button>
+
+		<?php if ( count( $filmstrip_images ) > 1 ) : ?>
+			<div class="lightbox__strip-wrap">
+				<button class="lightbox__strip-nav lightbox__strip-nav--prev" type="button" aria-label="<?php esc_attr_e( 'Défiler les vignettes vers la gauche', 'sliceofcactus' ); ?>">‹</button>
+
+				<div class="lightbox__strip" role="group" aria-label="<?php esc_attr_e( 'Navigation entre les poses', 'sliceofcactus' ); ?>">
+					<?php foreach ( $filmstrip_images as $index => $image_id ) : ?>
+						<button
+							class="lightbox__strip__item"
+							type="button"
+							aria-label="<?php echo esc_attr( sprintf( __( 'Aller à la pose %s', 'sliceofcactus' ), number_format_i18n( $index + 1 ) ) ); ?>"
+						>
+							<?php
+							echo wp_get_attachment_image(
+								$image_id,
+								'thumbnail',
+								false,
+								array(
+									'loading' => 'lazy',
+									'alt'     => '',
+								)
+							);
+							?>
+						</button>
+					<?php endforeach; ?>
+				</div>
+
+				<button class="lightbox__strip-nav lightbox__strip-nav--next" type="button" aria-label="<?php esc_attr_e( 'Défiler les vignettes vers la droite', 'sliceofcactus' ); ?>">›</button>
+			</div>
+		<?php endif; ?>
 	</div>
 <?php endif; ?>
 <?php

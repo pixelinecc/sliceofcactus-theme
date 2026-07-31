@@ -22,19 +22,15 @@
 			return;
 		}
 
-		const lightboxImage = lightbox.querySelector('.lightbox__fig img');
-		const lightboxCaption = lightbox.querySelector('.lightbox__fig figcaption');
-		const closeButton = lightbox.querySelector('.lightbox__close');
-		const previousButton = lightbox.querySelector('.lightbox__nav--prev');
-		const nextButton = lightbox.querySelector('.lightbox__nav--next');
-		const focusableControls = [closeButton, previousButton, nextButton].filter(Boolean);
-		let currentIndex = 0;
-		let previouslyFocused = null;
+		const items = cards.map((card, index) => {
+			const cap = card.querySelector('.colo-card__title')?.textContent || '';
 
-		const items = cards.map((card) => ({
-			src: card.getAttribute('href') || '',
-			cap: card.querySelector('.colo-card__title')?.textContent || '',
-		}));
+			return {
+				src: card.getAttribute('href') || '',
+				alt: cap,
+				caption: `${cap} · ${index + 1} / ${cards.length}`,
+			};
+		});
 
 		cards.forEach((card) => {
 			const image = card.querySelector('.colo-card__img img');
@@ -56,70 +52,31 @@
 			}
 		});
 
-		const show = (requestedIndex) => {
-			currentIndex = (requestedIndex + items.length) % items.length;
-			lightboxImage.src = items[currentIndex].src;
-			lightboxImage.alt = items[currentIndex].cap;
-			lightboxCaption.textContent = `${items[currentIndex].cap} · ${currentIndex + 1} / ${items.length}`;
-		};
+		const controller = window.SocLightbox.create({
+			lightbox,
+			image: lightbox.querySelector('.lightbox__fig img'),
+			caption: lightbox.querySelector('.lightbox__fig figcaption'),
+			closeButton: lightbox.querySelector('.lightbox__close'),
+			prevButton: lightbox.querySelector('.lightbox__nav--prev'),
+			nextButton: lightbox.querySelector('.lightbox__nav--next'),
+			getItems: () => items,
+			strip: {
+				track: lightbox.querySelector('.lightbox__strip'),
+				buttons: Array.from(lightbox.querySelectorAll('.lightbox__strip__item')),
+				prevButton: lightbox.querySelector('.lightbox__strip-nav--prev'),
+				nextButton: lightbox.querySelector('.lightbox__strip-nav--next'),
+			},
+		});
 
-		const open = (index) => {
-			previouslyFocused = document.activeElement;
-			show(index);
-			lightbox.classList.add('is-open');
-			lightbox.setAttribute('aria-hidden', 'false');
-			closeButton?.focus();
-		};
-
-		const close = () => {
-			lightbox.classList.remove('is-open');
-			lightbox.setAttribute('aria-hidden', 'true');
-			lightboxImage.removeAttribute('src');
-
-			if (previouslyFocused instanceof HTMLElement) {
-				previouslyFocused.focus();
-			}
-		};
+		if (!controller) {
+			return;
+		}
 
 		cards.forEach((card, index) => {
 			card.addEventListener('click', (event) => {
 				event.preventDefault();
-				open(index);
+				controller.open(index);
 			});
-		});
-
-		closeButton?.addEventListener('click', close);
-		previousButton?.addEventListener('click', () => show(currentIndex - 1));
-		nextButton?.addEventListener('click', () => show(currentIndex + 1));
-		lightbox.addEventListener('click', (event) => {
-			if (event.target === lightbox) {
-				close();
-			}
-		});
-
-		document.addEventListener('keydown', (event) => {
-			if (!lightbox.classList.contains('is-open')) {
-				return;
-			}
-
-			if (event.key === 'Escape') {
-				close();
-			} else if (event.key === 'ArrowLeft') {
-				show(currentIndex - 1);
-			} else if (event.key === 'ArrowRight') {
-				show(currentIndex + 1);
-			} else if (event.key === 'Tab' && focusableControls.length) {
-				const firstControl = focusableControls[0];
-				const lastControl = focusableControls[focusableControls.length - 1];
-
-				if (event.shiftKey && document.activeElement === firstControl) {
-					event.preventDefault();
-					lastControl.focus();
-				} else if (!event.shiftKey && document.activeElement === lastControl) {
-					event.preventDefault();
-					firstControl.focus();
-				}
-			}
 		});
 	});
 })();

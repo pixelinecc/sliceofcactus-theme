@@ -282,7 +282,7 @@ $drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $drop_source, 0, 1 ) 
 
 <?php if ( ! empty( $gallery_ids ) ) : ?>
 	<div
-		class="lightbox soc-creation-lightbox"
+		class="lightbox<?php echo count( $gallery_ids ) > 1 ? ' lightbox--filmstrip' : ''; ?>"
 		id="<?php echo esc_attr( $lightbox_id ); ?>"
 		role="dialog"
 		aria-modal="true"
@@ -296,5 +296,35 @@ $drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $drop_source, 0, 1 ) 
 			<figcaption></figcaption>
 		</figure>
 		<button class="lightbox__nav lightbox__nav--next" type="button" aria-label="<?php esc_attr_e( 'Planche suivante', 'sliceofcactus' ); ?>">›</button>
+
+		<?php if ( count( $gallery_ids ) > 1 ) : ?>
+			<div class="lightbox__strip-wrap">
+				<button class="lightbox__strip-nav lightbox__strip-nav--prev" type="button" aria-label="<?php esc_attr_e( 'Défiler les vignettes vers la gauche', 'sliceofcactus' ); ?>">‹</button>
+
+				<div class="lightbox__strip" role="group" aria-label="<?php esc_attr_e( 'Navigation entre les planches', 'sliceofcactus' ); ?>">
+					<?php foreach ( array_values( $gallery_ids ) as $index => $attachment_id ) : ?>
+						<button
+							class="lightbox__strip__item"
+							type="button"
+							aria-label="<?php echo esc_attr( sprintf( __( 'Aller à la planche %s', 'sliceofcactus' ), number_format_i18n( $index + 1 ) ) ); ?>"
+						>
+							<?php
+							echo wp_get_attachment_image(
+								$attachment_id,
+								'thumbnail',
+								false,
+								array(
+									'loading' => 'lazy',
+									'alt'     => '',
+								)
+							);
+							?>
+						</button>
+					<?php endforeach; ?>
+				</div>
+
+				<button class="lightbox__strip-nav lightbox__strip-nav--next" type="button" aria-label="<?php esc_attr_e( 'Défiler les vignettes vers la droite', 'sliceofcactus' ); ?>">›</button>
+			</div>
+		<?php endif; ?>
 	</div>
 <?php endif; ?>

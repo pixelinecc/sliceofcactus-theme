@@ -133,16 +133,27 @@ $default_year = ! empty( $years ) ? array_key_first( $years ) : null;
 
 </main>
 
-<div class="p52lb" id="p52lb" aria-hidden="true">
-	<button class="p52lb__close" id="p52lbClose" type="button" aria-label="<?php esc_attr_e( 'Fermer', 'sliceofcactus' ); ?>">
-		<?php esc_html_e( 'Fermer ✕', 'sliceofcactus' ); ?>
-	</button>
-	<button class="p52lb__nav p52lb__nav--prev" id="p52lbPrev" type="button" aria-label="<?php esc_attr_e( 'Précédent', 'sliceofcactus' ); ?>">‹</button>
-	<figure class="p52lb__fig">
-		<img id="p52lbImg" src="" alt="">
-		<figcaption class="p52lb__cap" id="p52lbCap"></figcaption>
+<div
+	class="lightbox"
+	id="p52-lightbox"
+	role="dialog"
+	aria-modal="true"
+	aria-label="<?php esc_attr_e( 'Visionneuse du Projet 52', 'sliceofcactus' ); ?>"
+	aria-hidden="true"
+>
+	<button class="lightbox__close" type="button" aria-label="<?php esc_attr_e( 'Fermer', 'sliceofcactus' ); ?>">×</button>
+	<button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="<?php esc_attr_e( 'Semaine précédente', 'sliceofcactus' ); ?>">‹</button>
+	<figure class="lightbox__fig">
+		<img alt="">
+		<figcaption></figcaption>
 	</figure>
-	<button class="p52lb__nav p52lb__nav--next" id="p52lbNext" type="button" aria-label="<?php esc_attr_e( 'Suivant', 'sliceofcactus' ); ?>">›</button>
+	<button class="lightbox__nav lightbox__nav--next" type="button" aria-label="<?php esc_attr_e( 'Semaine suivante', 'sliceofcactus' ); ?>">›</button>
+
+	<div class="lightbox__strip-wrap">
+		<button class="lightbox__strip-nav lightbox__strip-nav--prev" type="button" aria-label="<?php esc_attr_e( 'Défiler les vignettes vers la gauche', 'sliceofcactus' ); ?>">‹</button>
+		<div class="lightbox__strip" id="p52lbStrip" role="group" aria-label="<?php esc_attr_e( 'Navigation entre les semaines', 'sliceofcactus' ); ?>"></div>
+		<button class="lightbox__strip-nav lightbox__strip-nav--next" type="button" aria-label="<?php esc_attr_e( 'Défiler les vignettes vers la droite', 'sliceofcactus' ); ?>">›</button>
+	</div>
 </div>
 <?php
 get_footer();

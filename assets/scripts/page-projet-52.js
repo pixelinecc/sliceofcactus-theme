@@ -4,8 +4,8 @@
  * Adapted from sliceofcactus-astro/src/pages/projet-52.astro. Unlike Astro,
  * every year's grid is server-rendered from a real photo gallery (see
  * page-projet-52.php) — this script only toggles which grid is visible and
- * drives a lightbox over the currently visible one, instead of generating
- * placeholder markup from a JS config.
+ * drives the shared lightbox (assets/scripts/components/lightbox.js) over
+ * whichever grid the clicked week belongs to.
  */
 
 (() => {
@@ -14,20 +14,11 @@
 	const yearButtons = document.querySelectorAll( '#p52Years button[data-year]' );
 	const barFill = document.getElementById( 'p52BarFill' );
 	const countEl = document.getElementById( 'p52Count' );
-	const lightbox = document.getElementById( 'p52lb' );
+	const lightbox = document.getElementById( 'p52-lightbox' );
 
 	if ( ! yearButtons.length || ! lightbox ) {
 		return;
 	}
-
-	const lightboxImage = document.getElementById( 'p52lbImg' );
-	const lightboxCaption = document.getElementById( 'p52lbCap' );
-	const closeButton = document.getElementById( 'p52lbClose' );
-	const previousButton = document.getElementById( 'p52lbPrev' );
-	const nextButton = document.getElementById( 'p52lbNext' );
-
-	let current = [];
-	let currentIndex = 0;
 
 	const showYear = ( year ) => {
 		document.querySelectorAll( '[data-p52-grid]' ).forEach( ( grid ) => {
@@ -56,33 +47,58 @@
 		} );
 	};
 
-	const open = ( index ) => {
-		const grid = document.querySelector( '[data-p52-grid]:not([hidden])' );
+	const stripTrack = document.getElementById( 'p52lbStrip' );
+	let activeButtons = [];
 
-		if ( ! grid ) {
-			return;
+	const controller = window.SocLightbox.create( {
+		lightbox,
+		image: lightbox.querySelector( '.lightbox__fig img' ),
+		caption: lightbox.querySelector( '.lightbox__fig figcaption' ),
+		closeButton: lightbox.querySelector( '.lightbox__close' ),
+		prevButton: lightbox.querySelector( '.lightbox__nav--prev' ),
+		nextButton: lightbox.querySelector( '.lightbox__nav--next' ),
+		getItems: () => activeButtons.map( ( button ) => ( {
+			src: button.dataset.full,
+			alt: button.dataset.caption,
+			caption: button.dataset.caption,
+		} ) ),
+		strip: {
+			track: stripTrack,
+			buttons: [],
+			prevButton: lightbox.querySelector( '.lightbox__strip-nav--prev' ),
+			nextButton: lightbox.querySelector( '.lightbox__strip-nav--next' ),
+		},
+	} );
+
+	if ( ! controller ) {
+		return;
+	}
+
+	// Rebuilds the thumbnail strip from the clicked week's grid, since a
+	// single lightbox is shared across every year instead of one per grid.
+	const renderStripFor = ( grid ) => {
+		if ( ! stripTrack ) {
+			return [];
 		}
 
-		current = Array.from( grid.querySelectorAll( '.wk--full' ) );
+		stripTrack.innerHTML = '';
 
-		if ( ! current.length ) {
-			return;
-		}
+		return Array.from( grid.querySelectorAll( '.wk--full' ) ).map( ( weekButton ) => {
+			const thumbButton = document.createElement( 'button' );
+			const thumbImage = weekButton.querySelector( 'img' );
 
-		currentIndex = ( index + current.length ) % current.length;
+			thumbButton.type = 'button';
+			thumbButton.className = 'lightbox__strip__item';
+			thumbButton.setAttribute( 'aria-label', weekButton.dataset.caption || '' );
 
-		const button = current[ currentIndex ];
+			if ( thumbImage ) {
+				thumbButton.append( thumbImage.cloneNode( true ) );
+			}
 
-		lightboxImage.src = button.dataset.full;
-		lightboxImage.alt = button.dataset.caption;
-		lightboxCaption.textContent = button.dataset.caption;
-		lightbox.classList.add( 'is-open' );
-		lightbox.setAttribute( 'aria-hidden', 'false' );
-	};
+			stripTrack.append( thumbButton );
 
-	const close = () => {
-		lightbox.classList.remove( 'is-open' );
-		lightbox.setAttribute( 'aria-hidden', 'true' );
+			return thumbButton;
+		} );
 	};
 
 	yearButtons.forEach( ( button ) => {
@@ -97,33 +113,11 @@
 				return;
 			}
 
-			current = Array.from( grid.querySelectorAll( '.wk--full' ) );
-			open( current.indexOf( button ) );
+			activeButtons = Array.from( grid.querySelectorAll( '.wk--full' ) );
+			lightbox.classList.toggle( 'lightbox--filmstrip', activeButtons.length > 1 );
+			controller.setStrip( renderStripFor( grid ) );
+			controller.open( activeButtons.indexOf( button ) );
 		} );
-	} );
-
-	closeButton?.addEventListener( 'click', close );
-	previousButton?.addEventListener( 'click', () => open( currentIndex - 1 ) );
-	nextButton?.addEventListener( 'click', () => open( currentIndex + 1 ) );
-
-	lightbox.addEventListener( 'click', ( event ) => {
-		if ( event.target === lightbox ) {
-			close();
-		}
-	} );
-
-	document.addEventListener( 'keydown', ( event ) => {
-		if ( ! lightbox.classList.contains( 'is-open' ) ) {
-			return;
-		}
-
-		if ( event.key === 'Escape' ) {
-			close();
-		} else if ( event.key === 'ArrowLeft' ) {
-			open( currentIndex - 1 );
-		} else if ( event.key === 'ArrowRight' ) {
-			open( currentIndex + 1 );
-		}
 	} );
 
 	const activeButton = document.querySelector( '#p52Years button.is-active' );

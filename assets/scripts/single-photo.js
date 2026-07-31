@@ -21,26 +21,6 @@
 			return;
 		}
 
-		const lightboxImage = lightbox.querySelector('.lightbox__fig img');
-		const lightboxCaption = lightbox.querySelector('.lightbox__fig figcaption');
-		const closeButton = lightbox.querySelector('.lightbox__close');
-		const previousButton = lightbox.querySelector('.lightbox__nav--prev');
-		const nextButton = lightbox.querySelector('.lightbox__nav--next');
-		const strip = lightbox.querySelector('.lightbox__strip');
-		const stripButtons = Array.from(lightbox.querySelectorAll('.lightbox__strip__item'));
-		const stripPrevButton = lightbox.querySelector('.lightbox__strip-nav--prev');
-		const stripNextButton = lightbox.querySelector('.lightbox__strip-nav--next');
-		const focusableControls = [
-			closeButton,
-			previousButton,
-			nextButton,
-			stripPrevButton,
-			...stripButtons,
-			stripNextButton,
-		].filter(Boolean);
-		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		let currentIndex = 0;
-		let previouslyFocused = null;
 		let resizeFrame = 0;
 
 		const items = figures.map((figure, index) => {
@@ -89,6 +69,7 @@
 				// instead reflect whatever smaller srcset candidate the browser picked to
 				// render the small grid thumbnail, which is too low-res for the lightbox.
 				src: image?.src || '',
+				caption: `Pose ${number} / ${String(figures.length).padStart(2, '0')}`,
 			};
 		});
 
@@ -122,109 +103,38 @@
 			}
 		});
 
-		const show = (requestedIndex) => {
-			currentIndex = (requestedIndex + items.length) % items.length;
-			lightboxImage.src = items[currentIndex].src;
-			lightboxImage.alt = items[currentIndex].alt;
-			lightboxCaption.textContent = `Pose ${String(currentIndex + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
+		const controller = window.SocLightbox.create({
+			lightbox,
+			image: lightbox.querySelector('.lightbox__fig img'),
+			caption: lightbox.querySelector('.lightbox__fig figcaption'),
+			closeButton: lightbox.querySelector('.lightbox__close'),
+			prevButton: lightbox.querySelector('.lightbox__nav--prev'),
+			nextButton: lightbox.querySelector('.lightbox__nav--next'),
+			getItems: () => items,
+			strip: {
+				track: lightbox.querySelector('.lightbox__strip'),
+				buttons: Array.from(lightbox.querySelectorAll('.lightbox__strip__item')),
+				prevButton: lightbox.querySelector('.lightbox__strip-nav--prev'),
+				nextButton: lightbox.querySelector('.lightbox__strip-nav--next'),
+			},
+		});
 
-			stripButtons.forEach((button, index) => {
-				const isActive = index === currentIndex;
-
-				button.classList.toggle('is-active', isActive);
-
-				if (isActive) {
-					button.setAttribute('aria-current', 'true');
-					button.scrollIntoView({
-						behavior: reduceMotion ? 'auto' : 'smooth',
-						block: 'nearest',
-						inline: 'center',
-					});
-				} else {
-					button.removeAttribute('aria-current');
-				}
-			});
-		};
-
-		const open = (index) => {
-			previouslyFocused = document.activeElement;
-			show(index);
-			lightbox.classList.add('is-open');
-			lightbox.setAttribute('aria-hidden', 'false');
-			closeButton?.focus();
-		};
-
-		const close = () => {
-			lightbox.classList.remove('is-open');
-			lightbox.setAttribute('aria-hidden', 'true');
-			lightboxImage.removeAttribute('src');
-
-			if (previouslyFocused instanceof HTMLElement) {
-				previouslyFocused.focus();
-			}
-		};
+		if (!controller) {
+			return;
+		}
 
 		figures.forEach((figure, index) => {
 			figure.addEventListener('click', (event) => {
 				event.preventDefault();
-				open(index);
+				controller.open(index);
 			});
 
 			figure.addEventListener('keydown', (event) => {
 				if (event.key === 'Enter' || event.key === ' ') {
 					event.preventDefault();
-					open(index);
+					controller.open(index);
 				}
 			});
-		});
-
-		closeButton?.addEventListener('click', close);
-		previousButton?.addEventListener('click', () => show(currentIndex - 1));
-		nextButton?.addEventListener('click', () => show(currentIndex + 1));
-		stripButtons.forEach((button, index) => {
-			button.addEventListener('click', () => show(index));
-		});
-		stripPrevButton?.addEventListener('click', () => {
-			strip?.scrollBy({
-				left: -strip.clientWidth * 0.8,
-				behavior: reduceMotion ? 'auto' : 'smooth',
-			});
-		});
-		stripNextButton?.addEventListener('click', () => {
-			strip?.scrollBy({
-				left: strip.clientWidth * 0.8,
-				behavior: reduceMotion ? 'auto' : 'smooth',
-			});
-		});
-		lightbox.addEventListener('click', (event) => {
-			if (event.target === lightbox) {
-				close();
-			}
-		});
-
-		document.addEventListener('keydown', (event) => {
-			if (!lightbox.classList.contains('is-open')) {
-				return;
-			}
-
-			if (event.key === 'Escape') {
-				close();
-			} else if (event.key === 'ArrowLeft') {
-				show(currentIndex - 1);
-			} else if (event.key === 'ArrowRight') {
-				show(currentIndex + 1);
-			} else if (event.key === 'Tab' && focusableControls.length) {
-				const firstControl = focusableControls[0];
-				const lastControl = focusableControls[focusableControls.length - 1];
-
-				if (event.shiftKey && document.activeElement === firstControl) {
-					event.preventDefault();
-					lastControl.focus();
-				} else if (!event.shiftKey && document.activeElement === lastControl) {
-					event.preventDefault();
-					firstControl.focus();
-				}
-			}
 		});
 
 		window.addEventListener('resize', () => {

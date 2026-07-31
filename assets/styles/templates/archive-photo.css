@@ -4,13 +4,17 @@
  * Adapted from sliceofcactus-astro/src/pages/photo/index.astro
  * and sliceofcactus-astro/public/css/style.css. The shared magazine-hub
  * chrome (runhead, masthead, view-toggle, sommaire, rubchips filter) lives
- * in assets/styles/components/magazine-hub.css.
+ * in assets/styles/components/magazine-hub.css. Also loaded on the
+ * narration term archive (taxonomy-narration.php), which reuses this same
+ * .serie-grid/.serie-cell markup scoped to one narration.
  *
- * The custom cursor and per-narration accent overrides are intentionally
- * left out: the archive uses the default (cactus green) universe, and the
- * cursor is a separate, not-yet-migrated transversal feature.
+ * The custom cursor is intentionally left out: a separate, not-yet-migrated
+ * transversal feature. The olive default below is overridden per narration
+ * term by soc_narration_archive_accent_style() (inc/template-tags.php) when
+ * that term has its own soc_narration_accent set.
  */
-body.post-type-archive-photo {
+body.post-type-archive-photo,
+body.tax-narration {
 	--accent: #8b8d3f;
 	--accent-deep: #64662c;
 }

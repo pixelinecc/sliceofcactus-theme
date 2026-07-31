@@ -149,6 +149,16 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Correction recommandée** : aucune action requise sauf si une politique de confidentialité stricte est visée.
 **Ampleur** : minime. **Certitude** : confirmé (code), pertinence à évaluer.
 
+### 21 — Important — Aucun template pour l'archive de narration (trouvé par Céline)
+- [x] Corrigé
+**Problème constaté** : la taxonomie `narration` est publique, mais aucun `taxonomy-narration.php` n'existait. Une URL comme `/narration/voyage/` retombait donc sur `index.php`, le repli générique sans le style magazine-hub (le même repli identifié pour la recherche native, voir #14).
+**Correction appliquée** : `taxonomy-narration.php` créé sur le modèle de `archive-photo.php` (mag-runhead, masthead, view-switch, grille de séries), scopé à une seule narration. `projet-52` et `color-your-life` ne l'atteignent jamais (redirigés avant, voir `inc/redirects.php`) ; toutes les autres narrations (voyage, lifestyle, portraits, et toute narration future) l'utilisent.
+- `inc/queries.php` : nouvelle fonction `soc_get_photo_archive_series_by_narration()`.
+- `inc/assets.php` : le CSS magazine-hub + archive-photo se charge aussi sur `is_tax('narration')`.
+- `assets/styles/templates/archive-photo.css` : accent olive par défaut pour ces pages (`body.tax-narration`).
+- `inc/template-tags.php` : `soc_narration_archive_accent_style()` applique la couleur d'accent propre à la narration (champ ajouté au point #12) sur sa page d'archive, avec repli sur l'olive par défaut.
+**Ampleur** : modérée (nouveau template + petits ajustements). **Certitude** : confirmé.
+
 ---
 
 ## 5 corrections prioritaires

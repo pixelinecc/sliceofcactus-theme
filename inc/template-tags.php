@@ -481,6 +481,44 @@ function soc_photo_accent_style(): void {
 add_action( 'wp_head', 'soc_photo_accent_style' );
 
 /**
+ * Prints --accent/--accent-deep on the body for a narration term archive
+ * (taxonomy-narration.php), from that term's own soc_narration_accent ACF
+ * field. Falls back to the default olive tone set in archive-photo.css
+ * (body.tax-narration) when the term has no accent of its own.
+ */
+function soc_narration_archive_accent_style(): void {
+	if ( ! is_tax( 'narration' ) ) {
+		return;
+	}
+
+	$term = get_queried_object();
+
+	if ( ! $term instanceof WP_Term ) {
+		return;
+	}
+
+	$color = soc_get_narration_accent_color( $term );
+
+	if ( '' === $color ) {
+		return;
+	}
+
+	$deep = soc_darken_hex( $color );
+
+	if ( '' === $deep ) {
+		return;
+	}
+
+	printf(
+		'<style>body.term-%s{--accent:%s !important;--accent-deep:%s !important;}</style>' . "\n",
+		esc_attr( sanitize_html_class( $term->slug, (string) $term->term_id ) ),
+		esc_html( '#' . ltrim( $color, '#' ) ),
+		esc_html( $deep )
+	);
+}
+add_action( 'wp_head', 'soc_narration_archive_accent_style' );
+
+/**
  * Adds narration slugs to the body classes of a single photo.
  *
  * @param string[] $classes Existing body classes.

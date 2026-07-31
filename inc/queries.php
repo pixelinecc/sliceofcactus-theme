@@ -105,6 +105,49 @@ function soc_get_photo_archive_series(): array {
 }
 
 /**
+ * Gets the photo series belonging to a single narration term, most recent
+ * editorial year first (see soc_compare_photos_by_year_desc()) — the
+ * per-narration equivalent of soc_get_photo_archive_series(), powering the
+ * narration term archive (taxonomy-narration.php). projet-52 and
+ * color-your-life never reach this template: they're redirected to their
+ * own dedicated page before rendering (see inc/redirects.php).
+ *
+ * @param WP_Term $term Narration term.
+ * @return WP_Post[]
+ */
+function soc_get_photo_archive_series_by_narration( WP_Term $term ): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'photo',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'narration',
+					'field'    => 'term_id',
+					'terms'    => array( $term->term_id ),
+				),
+			),
+		)
+	);
+
+	$photos = array_values(
+		array_filter(
+			$query->posts,
+			static fn( WP_Post $photo ): bool => soc_get_photo_cover_id( $photo->ID ) > 0
+		)
+	);
+
+	usort( $photos, 'soc_compare_photos_by_year_desc' );
+
+	return $photos;
+}
+
+/**
  * Compares two photo series by editorial date (soc_get_photo_year(),
  * soc_get_photo_month()), most recent first. Within the same year, a known
  * month ranks above an unspecified one (0), since it carries more precision

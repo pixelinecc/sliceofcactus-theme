@@ -114,7 +114,13 @@ if ( ! empty( $related_photos ) ) {
 			<?php
 			$plate_html    = ob_get_clean();
 			$content_html  = apply_filters( 'the_content', get_the_content() );
-			$after_first_p = strpos( $content_html, '</p>' );
+			// Only splice after the first paragraph when the content actually
+			// opens with one: a bare strpos() for '</p>' would otherwise match
+			// a closing tag nested inside an earlier block (e.g. a quote's
+			// citation paragraph), splitting that block's markup instead of
+			// following the opening paragraph.
+			$starts_with_p = 0 === stripos( ltrim( $content_html ), '<p' );
+			$after_first_p = $starts_with_p ? strpos( $content_html, '</p>' ) : false;
 
 			if ( false !== $after_first_p ) {
 				$after_first_p += strlen( '</p>' );

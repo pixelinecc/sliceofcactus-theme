@@ -61,11 +61,10 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime (finalement, une fois la bonne fonction WP identifiée). **Certitude** : confirmé.
 
 ### 8 — Important — `template-parts/single/recit-article.php` (insertion de la "planche")
-- [ ] Corrigé
-**Problème constaté** : en présentation "plate", le code cherche la première occurrence de `</p>` dans tout le HTML rendu de `the_content()` et y insère la planche juste après. Si le premier bloc Gutenberg n'est pas un paragraphe, la planche peut atterrir bien plus loin que prévu.
-**Impact réel** : dépend entièrement des habitudes de rédaction ; pas un bug si chaque récit commence par du texte.
-**Correction recommandée** : pas d'urgence — à surveiller, ou ajouter un garde-fou.
-**Ampleur** : minime. **Certitude** : probable.
+- [x] Corrigé
+**Problème constaté** : en présentation "plate", le code cherchait la première occurrence de `</p>` dans tout le HTML rendu de `the_content()` et y insérait la planche juste après. Au-delà du simple mauvais positionnement, le vrai risque était de couper du HTML invalide si ce premier `</p>` se trouvait imbriqué dans un autre bloc (ex. la légende d'une citation), et non un paragraphe de premier niveau.
+**Correction appliquée** : la recherche de `</p>` n'a lieu que si le contenu commence réellement par un paragraphe (`stripos( ltrim( $content_html ), '<p' ) === 0`) ; sinon, repli sur le comportement déjà existant (planche avant tout le contenu).
+**Ampleur** : minime. **Certitude** : confirmé.
 
 ### 9 — Important — `acf-json/post_type_soc_photo.json` (labels admin)
 - [ ] Corrigé

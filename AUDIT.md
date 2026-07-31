@@ -133,11 +133,9 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 19 — Optionnel — Absence de balises SEO/OG dans le thème
-- [ ] Corrigé
-**Problème constaté** : aucune balise `meta description`, `canonical`, Open Graph ou Twitter Card n'est générée par le thème.
-**Impact réel** : cohérent avec la consigne du projet de ne pas dupliquer ce qui relève d'une extension SEO. Mais sans extension active, WordPress natif ne génère rien de tout cela.
-**Correction recommandée** : confirmer qu'une extension SEO (Yoast, RankMath, SEOPress…) est bien active en production.
-**Ampleur** : n/a. **Certitude** : à vérifier dans WordPress.
+- [x] Vérifié — non applicable
+**Constat initial** : aucune balise `meta description`, `canonical`, Open Graph ou Twitter Card n'est générée par le thème.
+**Confirmé avec Céline** : SEOPress (et éventuellement SEOPress Pro) est actif en production et gère ce volet. Cohérent avec le thème qui ne duplique rien de ce que l'extension prend déjà en charge — aucune action nécessaire.
 
 ### 20 — Optionnel — Curseur personnalisé et animations tierces
 - [ ] Corrigé

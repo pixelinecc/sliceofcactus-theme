@@ -14,15 +14,15 @@ $site_name_words  = preg_split( '/\s+/u', trim( $site_name ), -1, PREG_SPLIT_NO_
 $footer_columns   = array(
 	array(
 		'location' => 'footer_photo',
-		'title'    => __( 'Photo', 'sliceofcactus' ),
+		'title'    => __( 'Photos', 'sliceofcactus' ),
 	),
 	array(
 		'location' => 'footer_dessin',
-		'title'    => __( 'Dessin', 'sliceofcactus' ),
+		'title'    => __( 'Créations', 'sliceofcactus' ),
 	),
 	array(
 		'location' => 'footer_read',
-		'title'    => __( 'À lire & suivre', 'sliceofcactus' ),
+		'title'    => __( 'Récits', 'sliceofcactus' ),
 	),
 	array(
 		'location' => 'footer_resonances',
@@ -30,6 +30,11 @@ $footer_columns   = array(
 	),
 );
 $contact_email    = 'bonjour@sliceofcactus.fr';
+// TODO: remplacer par l'URL Pinterest réelle une fois le compte créé/confirmé.
+$instagram_url    = 'https://www.instagram.com/sliceofcactus/';
+$instagramdessin_url    = 'https://www.instagram.com/traitducameleon/';
+$latest_recits    = soc_get_home_recits( 1 );
+$latest_recit     = ! empty( $latest_recits ) ? $latest_recits[0] : null;
 
 if ( empty( $site_name_words ) ) {
 	$site_name_words = array( $site_name );
@@ -57,13 +62,6 @@ if ( empty( $site_name_words ) ) {
 			<p class="footer__tag">
 				Atelier d'images — photo <em>36 poses</em>, dessin &amp; coloriage.
 			</p>
-			<a
-				class="footer__mail"
-				href="<?php echo esc_url( 'mailto:' . $contact_email ); ?>"
-				data-magnetic
-			>
-				<?php echo esc_html( $contact_email ); ?>
-			</a>
 		</div>
 
 		<nav class="footer__nav" aria-label="<?php esc_attr_e( 'Navigation du pied de page', 'sliceofcactus' ); ?>">
@@ -86,12 +84,9 @@ if ( empty( $site_name_words ) ) {
 						?>
 					<?php endif; ?>
 
-					<?php if ( 'footer_read' === $footer_column['location'] ) : ?>
-						<a href="<?php echo esc_url( 'https://instagram.com/sliceofcactus' ); ?>" target="_blank" rel="noopener">
-							<?php esc_html_e( 'Instagram · photo', 'sliceofcactus' ); ?>
-						</a>
-						<a href="<?php echo esc_url( 'https://instagram.com/traitducamelon' ); ?>" target="_blank" rel="noopener">
-							<?php esc_html_e( 'Instagram · dessin', 'sliceofcactus' ); ?>
+					<?php if ( 'footer_read' === $footer_column['location'] && $latest_recit instanceof WP_Post ) : ?>
+						<a href="<?php echo esc_url( get_permalink( $latest_recit ) ); ?>">
+							<?php echo esc_html( get_the_title( $latest_recit ) ); ?>
 						</a>
 					<?php endif; ?>
 				</div>
@@ -103,6 +98,20 @@ if ( empty( $site_name_words ) ) {
 		<span>
 			&copy; <?php echo esc_html( wp_date( 'Y' ) ); ?>
 			<?php echo esc_html( $site_name ); ?> · atelier d'images
+		</span>
+
+		<a class="footer__bottom-link" href="<?php echo esc_url( 'mailto:' . $contact_email ); ?>">
+			<?php esc_html_e( 'Écrire ↗', 'sliceofcactus' ); ?>
+		</a>
+
+		<span class="footer__social-inline">
+			<a class="footer__bottom-link" href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer">
+				<?php esc_html_e( 'Instagram Photo ↗', 'sliceofcactus' ); ?>
+			</a>
+			<span aria-hidden="true">·</span>
+			<a class="footer__bottom-link" href="<?php echo esc_url( $instagramdessin_url ); ?>" target="_blank" rel="noopener noreferrer">
+				<?php esc_html_e( 'Instagram Dessin ↗', 'sliceofcactus' ); ?>
+			</a>
 		</span>
 
 		<div class="footer__utilities">

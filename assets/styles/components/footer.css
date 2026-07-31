@@ -4,7 +4,7 @@
 
 .footer {
 	position: relative;
-	padding: clamp(3.5rem, 7vw, 6rem) 0 2rem;
+	padding: clamp(3rem, 6vw, 5rem) 0 2rem;
 	border-top: 1px solid rgb(247 239 230 / 14%);
 	background: transparent;
 	color: var(--paper);
@@ -12,9 +12,9 @@
 
 .footer__top {
 	display: grid;
-	grid-template-columns: 1.1fr 1fr;
+	grid-template-columns: .9fr 1.1fr;
 	align-items: start;
-	gap: clamp(2rem, 5vw, 4rem);
+	gap: clamp(1.5rem, 4vw, 3rem);
 	max-width: var(--maxw);
 	margin: 0 auto;
 	padding: 0 clamp(1.2rem, 4vw, 3rem);
@@ -62,8 +62,10 @@
 
 .footer__nav {
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(5, 1fr);
+	align-items: start;
 	gap: 1.6rem;
+	margin-top: 2rem;
 }
 
 .footer__col,
@@ -80,6 +82,27 @@
 	list-style: none;
 }
 
+/*
+ * Résonances can list more terms than the other columns' fixed few items —
+ * two columns instead of one long vertical list, twice the grid width
+ * (.footer__nav above) so each stays legible instead of wrapping. The
+ * column-gap is deliberately tighter than .footer__nav's own gap (1.6rem)
+ * so the two halves read as one related group, not two separate rubriques.
+ */
+.footer__col:has(#menu-footer-resonances) {
+	grid-column: span 2;
+}
+
+#menu-footer-resonances {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	column-gap: .9rem;
+}
+
+#menu-footer-resonances a {
+	white-space: nowrap;
+}
+
 .footer__heading {
 	margin-bottom: .3rem;
 	color: rgb(247 239 230 / 55%);
@@ -94,8 +117,9 @@
 .footer__col a {
 	position: relative;
 	width: fit-content;
-	color: rgb(247 239 230 / 90%);
-	font-size: 1rem;
+	color: rgb(247 239 230 / 95%);
+	font-family: var(--font-body);
+	font-size: 1.05rem;
 	transition: color .3s;
 }
 
@@ -118,22 +142,17 @@
 	width: 100%;
 }
 
-.footer__mail {
-	display: inline-block;
-	margin-top: 1.3rem;
-	padding-bottom: 2px;
-	border-bottom: 1px solid rgb(247 239 230 / 40%);
-	color: var(--paper);
-	font-family: var(--font-display);
-	font-size: clamp(1.1rem, 1.6vw, 1.35rem);
-	font-style: italic;
-	font-weight: 500;
-	transition: color .3s, border-color .3s;
-}
-
-.footer__mail:hover {
-	border-color: var(--salmon);
-	color: var(--salmon);
+/*
+ * .footer__social-inline keeps "Instagram ↗ · Pinterest ↗" together as one
+ * group on .footer__bottom (font-family/size/tracking inherited from there —
+ * see .footer__bottom below), rather than spread apart by its
+ * justify-content: space-between.
+ */
+.footer__social-inline {
+	display: inline-flex;
+	align-items: center;
+	gap: .5rem;
+	white-space: nowrap;
 }
 
 .footer__bottom {
@@ -143,7 +162,7 @@
 	justify-content: space-between;
 	gap: 1rem;
 	max-width: var(--maxw);
-	margin: clamp(2.5rem, 5vw, 4rem) auto 0;
+	margin: clamp(1.8rem, 4vw, 3rem) auto 0;
 	padding: 1.5rem clamp(1.2rem, 4vw, 3rem) 0;
 	border-top: 1px solid rgb(247 239 230 / 15%);
 	color: rgb(247 239 230 / 50%);
@@ -161,12 +180,14 @@
 	gap: 1.6rem;
 }
 
-.footer__utilities a {
+.footer__utilities a,
+.footer__bottom-link {
 	color: rgb(247 239 230 / 60%);
 	transition: color .3s;
 }
 
-.footer__utilities a:hover {
+.footer__utilities a:hover,
+.footer__bottom-link:hover {
 	color: var(--salmon);
 }
 
@@ -183,6 +204,24 @@
 	.footer__nav {
 		grid-template-columns: repeat(2, 1fr);
 		gap: 1.6rem 1rem;
+	}
+
+	/*
+	 * Résonances only needs its double width (.footer__col:has above) to fit
+	 * its own 2-column sub-list, which already collapses to 1 column here —
+	 * back to a plain 2x2 grid, two menus per column.
+	 */
+	.footer__col:has(#menu-footer-resonances) {
+		grid-column: span 1;
+	}
+
+	#menu-footer-resonances {
+		grid-template-columns: 1fr;
+	}
+
+	.footer__bottom {
+		justify-content: center;
+		text-align: center;
 	}
 }
 

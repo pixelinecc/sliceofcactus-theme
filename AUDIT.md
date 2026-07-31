@@ -96,7 +96,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 
 ### 13 — Finition — `acf-json/taxonomy_narration.json` (`with_front`)
 - [x] Corrigé — aligné sur `"0"`, comme les trois autres taxonomies. Confirmé sans effet visible (l'URL réelle testée par Céline, `/narration/voyage/`, ne changeait déjà rien à ce comportement) ; penser à ré-enregistrer les permaliens (Réglages → Permaliens → Enregistrer) après déploiement par bonne pratique.
-**Note au passage (hors scope, non corrigée)** : ce même fichier a les mêmes fautes de grammaire que celles corrigées au point #9 pour le CPT Photo (« Tous les Narration », « Aucun narration trouvé »…) — à traiter si besoin dans un point séparé.
+**Bonus traité au passage** : les mêmes fautes de grammaire que celles corrigées au point #9 pour le CPT Photo (« Tous les Narration », « Aucun narration trouvé »…) ont été corrigées ici aussi, avec l'accord féminin correct ("une/la narration").
 
 ### 14 — Finition — Absence de `search.php`
 - [ ] Corrigé

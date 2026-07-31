@@ -67,7 +67,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 9 — Important — `acf-json/post_type_soc_photo.json` (labels admin)
-- [ ] Corrigé
+- [x] Corrigé — tous les libellés réécrits avec l'accord féminin correct ("une/la photo"), sur le modèle des CPT Atelier et Récits.
 **Problème constaté** : contrairement aux libellés soignés des CPT "Atelier" et "Récits", ceux de "Photos" comportent des fautes de français : « Tous les Photos », « Aucun photos trouvé », « Archives des Photo » / « Attributs des Photo », « Un lien vers un photo ».
 **Impact réel** : visible uniquement dans l'admin WordPress, pas sur le site public — mais détonne par rapport au soin apporté ailleurs.
 **Correction recommandée** : réécrire le tableau `labels` de `post_type_soc_photo.json` sur le modèle des deux autres CPT.
@@ -155,7 +155,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 2. **#3** — Ajouter `:focus-within` aux panneaux `.upanel`/`.xtile` pour l'accessibilité clavier. ✅ fait
 3. **#4** — Corriger les 5 variables CSS cassées de `page-a-propos.css`. ✅ fait
 4. **#7** — Traiter le CLS des `.colo-card`. ✅ fait
-5. **#9** — Corriger les libellés admin du CPT Photo.
+5. **#9** — Corriger les libellés admin du CPT Photo. ✅ fait
 
 ## Petites corrections rapides groupables
 En un seul lot "nettoyage" : **#5** (sélecteurs morts page-a-propos), **#10** (TODO Pinterest orphelin), **#11** (nommage `$instagramdessin_url`), **#16** (alias couleur hérités), **#18** (`.is-loaded` mort), **#6** (préchargeur et reduced-motion).

@@ -35,10 +35,9 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 4 — Important — `assets/styles/templates/page-a-propos.css` (variables CSS inexistantes)
-- [ ] Corrigé
-**Problème constaté** : `.about-sequence-item .no` utilise `var(--mono)` et `var(--cyan)` ; `.about-sequence-item h3 em` utilise `var(--serif)` et `var(--magenta)` ; la media query mobile utilise `var(--sec)` pour un padding. Aucune de ces 5 variables n'est définie où que ce soit dans le thème (le design system utilise `--font-mono`, `--font-display`, `--accent`/`--flash`).
-**Impact réel** : les numéros d'étape de "La démarche" (01–04) n'ont ni la police mono ni la couleur cyan prévues ; le padding mobile du visuel sticky est également ignoré.
-**Correction recommandée** : remplacer par les vrais tokens du projet.
+- [x] Corrigé
+**Problème constaté** : `.about-sequence-item .no` utilisait `var(--mono)` et `var(--cyan)` — et ne correspondait même à aucun élément réel : le HTML utilise `class="about-sequence-item__no"` (BEM), pas une classe `.no` imbriquée, donc ce numéro d'étape n'avait aucun style du tout, pas seulement des couleurs manquantes. `.about-sequence-item h3 em` utilisait `var(--serif)`/`var(--magenta)` mais ne correspond à aucun `<em>` réel dans le template (sélecteur mort). La media query mobile utilisait `var(--sec)` pour un padding, variable elle aussi jamais définie.
+**Correction appliquée** : sélecteur renommé en `.about-sequence-item__no`, `var(--mono)` → `var(--font-mono)`, `var(--cyan)` → `var(--flash)` (même convention que `.pose__num`/`.frame__num`, numéros sur fond sombre). Règle `.about-sequence-item h3 em` supprimée (sélecteur mort). `var(--sec)` → `4rem`, la valeur de rythme entre sections déjà documentée pour cette page (`.about-forms.universe { padding-top: 4rem }`).
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 5 — Important — `assets/styles/templates/page-a-propos.css` (sélecteurs morts)

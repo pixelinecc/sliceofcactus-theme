@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$site_name        = get_bloginfo( 'name' );
-$site_name_words  = preg_split( '/\s+/u', trim( $site_name ), -1, PREG_SPLIT_NO_EMPTY );
-$footer_columns   = array(
+$site_name            = get_bloginfo( 'name' );
+$site_name_words      = preg_split( '/\s+/u', trim( $site_name ), -1, PREG_SPLIT_NO_EMPTY );
+$footer_columns       = array(
 	array(
 		'location' => 'footer_photo',
 		'title'    => __( 'Photo', 'sliceofcactus' ),
@@ -29,11 +29,11 @@ $footer_columns   = array(
 		'title'    => __( 'Résonances', 'sliceofcactus' ),
 	),
 );
-$contact_email    = 'bonjour@sliceofcactus.fr';
-$instagram_url    = 'https://www.instagram.com/sliceofcactus/';
-$instagramdessin_url    = 'https://www.instagram.com/traitducameleon/';
-$latest_recits    = soc_get_home_recits( 1 );
-$latest_recit     = ! empty( $latest_recits ) ? $latest_recits[0] : null;
+$contact_email        = 'bonjour@sliceofcactus.fr';
+$instagram_url        = 'https://www.instagram.com/sliceofcactus/';
+$instagram_dessin_url = 'https://www.instagram.com/traitducameleon/';
+$latest_recits        = soc_get_home_recits( 1 );
+$latest_recit         = ! empty( $latest_recits ) ? $latest_recits[0] : null;
 
 if ( empty( $site_name_words ) ) {
 	$site_name_words = array( $site_name );
@@ -108,7 +108,7 @@ if ( empty( $site_name_words ) ) {
 				<?php esc_html_e( 'Instagram Photo ↗', 'sliceofcactus' ); ?>
 			</a>
 			<span aria-hidden="true">·</span>
-			<a class="footer__bottom-link" href="<?php echo esc_url( $instagramdessin_url ); ?>" target="_blank" rel="noopener noreferrer">
+			<a class="footer__bottom-link" href="<?php echo esc_url( $instagram_dessin_url ); ?>" target="_blank" rel="noopener noreferrer">
 				<?php esc_html_e( 'Instagram Dessin ↗', 'sliceofcactus' ); ?>
 			</a>
 		</span>

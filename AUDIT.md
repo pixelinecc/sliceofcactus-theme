@@ -83,7 +83,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 11 — Finition — `footer.php` (nommage de variable)
-- [ ] Corrigé
+- [x] Corrigé — renommée en `$instagram_dessin_url`, alignement des `=` du bloc de variables refait.
 **Problème constaté** : `$instagramdessin_url` (sans underscore) rompt la convention snake_case suivie partout ailleurs.
 **Correction recommandée** : renommer en `$instagram_dessin_url`.
 **Ampleur** : minime. **Certitude** : confirmé.

@@ -62,3 +62,16 @@ function soc_setup(): void {
 	);
 }
 add_action( 'after_setup_theme', 'soc_setup' );
+
+/**
+ * Disables WordPress 6.7's automatic sizes="auto" on lazy-loaded images.
+ *
+ * Every card grid in this theme (contact-sheet poses, colo-card, cyl-card,
+ * more-series__card, hr-card...) crops a same-aspect-ratio image to a fixed
+ * box with CSS (aspect-ratio + object-fit: cover) far narrower than the
+ * image's native width — never at the near-full-viewport width core assumes.
+ * "auto" makes supporting browsers measure the <img>'s box before the CSS
+ * grid has finished laying out sibling tracks, locking in an undersized
+ * srcset candidate that then gets stretched by object-fit and blurs.
+ */
+add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );

@@ -28,7 +28,7 @@
             "max_size": "",
             "mime_types": "jpg,jpeg,png,webp,avif",
             "insert": "append",
-            "preview_size": "medium"
+            "preview_size": "thumbnail"
         },
         {
             "key": "field_soc_photo_location",
@@ -134,7 +134,7 @@
         },
         {
             "key": "field_soc_photo_period",
-            "label": "Mois / année du voyage",
+            "label": "Mois \/ année du voyage",
             "name": "soc_photo_period",
             "aria-label": "",
             "type": "group",
@@ -176,7 +176,7 @@
                         "11": "Novembre",
                         "12": "Décembre"
                     },
-                    "default_value": "",
+                    "default_value": false,
                     "return_format": "value",
                     "multiple": 0,
                     "allow_null": 1,
@@ -204,7 +204,7 @@
                     "min": 1826,
                     "max": 2100,
                     "step": 1,
-                    "placeholder": "2005",
+                    "placeholder": 2005,
                     "prepend": "",
                     "append": ""
                 }
@@ -293,5 +293,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785397116
+    "modified": 1785488032
 }

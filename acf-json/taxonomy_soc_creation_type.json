@@ -49,7 +49,7 @@
     "hierarchical": 1,
     "show_ui": 1,
     "show_in_menu": 1,
-    "show_in_nav_menus": 0,
+    "show_in_nav_menus": 1,
     "show_in_rest": 1,
     "rest_base": "",
     "rest_namespace": "wp\/v2",
@@ -74,5 +74,5 @@
     "meta_box_sanitize_cb": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785333533
+    "modified": 1785493519
 }

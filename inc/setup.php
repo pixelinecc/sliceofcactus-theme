@@ -53,11 +53,12 @@ function soc_setup(): void {
 
 	register_nav_menus(
 		array(
-			'primary'        => __( 'Navigation principale', 'sliceofcactus' ),
-			'footer_photo'   => __( 'Pied de page — Photo', 'sliceofcactus' ),
-			'footer_dessin'  => __( 'Pied de page — Dessin', 'sliceofcactus' ),
-			'footer_read'    => __( 'Pied de page — À lire et suivre', 'sliceofcactus' ),
-			'footer_legal'   => __( 'Pied de page — Informations légales', 'sliceofcactus' ),
+			'primary'           => __( 'Navigation principale', 'sliceofcactus' ),
+			'footer_photo'      => __( 'Pied de page — Photo', 'sliceofcactus' ),
+			'footer_dessin'     => __( 'Pied de page — Dessin', 'sliceofcactus' ),
+			'footer_read'       => __( 'Pied de page — À lire et suivre', 'sliceofcactus' ),
+			'footer_resonances' => __( 'Pied de page — Résonances', 'sliceofcactus' ),
+			'footer_legal'      => __( 'Pied de page — Informations légales', 'sliceofcactus' ),
 		)
 	);
 }

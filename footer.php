@@ -24,6 +24,10 @@ $footer_columns   = array(
 		'location' => 'footer_read',
 		'title'    => __( 'À lire & suivre', 'sliceofcactus' ),
 	),
+	array(
+		'location' => 'footer_resonances',
+		'title'    => __( 'Résonances', 'sliceofcactus' ),
+	),
 );
 $contact_email    = 'bonjour@sliceofcactus.fr';
 

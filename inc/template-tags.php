@@ -346,6 +346,34 @@ function soc_hex_to_hue( string $hex ): float {
 }
 
 /**
+ * Darkens a hex color by mixing it toward black.
+ *
+ * Used to derive --accent-deep from a photo's dominant color (soc_get_photo_color()),
+ * matching the ratio of the --accent/--accent-deep pairs already hand-picked
+ * per narration in single-photo.css (roughly 35% darker).
+ *
+ * @param string $hex    Hex color, with or without a leading #.
+ * @param float  $amount Fraction to darken by, from 0 to 1.
+ * @return string Hex color with a leading #, or an empty string when invalid.
+ */
+function soc_darken_hex( string $hex, float $amount = 0.35 ): string {
+	$hex = ltrim( trim( $hex ), '#' );
+
+	if ( 6 !== strlen( $hex ) || ! ctype_xdigit( $hex ) ) {
+		return '';
+	}
+
+	$amount   = max( 0.0, min( 1.0, $amount ) );
+	$darkened = array_map(
+		static fn( string $channel ): string
+			=> str_pad( dechex( (int) round( hexdec( $channel ) * ( 1 - $amount ) ) ), 2, '0', STR_PAD_LEFT ),
+		str_split( $hex, 2 )
+	);
+
+	return '#' . implode( '', $darkened );
+}
+
+/**
  * Prints the mobile browser theme-color meta tag for a single photo.
  *
  * Mirrors the per-series themeColor prop of sliceofcactus-astro/src/layouts/Base.astro,
@@ -361,6 +389,42 @@ function soc_photo_theme_color_meta(): void {
 	printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( '' !== $color ? $color : '#12B26A' ) );
 }
 add_action( 'wp_head', 'soc_photo_theme_color_meta' );
+
+/**
+ * Prints --accent/--accent-deep on the body for a single photo with a
+ * dominant color set (soc_photo_color ACF field), overriding the
+ * hardcoded per-narration accent (soc-narration-voyage, soc-narration-lifestyle...)
+ * from single-photo.css. Both custom properties drive the whole-page
+ * background wash in assets/styles/base/elements.css, so the override is
+ * scoped to this post's body class and !important, otherwise a more
+ * specific narration selector on the same body tag (e.g. a photo tagged
+ * both "voyage" and "color-your-life") would win instead.
+ */
+function soc_photo_accent_style(): void {
+	if ( ! is_singular( 'photo' ) ) {
+		return;
+	}
+
+	$color = soc_get_photo_color();
+
+	if ( '' === $color ) {
+		return;
+	}
+
+	$deep = soc_darken_hex( $color );
+
+	if ( '' === $deep ) {
+		return;
+	}
+
+	printf(
+		'<style>body.postid-%d{--accent:%s !important;--accent-deep:%s !important;}</style>' . "\n",
+		get_the_ID(),
+		esc_html( '#' . ltrim( $color, '#' ) ),
+		esc_html( $deep )
+	);
+}
+add_action( 'wp_head', 'soc_photo_accent_style' );
 
 /**
  * Adds narration slugs to the body classes of a single photo.

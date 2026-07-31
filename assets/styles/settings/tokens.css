@@ -13,11 +13,6 @@
 	--accent: var(--wp--preset--color--accent);
 	--accent-deep: var(--wp--preset--color--accent-deep);
 
-	/* Legacy Astro aliases kept while component styles are migrated. */
-	--coral: var(--accent);
-	--salmon: var(--accent);
-	--flash-pink: var(--accent);
-
 	--font-head: "Anton", "Arial Narrow", sans-serif;
 	--font-display: "Cormorant Garamond", Georgia, serif;
 	--font-body: "Newsreader", Georgia, serif;

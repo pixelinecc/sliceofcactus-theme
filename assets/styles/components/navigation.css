@@ -27,7 +27,7 @@
 	left: 0;
 	width: 0;
 	height: 2px;
-	background: var(--coral);
+	background: var(--accent);
 	content: "";
 	transition: width .35s var(--ease);
 }
@@ -111,7 +111,7 @@
 	}
 
 	.soc-site-header.has-menu-toggle .nav__links .soc-primary-menu > li:not(.soc-menu-item--cta) > a::after {
-		background: var(--salmon);
+		background: var(--accent);
 	}
 
 	.soc-site-header:not(.has-menu-toggle) .soc-primary-menu {

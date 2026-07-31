@@ -117,7 +117,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 16 — Finition — `assets/styles/settings/tokens.css` (alias couleur hérités d'Astro)
-- [ ] Corrigé
+- [x] Corrigé — `var(--coral)`/`var(--salmon)` remplacés par `var(--accent)` dans les 4 fichiers concernés, les 3 alias supprimés de `tokens.css`.
 **Problème constaté** : `--coral`, `--salmon`, `--flash-pink` pointent tous désormais vers `--accent` (même valeur) mais sont encore référencés dans 4 fichiers CSS (footer, navigation, archive-photo, front-page).
 **Impact réel** : aucun visuellement (synonymes exacts), mais couche de nommage qui n'apporte plus rien.
 **Correction recommandée** : remplacer par `var(--accent)` directement, et supprimer `--flash-pink` si vraiment inutilisé.

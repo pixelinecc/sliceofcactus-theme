@@ -129,7 +129,7 @@
 	left: 0;
 	width: 0;
 	height: 1.5px;
-	background: var(--salmon);
+	background: var(--accent);
 	content: "";
 	transition: width .35s var(--ease);
 }
@@ -188,7 +188,7 @@
 
 .footer__utilities a:hover,
 .footer__bottom-link:hover {
-	color: var(--salmon);
+	color: var(--accent);
 }
 
 .footer__top-link {

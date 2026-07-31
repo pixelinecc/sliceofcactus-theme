@@ -62,7 +62,7 @@ body.post-type-archive-photo {
 
 .serie-cell__no {
 	padding-top: .5rem;
-	color: var(--coral);
+	color: var(--accent);
 	font-family: var(--font-mono);
 	font-size: .74rem;
 	letter-spacing: .14em;
@@ -88,7 +88,7 @@ body.post-type-archive-photo {
 }
 
 .serie-cell__title::after {
-	color: var(--coral);
+	color: var(--accent);
 	content: " →";
 	opacity: 0;
 	transition: opacity .35s;

@@ -42,3 +42,13 @@ body {
 		display: none;
 	}
 }
+
+@media (prefers-reduced-motion: reduce) {
+	body {
+		cursor: auto;
+	}
+
+	.cursor {
+		display: none;
+	}
+}

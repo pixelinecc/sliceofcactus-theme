@@ -137,12 +137,10 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Constat initial** : aucune balise `meta description`, `canonical`, Open Graph ou Twitter Card n'est générée par le thème.
 **Confirmé avec Céline** : SEOPress (et éventuellement SEOPress Pro) est actif en production et gère ce volet. Cohérent avec le thème qui ne duplique rien de ce que l'extension prend déjà en charge — aucune action nécessaire.
 
-### 20 — Optionnel — Curseur personnalisé et animations tierces
-- [ ] Corrigé
-**Problème constaté** : la boucle `requestAnimationFrame` qui fait suivre le curseur personnalisé (`main.js`) ne vérifie pas `prefers-reduced-motion`. Par ailleurs, la carte des voyages dépend de 3 domaines tiers (unpkg, CARTO, OSM) chargés sans alternative locale.
-**Impact réel** : mineur dans les deux cas — le curseur est un remplacement 1:1 discret ; les CDN tiers impliquent des requêtes vers des tiers à chaque visite de `/voyage-carte/` (point RGPD/vie privée mineur).
-**Correction recommandée** : aucune action requise sauf si une politique de confidentialité stricte est visée.
-**Ampleur** : minime. **Certitude** : confirmé (code), pertinence à évaluer.
+### 20 — Curseur personnalisé (corrigé) / CDN tiers (laissé tel quel)
+- [x] Traité
+**Curseur** : la boucle `requestAnimationFrame` qui fait suivre le curseur personnalisé (`main.js`) ne vérifiait pas `prefers-reduced-motion`, contrairement à l'effet magnétique juste à côté dans le même fichier. Corrigé : `main.js` n'active plus le suivi du curseur si `prefers-reduced-motion` est actif, et `cursor.css` restaure le curseur natif dans ce cas (même bloc que `@media (hover: none)`).
+**CDN de la carte des voyages (Leaflet/CARTO/OSM)** : décision d'architecture déjà actée, non remise en question — reste tel quel sauf demande explicite.
 
 ### 21 — Important — Aucun template pour l'archive de narration (trouvé par Céline)
 - [x] Corrigé

@@ -142,7 +142,7 @@
 	const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	if (finePointer && cursor) {
+	if (finePointer && !reducedMotion && cursor) {
 		let mouseX = window.innerWidth / 2;
 		let mouseY = window.innerHeight / 2;
 		let cursorX = mouseX;

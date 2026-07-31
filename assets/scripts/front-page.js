@@ -13,19 +13,24 @@
 	const preCount = document.getElementById( 'preCount' );
 
 	if ( preloader && preCount ) {
-		let count = 0;
-		const tick = window.setInterval( () => {
-			count++;
-			preCount.textContent = String( count ).padStart( 2, '0' );
+		if ( window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) {
+			preloader.classList.add( 'is-done' );
+			document.body.classList.add( 'is-loaded' );
+		} else {
+			let count = 0;
+			const tick = window.setInterval( () => {
+				count++;
+				preCount.textContent = String( count ).padStart( 2, '0' );
 
-			if ( count >= 36 ) {
-				window.clearInterval( tick );
-				window.setTimeout( () => {
-					preloader.classList.add( 'is-done' );
-					document.body.classList.add( 'is-loaded' );
-				}, 350 );
-			}
-		}, 42 );
+				if ( count >= 36 ) {
+					window.clearInterval( tick );
+					window.setTimeout( () => {
+						preloader.classList.add( 'is-done' );
+						document.body.classList.add( 'is-loaded' );
+					}, 350 );
+				}
+			}, 42 );
+		}
 	}
 
 	const typewriterEl = document.getElementById( 'tw' );

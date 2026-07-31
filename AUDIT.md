@@ -48,7 +48,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 6 — Important — `assets/scripts/front-page.js` (préchargeur et `prefers-reduced-motion`)
-- [ ] Corrigé
+- [x] Corrigé — le préchargeur passe directement en `is-done` quand `prefers-reduced-motion: reduce` est actif, sur le même modèle que le bloc machine à écrire du même fichier.
 **Problème constaté** : le compteur du préchargeur (36 étapes × 42 ms, ~1,5 s minimum) s'exécute sans condition à chaque chargement de l'accueil, alors que les effets voisins du même fichier (machine à écrire, parallaxe du blob) vérifient explicitement `prefers-reduced-motion`.
 **Impact réel** : les visiteurs sensibles au mouvement n'ont aucun moyen d'éviter cette animation précise ; ce délai s'impose aussi à chaque visite, y compris répétée.
 **Correction recommandée** : basculer directement en `is-done` quand `prefers-reduced-motion` est actif, et/ou ne jouer le préchargeur qu'une fois par session.

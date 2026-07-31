@@ -99,11 +99,11 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Bonus traité au passage** : les mêmes fautes de grammaire que celles corrigées au point #9 pour le CPT Photo (« Tous les Narration », « Aucun narration trouvé »…) ont été corrigées ici aussi, avec l'accord féminin correct ("une/la narration").
 
 ### 14 — Finition — Absence de `search.php`
-- [ ] Corrigé
-**Problème constaté** : les 3 CPT ont `exclude_from_search: false`, mais aucun formulaire de recherche n'existe dans l'interface, et il n'y a pas de `search.php` dédié — `index.php` sert de repli, avec un `<h1>` qui affiche toujours le nom du site plutôt qu'un titre contextuel.
-**Impact réel** : `/?s=...` reste techniquement atteignable. Impact faible tant que l'endpoint n'est pas mis en avant.
-**Correction recommandée** : optionnel — ajouter un `search.php` simple si la recherche doit un jour être exposée.
-**Ampleur** : minime. **Certitude** : confirmé (code), impact réel à vérifier.
+- [x] Corrigé
+**Problème constaté** : les 3 CPT ont `exclude_from_search: false`, mais il n'y avait pas de `search.php` dédié — `index.php` servait de repli, avec un `<h1>` qui affichait toujours le nom du site plutôt qu'un titre contextuel.
+**Correction appliquée** : `search.php` créé (même structure que `index.php`/`page.php` : `soc-page-header`/`soc-container`, `template-parts/content`, pagination), avec un `<h1>` "Résultats de recherche pour : …". `template-parts/content-none.php` affiche désormais un message "Aucun résultat" dédié en contexte de recherche plutôt que le message générique "Aucun contenu".
+**Non traité (choix éditorial, pas technique)** : aucun formulaire de recherche visible n'a été ajouté dans l'interface (menu, header…) — c'était hors du périmètre de ce point ; l'endpoint `/?s=...` est maintenant correctement géré s'il est atteint, mais reste à décider si/où l'exposer visuellement.
+**Ampleur** : minime. **Certitude** : confirmé.
 
 ### 15 — Finition — `inc/blocks.php` / `inc/patterns.php` (scaffolding sans effet)
 - [ ] Corrigé

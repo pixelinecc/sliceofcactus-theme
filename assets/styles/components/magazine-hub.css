@@ -355,6 +355,30 @@
 	.more-series__grid {
 		grid-template-columns: 1fr;
 	}
+
+	/*
+	 * A view-toggle with several tabs (e.g. one per résonance term) can run
+	 * wider than the screen — scrolls horizontally instead of overflowing
+	 * or wrapping into a cramped multi-line pill.
+	 */
+	.view-switch {
+		justify-content: flex-start;
+	}
+
+	.view-toggle {
+		max-width: 100%;
+		overflow-x: auto;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	.view-toggle::-webkit-scrollbar {
+		display: none;
+	}
+
+	.view-toggle a {
+		flex-shrink: 0;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

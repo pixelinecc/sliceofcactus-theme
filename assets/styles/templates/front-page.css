@@ -457,7 +457,8 @@
 	grid-row: span 2;
 }
 
-.xtile:hover {
+.xtile:hover,
+.xtile:focus-visible {
 	transform: translateY(-3px);
 }
 
@@ -480,7 +481,8 @@
 	transition: opacity .6s;
 }
 
-.xtile:hover .xtile__bg {
+.xtile:hover .xtile__bg,
+.xtile:focus-visible .xtile__bg {
 	filter: grayscale(0) brightness(.86);
 	transform: scale(1);
 }
@@ -513,7 +515,8 @@
 	transition: background .4s var(--ease), border-color .4s, transform .5s var(--ease), color .4s;
 }
 
-.xtile:hover .xtile__go {
+.xtile:hover .xtile__go,
+.xtile:focus-visible .xtile__go {
 	border-color: var(--c);
 	background: var(--c);
 	transform: rotate(-45deg);
@@ -552,7 +555,8 @@
 	transform-origin: left;
 }
 
-.xtile:hover .xtile__bar {
+.xtile:hover .xtile__bar,
+.xtile:focus-visible .xtile__bar {
 	transform: scaleX(1);
 }
 

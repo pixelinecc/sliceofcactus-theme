@@ -156,34 +156,41 @@
 	transition: max-height .6s var(--ease), opacity .5s var(--ease), margin .6s;
 }
 
-.universe__panels:hover .upanel {
+.universe__panels:hover .upanel,
+.universe__panels:focus-within .upanel {
 	flex: .72;
 }
 
-.universe__panels .upanel:hover {
+.universe__panels .upanel:hover,
+.universe__panels .upanel:focus-visible {
 	flex: 2.4;
 }
 
-.upanel:hover .upanel__bg {
+.upanel:hover .upanel__bg,
+.upanel:focus-visible .upanel__bg {
 	filter: grayscale(0) brightness(.82);
 	transform: scale(1);
 }
 
-.upanel:hover::after {
+.upanel:hover::after,
+.upanel:focus-visible::after {
 	background: linear-gradient(180deg, transparent 8%, rgb(10 8 7 / 80%));
 }
 
-.upanel:hover::before {
+.upanel:hover::before,
+.upanel:focus-visible::before {
 	transform: scaleY(1);
 }
 
-.upanel:hover .upanel__d {
+.upanel:hover .upanel__d,
+.upanel:focus-visible .upanel__d {
 	max-height: 130px;
 	margin-top: .8rem;
 	opacity: 1;
 }
 
-.upanel:hover .upanel__cta {
+.upanel:hover .upanel__cta,
+.upanel:focus-visible .upanel__cta {
 	max-height: 40px;
 	margin-top: 1rem;
 	opacity: 1;

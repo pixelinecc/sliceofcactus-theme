@@ -158,8 +158,15 @@ $lead_rest   = function_exists( 'mb_substr' ) ? mb_substr( $accroche, 1 ) : subs
 		data-lightbox="<?php echo esc_attr( $lightbox_id ); ?>"
 	>
 		<?php foreach ( $gallery_ids as $attachment_id ) : ?>
-			<?php $alt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ); ?>
-			<a class="colo-card" href="<?php echo esc_url( wp_get_attachment_image_url( $attachment_id, 'full' ) ); ?>">
+			<?php
+			$alt          = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+			$image_src    = wp_get_attachment_image_src( $attachment_id, 'large' );
+			$is_landscape = is_array( $image_src ) && $image_src[1] > $image_src[2] * 1.05;
+			?>
+			<a
+				class="colo-card<?php echo $is_landscape ? ' colo-card--wide' : ''; ?>"
+				href="<?php echo esc_url( wp_get_attachment_image_url( $attachment_id, 'full' ) ); ?>"
+			>
 				<div class="colo-card__img">
 					<?php
 					echo wp_get_attachment_image(

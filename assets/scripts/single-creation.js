@@ -1,8 +1,11 @@
 /**
- * Single creation: colo-grid lightbox and wide-image detection.
+ * Single creation: colo-grid lightbox.
  *
  * Adapted from the shared inline script of
  * sliceofcactus-astro/src/pages/dessin/[id].astro and coloriage/[id].astro.
+ * Wide-image detection (.colo-card--wide) is computed server-side from the
+ * attachment's own metadata (template-parts/single/creation-contact-sheet.php)
+ * instead of measured here after image load, to avoid a layout shift.
  */
 
 (() => {
@@ -30,26 +33,6 @@
 				alt: cap,
 				caption: `${cap} · ${index + 1} / ${cards.length}`,
 			};
-		});
-
-		cards.forEach((card) => {
-			const image = card.querySelector('.colo-card__img img');
-
-			if (!image) {
-				return;
-			}
-
-			const markOrientation = () => {
-				if (image.naturalWidth > image.naturalHeight * 1.05) {
-					card.classList.add('colo-card--wide');
-				}
-			};
-
-			if (image.complete && image.naturalWidth) {
-				markOrientation();
-			} else {
-				image.addEventListener('load', markOrientation, { once: true });
-			}
 		});
 
 		const controller = window.SocLightbox.create({

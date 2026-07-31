@@ -55,11 +55,10 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé (code) — effet ressenti à vérifier visuellement.
 
 ### 7 — Important — `assets/scripts/single-creation.js` + `assets/styles/templates/single-creation.css` (`.colo-card`)
-- [ ] Corrigé
-**Problème constaté** : `.colo-card` démarre avec `aspect-ratio: 4/5` (cadrage portrait) ; le script ne rajoute `.colo-card--wide` (bascule en `aspect-ratio: auto`/`object-fit: contain`, carte plus large sur 2 colonnes) qu'une fois l'image chargée (`naturalWidth` mesuré au `load`).
-**Impact réel** : pour toute planche de coloriage au format paysage non mise en cache, un saut de mise en page (CLS) est visible.
-**Correction recommandée** : difficile à éviter uniquement en CSS/JS ; solution propre = stocker l'orientation en métadonnée/ACF à l'import et poser la classe côté serveur.
-**Ampleur** : modérée (implique un ajustement du modèle de données). **Certitude** : confirmé dans le code ; fréquence réelle à vérifier visuellement.
+- [x] Corrigé
+**Problème constaté** : `.colo-card` démarre avec `aspect-ratio: 4/5` (cadrage portrait) ; le script ne rajoutait `.colo-card--wide` (bascule en `aspect-ratio: auto`/`object-fit: contain`, carte plus large sur 2 colonnes) qu'une fois l'image chargée (`naturalWidth` mesuré au `load`), causant un saut de mise en page pour les planches au format paysage non mises en cache.
+**Correction appliquée** : pas besoin de nouveau champ ACF — WordPress stocke déjà la largeur/hauteur de chaque image. `template-parts/single/creation-contact-sheet.php` calcule maintenant l'orientation via `wp_get_attachment_image_src()` et pose `colo-card--wide` directement dans le HTML rendu ; la mesure côté client (`single-creation.js`) a été retirée, elle est devenue redondante.
+**Ampleur** : minime (finalement, une fois la bonne fonction WP identifiée). **Certitude** : confirmé.
 
 ### 8 — Important — `template-parts/single/recit-article.php` (insertion de la "planche")
 - [ ] Corrigé
@@ -154,9 +153,9 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 
 ## 5 corrections prioritaires
 1. **#1** — Ajouter un `.gitignore` (exclure `.vscode/`), envisager de changer le mot de passe FTP. ✅ fait
-2. **#3** — Ajouter `:focus-within` aux panneaux `.upanel`/`.xtile` pour l'accessibilité clavier.
-3. **#4** — Corriger les 5 variables CSS cassées de `page-a-propos.css`.
-4. **#7** — Traiter le CLS des `.colo-card` (au minimum documenter/mesurer l'ampleur réelle).
+2. **#3** — Ajouter `:focus-within` aux panneaux `.upanel`/`.xtile` pour l'accessibilité clavier. ✅ fait
+3. **#4** — Corriger les 5 variables CSS cassées de `page-a-propos.css`. ✅ fait
+4. **#7** — Traiter le CLS des `.colo-card`. ✅ fait
 5. **#9** — Corriger les libellés admin du CPT Photo.
 
 ## Petites corrections rapides groupables
@@ -172,12 +171,13 @@ En un seul lot "nettoyage" : **#5** (sélecteurs morts page-a-propos), **#10** (
 
 ## Ordre d'intervention proposé
 1. Sécurité (#1) — trivial, à faire immédiatement. ✅ fait
-2. Nettoyage CSS/JS rapide groupé (#5, #6, #10, #11, #16, #18).
-3. Accessibilité clavier (#3).
-4. Variables cassées page À propos (#4).
-5. Labels admin Photo (#9), clé ACF (#17) — sans urgence.
+2. Nettoyage CSS/JS rapide groupé (#5, #6, #10, #11, #16, #18). ✅ fait
+3. Accessibilité clavier (#3). ✅ fait
+4. Variables cassées page À propos (#4). ✅ fait
+5. Labels admin Photo (#9), clé ACF (#17) — sans urgence. #17 fait, #9 restant.
 6. Points "à vérifier" (#12, #13, #14, #19, #20) — à trancher une fois le contenu réel confirmé.
-7. CLS `.colo-card` (#7) — à planifier séparément si la mesure confirme un impact réel.
+7. CLS `.colo-card` (#7). ✅ fait
+8. #8 (insertion de la planche récit) — à surveiller, pas de correction de code prévue pour l'instant.
 
 ## Tests manuels à effectuer après correction
 - Vérifier au DevTools que les 4 polices se chargent bien (onglet Network → Fonts) et que le rendu visuel change sur titres/mastheads/légendes.

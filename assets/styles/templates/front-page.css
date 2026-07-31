@@ -722,6 +722,12 @@
 
 /* ---------- RÉCITS À LA UNE ---------- */
 
+.home-recits {
+	max-width: var(--maxw);
+	margin: 7rem auto;
+	padding: 2rem clamp(1.2rem, 4vw, 3rem);
+}
+
 .home-recits__grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);

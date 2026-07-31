@@ -1,6 +1,10 @@
 <?php
 /**
- * Créations archive: every dessin and coloriage mixed, most recent first.
+ * Atelier archive: every dessin and coloriage mixed, most recent first.
+ *
+ * Public-facing rubrique renamed from "Création" to "Atelier" — the CPT's
+ * own key ('creation') and every internal function/class/file name stay
+ * untouched, only labels and the rewrite slug (now /atelier/) changed.
  *
  * No Astro equivalent (Astro only has separate dessin/index.astro and
  * coloriage/index.astro, still served here by taxonomy-creation_type.php)
@@ -8,7 +12,7 @@
  * archive-photo.php (masthead, view-switch, filter chips, grid), using the
  * book-card markup already established in
  * template-parts/taxonomy/creation-type-book-grid.php for visual
- * consistency across every Création page. Filter chips run on the medium
+ * consistency across every Atelier page. Filter chips run on the medium
  * taxonomy (technique: aquarelle, feutres…) — the rubrique split
  * (dessin/coloriage) is already covered by the view-switch tabs above.
  *
@@ -27,14 +31,14 @@ $total = count( $items );
 <main id="main-content" class="soc-creation-archive rubrique-page colo">
 
 	<div class="mag-runhead">
-		<span><?php esc_html_e( 'Slice of Cactus — Créations', 'sliceofcactus' ); ?></span>
+		<span><?php esc_html_e( 'Slice of Cactus — Atelier', 'sliceofcactus' ); ?></span>
 		<span><?php esc_html_e( 'Trait du camélon · hors label 36 poses', 'sliceofcactus' ); ?></span>
 		<span><?php esc_html_e( 'dessins & coloriages', 'sliceofcactus' ); ?></span>
 	</div>
 
 	<header class="mag-masthead">
 		<h1 class="mag-masthead__title">
-			<?php esc_html_e( 'Créations', 'sliceofcactus' ); ?>
+			<?php esc_html_e( 'Atelier', 'sliceofcactus' ); ?>
 			<em><?php esc_html_e( 'tous les carnets, dessins et coloriages confondus', 'sliceofcactus' ); ?></em>
 		</h1>
 		<div class="mag-masthead__lead">
@@ -46,7 +50,7 @@ $total = count( $items );
 	</header>
 
 	<div class="view-switch">
-		<div class="view-toggle" role="tablist" aria-label="<?php esc_attr_e( 'Explorer la création', 'sliceofcactus' ); ?>">
+		<div class="view-toggle" role="tablist" aria-label="<?php esc_attr_e( 'Explorer l\'atelier', 'sliceofcactus' ); ?>">
 			<a href="<?php echo esc_url( get_post_type_archive_link( 'creation' ) ); ?>" class="is-active" aria-current="page">
 				<?php esc_html_e( 'Toutes', 'sliceofcactus' ); ?>
 			</a>
@@ -60,12 +64,12 @@ $total = count( $items );
 	</div>
 
 	<div class="mag-sommaire">
-		<h2><?php esc_html_e( 'Toutes les créations', 'sliceofcactus' ); ?></h2>
+		<h2><?php esc_html_e( 'Tout l\'atelier', 'sliceofcactus' ); ?></h2>
 		<span id="soc-creation-count">
 			<?php
 			printf(
-				/* translators: %s: number of creations. */
-				esc_html( _n( '%s création', '%s créations', $total, 'sliceofcactus' ) ),
+				/* translators: %s: number of contents. */
+				esc_html( _n( '%s contenu', '%s contenus', $total, 'sliceofcactus' ) ),
 				esc_html( number_format_i18n( $total ) )
 			);
 			?>

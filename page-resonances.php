@@ -27,13 +27,13 @@ $rows = soc_get_resonance_rows( 8 );
 	<div class="mag-runhead">
 		<span><?php esc_html_e( 'Slice of Cactus — Résonances', 'sliceofcactus' ); ?></span>
 		<span><?php esc_html_e( 'Boussole éditoriale transversale', 'sliceofcactus' ); ?></span>
-		<span><?php esc_html_e( 'Photo, Création, Récits', 'sliceofcactus' ); ?></span>
+		<span><?php esc_html_e( 'Photo, Atelier, Récits', 'sliceofcactus' ); ?></span>
 	</div>
 
 	<header class="mag-masthead">
 		<h1 class="mag-masthead__title">
 			<?php esc_html_e( 'Résonances', 'sliceofcactus' ); ?>
-			<em><?php esc_html_e( 'relie Photo, Création et Récits', 'sliceofcactus' ); ?></em>
+			<em><?php esc_html_e( 'relie Photo, Atelier et Récits', 'sliceofcactus' ); ?></em>
 		</h1>
 		<div class="mag-masthead__lead">
 			<p>

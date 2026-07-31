@@ -46,7 +46,7 @@ if ( ! empty( $related_photos ) ) {
 	$stamp_text = __( 'Galerie photo', 'sliceofcactus' );
 } elseif ( ! empty( $related ) ) {
 	$stamp_href = '#article-creations-' . $post_id;
-	$stamp_text = __( 'Création associée', 'sliceofcactus' );
+	$stamp_text = __( 'Contenu associé', 'sliceofcactus' );
 }
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'article' ); ?>>
@@ -186,7 +186,7 @@ if ( ! empty( $related_photos ) ) {
 						<?php endif; ?>
 						<div class="article__gallery-cap">
 							<span class="article__gallery-title"><?php echo esc_html( get_the_title( $creation ) ); ?></span>
-							<span class="article__gallery-more"><?php esc_html_e( 'Voir la création →', 'sliceofcactus' ); ?></span>
+							<span class="article__gallery-more"><?php esc_html_e( 'Voir →', 'sliceofcactus' ); ?></span>
 						</div>
 					</a>
 				<?php endforeach; ?>

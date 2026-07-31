@@ -30,7 +30,7 @@
         },
         {
             "key": "field_soc_recit_creations",
-            "label": "Créations associées",
+            "label": "Contenus d’atelier associés",
             "name": "soc_recit_creations",
             "aria-label": "",
             "type": "relationship",

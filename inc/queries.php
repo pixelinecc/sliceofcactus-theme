@@ -308,11 +308,11 @@ function soc_get_creation_archive_items( string $rubrique_slug ): array {
 }
 
 /**
- * Gets the creations shown on the combined Créations archive.
+ * Gets the creations shown on the combined Atelier archive.
  *
  * No Astro equivalent (Astro only has separate dessin/coloriage index
  * pages, already covered by soc_get_creation_archive_items() /
- * taxonomy-creation_type.php) — this powers the new unified /creations/
+ * taxonomy-creation_type.php) — this powers the new unified /atelier/
  * overview, every rubrique mixed, most recent first, cover image required.
  *
  * @return WP_Post[]
@@ -865,7 +865,7 @@ function soc_get_resonance_groups( int $post_id = 0 ): array {
 	$kinds = array(
 		'recit'    => __( 'Récit', 'sliceofcactus' ),
 		'photo'    => __( 'Photo', 'sliceofcactus' ),
-		'creation' => __( 'Création', 'sliceofcactus' ),
+		'creation' => __( 'Atelier', 'sliceofcactus' ),
 	);
 
 	$groups = array();
@@ -929,7 +929,7 @@ function soc_get_resonance_rows( int $limit = 8 ): array {
 
 	$kinds = array(
 		'photo'    => __( 'Photo', 'sliceofcactus' ),
-		'creation' => __( 'Création', 'sliceofcactus' ),
+		'creation' => __( 'Atelier', 'sliceofcactus' ),
 		'recit'    => __( 'Récit', 'sliceofcactus' ),
 	);
 

@@ -255,7 +255,7 @@ $drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $drop_source, 0, 1 ) 
 
 	<?php if ( ! empty( $related_recits ) ) : ?>
 		<p class="linked-note is-on">
-			<?php esc_html_e( 'Cette création est racontée dans :', 'sliceofcactus' ); ?>
+			<?php esc_html_e( 'Ce contenu est raconté dans :', 'sliceofcactus' ); ?>
 			<?php foreach ( $related_recits as $index => $recit ) : ?>
 				<?php echo 0 < $index ? ', ' : ' '; ?>
 				<a href="<?php echo esc_url( get_permalink( $recit ) ); ?>"><?php echo esc_html( get_the_title( $recit ) ); ?></a>
@@ -286,7 +286,7 @@ $drop_letter = function_exists( 'mb_substr' ) ? mb_substr( $drop_source, 0, 1 ) 
 		id="<?php echo esc_attr( $lightbox_id ); ?>"
 		role="dialog"
 		aria-modal="true"
-		aria-label="<?php esc_attr_e( 'Visionneuse de la création', 'sliceofcactus' ); ?>"
+		aria-label="<?php esc_attr_e( 'Visionneuse du contenu', 'sliceofcactus' ); ?>"
 		aria-hidden="true"
 	>
 		<button class="lightbox__close" type="button" aria-label="<?php esc_attr_e( 'Fermer', 'sliceofcactus' ); ?>">×</button>

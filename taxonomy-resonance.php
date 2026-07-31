@@ -50,7 +50,7 @@ $groups = array(
 		'items' => $term instanceof WP_Term ? soc_get_resonance_items( $term, 'photo' ) : array(),
 	),
 	'creation' => array(
-		'label' => __( 'Création', 'sliceofcactus' ),
+		'label' => __( 'Atelier', 'sliceofcactus' ),
 		'items' => $term instanceof WP_Term ? soc_get_resonance_items( $term, 'creation' ) : array(),
 	),
 	'recit'    => array(
@@ -66,7 +66,7 @@ $total = array_sum( array_map( static fn( array $group ): int => count( $group['
 	<div class="mag-runhead">
 		<span><?php esc_html_e( 'Slice of Cactus — Résonances', 'sliceofcactus' ); ?></span>
 		<span><?php esc_html_e( 'Boussole éditoriale transversale', 'sliceofcactus' ); ?></span>
-		<span><?php esc_html_e( 'relie Photo, Création et Récits', 'sliceofcactus' ); ?></span>
+		<span><?php esc_html_e( 'relie Photo, Atelier et Récits', 'sliceofcactus' ); ?></span>
 	</div>
 
 	<header class="mag-masthead">
@@ -149,7 +149,7 @@ $total = array_sum( array_map( static fn( array $group ): int => count( $group['
 						} elseif ( 'creation' === $type ) {
 							$cover_id  = soc_get_creation_cover_id( $item->ID );
 							$rubrique  = soc_get_creation_rubrique( $item->ID );
-							$sub_label = $rubrique ? $rubrique->name : __( 'Création', 'sliceofcactus' );
+							$sub_label = $rubrique ? $rubrique->name : __( 'Atelier', 'sliceofcactus' );
 						} else {
 							$cover_id  = absint( get_post_thumbnail_id( $item->ID ) );
 							$date      = soc_get_recit_date_label( $item->ID );

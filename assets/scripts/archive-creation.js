@@ -52,7 +52,7 @@
 
 		if (count) {
 			const visibleCount = visible.length;
-			count.textContent = `${String(visibleCount).padStart(2, '0')} création${visibleCount > 1 ? 's' : ''}`;
+			count.textContent = `${String(visibleCount).padStart(2, '0')} contenu${visibleCount > 1 ? 's' : ''}`;
 		}
 	};
 

@@ -98,9 +98,9 @@ while ( have_posts() ) :
 		array(
 			'num'    => '02',
 			'kicker' => __( 'Dessin & coloriage · trait du camélon', 'sliceofcactus' ),
-			'title'  => __( 'Création', 'sliceofcactus' ),
+			'title'  => __( 'Atelier', 'sliceofcactus' ),
 			'desc'   => __( 'Dessins et coloriages, un geste qui prolonge le regard.', 'sliceofcactus' ),
-			'cta'    => __( 'Explorer Création →', 'sliceofcactus' ),
+			'cta'    => __( 'Explorer l\'atelier →', 'sliceofcactus' ),
 			'url'    => get_post_type_archive_link( 'creation' ),
 			'color'  => '#e0592f',
 			'image'  => ! empty( $latest_creation ) ? soc_get_creation_cover_id( $latest_creation[0]->ID ) : 0,
@@ -242,7 +242,7 @@ while ( have_posts() ) :
 					$resonance_kind_labels = array(
 						'recit'    => __( 'Récit', 'sliceofcactus' ),
 						'photo'    => __( 'Photo', 'sliceofcactus' ),
-						'creation' => __( 'Création', 'sliceofcactus' ),
+						'creation' => __( 'Atelier', 'sliceofcactus' ),
 					);
 					?>
 					<?php foreach ( $resonance_terms as $term ) : ?>
@@ -308,7 +308,7 @@ while ( have_posts() ) :
 					<?php esc_html_e( 'Explorer une série', 'sliceofcactus' ); ?>
 				</a>
 				<a class="about-invite__link" href="<?php echo esc_url( get_post_type_archive_link( 'creation' ) ); ?>">
-					<?php esc_html_e( 'Découvrir une création', 'sliceofcactus' ); ?>
+					<?php esc_html_e( 'Découvrir l\'atelier', 'sliceofcactus' ); ?>
 				</a>
 			</div>
 		</section>

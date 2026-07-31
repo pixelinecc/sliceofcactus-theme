@@ -14,11 +14,11 @@ $site_name_words  = preg_split( '/\s+/u', trim( $site_name ), -1, PREG_SPLIT_NO_
 $footer_columns   = array(
 	array(
 		'location' => 'footer_photo',
-		'title'    => __( 'Photos', 'sliceofcactus' ),
+		'title'    => __( 'Photo', 'sliceofcactus' ),
 	),
 	array(
 		'location' => 'footer_dessin',
-		'title'    => __( 'Créations', 'sliceofcactus' ),
+		'title'    => __( 'Atelier', 'sliceofcactus' ),
 	),
 	array(
 		'location' => 'footer_read',

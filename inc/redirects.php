@@ -1,6 +1,7 @@
 <?php
 /**
- * Redirects URLs that duplicate a dedicated Photo page.
+ * Redirects URLs that duplicate a dedicated Photo page, and legacy URLs
+ * left behind by the Création → Atelier rubrique rename.
  *
  * The narration taxonomy is public, so WordPress generates a default
  * archive for every term (/narration/{slug}/) with no template of its own
@@ -71,3 +72,26 @@ function soc_redirect_projet52_single(): void {
 	exit;
 }
 add_action( 'template_redirect', 'soc_redirect_projet52_single' );
+
+/**
+ * Redirects the old /creations/ URLs (rubrique renamed to "Atelier",
+ * slug now /atelier/ — see acf-json/post_type_soc_creation.json) to their
+ * /atelier/ equivalent, archive and singles alike.
+ *
+ * @return void
+ */
+function soc_redirect_legacy_creation_urls(): void {
+	if ( ! is_404() ) {
+		return;
+	}
+
+	$path = wp_parse_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) ), PHP_URL_PATH );
+
+	if ( ! is_string( $path ) || 0 !== strpos( $path, '/creations/' ) ) {
+		return;
+	}
+
+	wp_safe_redirect( home_url( '/atelier/' . substr( $path, strlen( '/creations/' ) ) ), 301 );
+	exit;
+}
+add_action( 'template_redirect', 'soc_redirect_legacy_creation_urls' );

@@ -1,0 +1,12 @@
+/**
+ * Résonance archive: page-specific chrome only.
+ *
+ * The dark background, the view-toggle contrast fix and the row/track/nav/
+ * card slider system are all shared with page-resonances.php via
+ * assets/styles/components/resonances.css.
+ */
+
+.resonance-archive__footer {
+	margin-top: 4rem;
+	text-align: center;
+}

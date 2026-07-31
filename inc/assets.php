@@ -220,15 +220,32 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
-	if ( is_page_template( 'page-resonances.php' ) ) {
-		$resonances_style_path = get_theme_file_path( '/assets/styles/templates/page-resonances.css' );
+	$needs_resonances      = is_page_template( 'page-resonances.php' ) || is_tax( 'resonance' );
+	$resonances_style_deps = $magazine_hub_deps;
 
-		if ( is_readable( $resonances_style_path ) ) {
+	if ( $needs_resonances ) {
+		$resonances_component_style_path = get_theme_file_path( '/assets/styles/components/resonances.css' );
+
+		if ( is_readable( $resonances_component_style_path ) ) {
 			wp_enqueue_style(
-				'sliceofcactus-page-resonances',
-				get_theme_file_uri( '/assets/styles/templates/page-resonances.css' ),
+				'sliceofcactus-resonances',
+				get_theme_file_uri( '/assets/styles/components/resonances.css' ),
 				$magazine_hub_deps,
-				(string) filemtime( $resonances_style_path )
+				(string) filemtime( $resonances_component_style_path )
+			);
+			$resonances_style_deps[] = 'sliceofcactus-resonances';
+		}
+	}
+
+	if ( is_tax( 'resonance' ) ) {
+		$taxonomy_resonance_style_path = get_theme_file_path( '/assets/styles/templates/taxonomy-resonance.css' );
+
+		if ( is_readable( $taxonomy_resonance_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-taxonomy-resonance',
+				get_theme_file_uri( '/assets/styles/templates/taxonomy-resonance.css' ),
+				$resonances_style_deps,
+				(string) filemtime( $taxonomy_resonance_style_path )
 			);
 		}
 	}
@@ -402,18 +419,18 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
-	if ( is_page_template( 'page-resonances.php' ) ) {
-		$resonances_script_path = get_theme_file_path( '/assets/scripts/page-resonances.js' );
+	if ( is_page_template( 'page-resonances.php' ) || is_tax( 'resonance' ) ) {
+		$resonances_script_path = get_theme_file_path( '/assets/scripts/components/resonances.js' );
 
 		if ( is_readable( $resonances_script_path ) ) {
 			wp_enqueue_script(
-				'sliceofcactus-page-resonances',
-				get_theme_file_uri( '/assets/scripts/page-resonances.js' ),
+				'sliceofcactus-resonances',
+				get_theme_file_uri( '/assets/scripts/components/resonances.js' ),
 				array(),
 				(string) filemtime( $resonances_script_path ),
 				true
 			);
-			wp_script_add_data( 'sliceofcactus-page-resonances', 'strategy', 'defer' );
+			wp_script_add_data( 'sliceofcactus-resonances', 'strategy', 'defer' );
 		}
 	}
 

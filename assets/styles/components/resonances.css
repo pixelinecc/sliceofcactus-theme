@@ -1,17 +1,30 @@
 /**
- * Résonances: one horizontal-scroll row per term.
+ * Résonances row/slider chrome, shared by the parent page-resonances.php
+ * (rows mixing Photo/Création/Récit by term) and taxonomy-resonance.php
+ * (rows split by post type within one term) — same dark background and
+ * same horizontal-scroll row for both, so a term's own archive reads as a
+ * continuation of the parent page rather than a different design.
  *
- * No dedicated --accent/--accent-deep override here: taxonomy-resonance.php
- * (the destination of every "Tout voir" link and view-toggle tab) has none
- * either, reusing the generic default from assets/styles/settings/tokens.css
- * — kept consistent between the parent list and each row's own page rather
- * than clashing.
- *
- * .view-switch/.view-toggle above the rows and .more-series__card/
- * .more-series__thumb/.more-series__cap for each item are reused as-is
- * (assets/styles/components/magazine-hub.css) — only the row/track/nav
- * chrome around them is new.
+ * Cards reuse .more-series__card/.more-series__thumb/.more-series__cap
+ * as-is (assets/styles/components/magazine-hub.css) — only the row/track/nav
+ * chrome around them lives here.
  */
+
+body.page-template-page-resonances-php,
+body.tax-resonance {
+	--accent: #312c2a;
+	--accent-deep: #201d1b;
+}
+
+/*
+ * .view-toggle's default background (magazine-hub.css) is a barely-there
+ * dark tint, meant for lighter --accent pages — against this dark #312c2a
+ * it loses almost all contrast with the ink-colored tab text.
+ */
+.soc-resonances .view-toggle,
+.soc-resonance-archive .view-toggle {
+	background: rgb(255 188 121 / 43%);
+}
 
 .resonance-row {
 	margin-top: 3rem;
@@ -52,6 +65,15 @@
 	flex-shrink: 0;
 	align-items: center;
 	gap: 1.4rem;
+}
+
+.resonance-row__count {
+	color: rgb(255 255 255 / 65%);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	white-space: nowrap;
 }
 
 .resonance-row__more {

@@ -7,8 +7,9 @@
  * (archive-creation.php, page-projet-52.php) — "Toutes" is this page, each
  * other tab a specific term. Below, one horizontal-scroll row per term
  * (soc_get_resonance_rows()), mixing Photo/Création/Récit, with its own
- * intro (term_description()) and a "Tout voir" link to that term's own
- * archive (taxonomy-resonance.php), which still groups by post type.
+ * intro (soc_resonance_intro ACF field, not the native term description)
+ * and a "Tout voir" link to that term's own archive (taxonomy-resonance.php),
+ * which still groups by post type.
  *
  * @package SliceOfCactus
  */
@@ -63,10 +64,11 @@ $rows = soc_get_resonance_rows( 8 );
 
 		<?php foreach ( $rows as $row ) : ?>
 			<?php
-			$term_id     = $row['term']->term_id;
-			$track_id    = 'resonance-track-' . $term_id;
-			$term_link   = get_term_link( $row['term'] );
-			$description = term_description( $row['term'] );
+			$term_id   = $row['term']->term_id;
+			$track_id  = 'resonance-track-' . $term_id;
+			$term_link = get_term_link( $row['term'] );
+			$intro     = function_exists( 'get_field' ) ? get_field( 'soc_resonance_intro', 'resonance_' . $term_id ) : '';
+			$intro     = is_string( $intro ) ? trim( $intro ) : '';
 			?>
 			<section class="resonance-row" aria-labelledby="<?php echo esc_attr( 'resonance-row-title-' . $term_id ); ?>">
 				<div class="resonance-row__head">
@@ -74,8 +76,8 @@ $rows = soc_get_resonance_rows( 8 );
 						<h2 class="resonance-row__title" id="<?php echo esc_attr( 'resonance-row-title-' . $term_id ); ?>">
 							<?php echo esc_html( $row['term']->name ); ?>
 						</h2>
-						<?php if ( '' !== $description ) : ?>
-							<p class="resonance-row__desc"><?php echo wp_kses_post( $description ); ?></p>
+						<?php if ( '' !== $intro ) : ?>
+							<p class="resonance-row__desc"><?php echo esc_html( $intro ); ?></p>
 						<?php endif; ?>
 					</div>
 

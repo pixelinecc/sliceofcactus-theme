@@ -124,7 +124,7 @@ Le point le plus sérieux n'est pas un bug de logique métier mais un oubli prob
 **Ampleur** : minime. **Certitude** : confirmé.
 
 ### 17 — Finition — `acf-json/group_soc_recit.json` (clé de champ ACF)
-- [ ] Corrigé
+- [x] Corrigé — clé renommée en `field_soc_recit_photos` (aucune donnée existante sur ce champ, renommage sans risque). Penser à cliquer "Synchroniser" dans Réglages → Champs personnalisés si l'admin le propose.
 **Problème constaté** : le champ "Photos associées" utilise une clé auto-générée (`field_6a6a0e4e0c94b`) au lieu de la convention `field_soc_recit_*` suivie par tous les autres champs du projet.
 **Impact réel** : aucun fonctionnellement ; simple incohérence de maintenance.
 **Correction recommandée** : à laisser tel quel pour l'instant (renommer une clé ACF sur un champ déjà utilisé est délicat) ; corriger seulement si ce groupe est retouché pour une autre raison.

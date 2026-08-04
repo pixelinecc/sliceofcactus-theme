@@ -14,9 +14,9 @@
  * ("plate"), the masthead's own background ("cover"), or .article__snapshot
  * tucked beside the body text ("margin").
  *
- * .article__resonance-card reads --term-color from each résonance term's own
- * soc_resonance_color ACF field (soc_get_resonance_groups()), falling back
- * to --accent when a term has none set.
+ * The "Résonne avec" cards at the foot of the article are the shared
+ * .rmosaic* mosaic (assets/styles/components/resonance-mosaic.css), same
+ * presentation as the À propos page.
  */
 
 .soc-recit-main {
@@ -255,102 +255,56 @@
 	}
 }
 
-.article__gallery {
-	max-width: 980px;
-	margin: 3rem auto;
-	padding: 0 clamp(1.2rem, 4vw, 3rem);
-}
-
-.article__gallery-head {
-	margin-bottom: 1.2rem;
-	padding-bottom: .6rem;
-	border-bottom: 1px solid rgb(20 18 16 / 22%);
-}
-
-.article__gallery-head h2 {
-	color: var(--accent);
-	font-family: var(--font-mono);
-	font-size: .78rem;
-	font-weight: 700;
-	letter-spacing: .18em;
-	text-transform: uppercase;
-}
-
-.article__gallery-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-	gap: 1.6rem;
-}
-
-.article__gallery-card {
-	display: block;
+/*
+ * Related content ("Cette histoire accompagne", "Photos associées"): the
+ * shared .mag-sommaire + .more-series* blocks
+ * (assets/styles/components/magazine-hub.css), same presentation as "Autres
+ * séries" on single-photo. Both sections sit outside <article> (see
+ * recit-article.php) so they run at var(--maxw); the rules below only flip
+ * that component's paper-on-dark chrome to ink-on-paper, the same way
+ * .mag-runhead and .serie-resonances are flipped elsewhere in this file.
+ */
+.more-series--recit .mag-sommaire {
+	border-top-color: rgb(20 18 16 / 22%);
 	color: var(--ink);
-	text-decoration: none;
 }
 
-.article__gallery-thumb {
-	position: relative;
-	overflow: hidden;
-	border-radius: 3px;
-	aspect-ratio: 3 / 2;
+.more-series--recit .mag-sommaire h2 {
+	color: var(--accent);
+}
+
+.more-series--recit .mag-sommaire span {
+	color: var(--grey);
+}
+
+.more-series--recit .more-series__card {
+	color: var(--ink);
+}
+
+.more-series--recit .more-series__thumb {
 	box-shadow: 0 14px 28px -16px rgb(20 18 16 / 35%);
 }
 
-.article__gallery-plate {
-	display: block;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	transition: transform .6s var(--ease), filter .4s;
-}
-
-.article__gallery-card:hover .article__gallery-plate,
-.article__gallery-card:focus-visible .article__gallery-plate {
-	transform: scale(1.05);
-}
-
-.article__gallery--photos .article__gallery-plate {
+/* Photo séries arrive desaturated and regain their color on hover, as on the
+   photo archive's .serie-cell — dessins (the section above) keep theirs. */
+.more-series--photos .more-series__plate {
 	filter: grayscale(1) contrast(1.03);
+	transition: transform .6s var(--ease), filter .7s var(--ease);
 }
 
-.article__gallery--photos .article__gallery-card:hover .article__gallery-plate,
-.article__gallery--photos .article__gallery-card:focus-visible .article__gallery-plate {
+.more-series--photos .more-series__card:hover .more-series__plate,
+.more-series--photos .more-series__card:focus-visible .more-series__plate {
 	filter: grayscale(0) contrast(1.05);
 }
 
-.article__gallery-cap {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: .8rem;
-	margin-top: .6rem;
-}
-
-.article__gallery-title {
-	font-family: var(--font-display);
-	font-size: 1.05rem;
-	font-weight: 700;
-}
-
-.article__gallery-more {
-	flex-shrink: 0;
-	color: var(--accent);
-	font-family: var(--font-mono);
-	font-size: .64rem;
-	letter-spacing: .08em;
-	text-transform: uppercase;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.article__gallery-plate {
-		transition-duration: .01ms;
-	}
-}
-
+/*
+ * Sits outside <article> (see recit-article.php) so it isn't held inside the
+ * 680px reading column: width and gutter come from .rmosaic-section
+ * (var(--maxw)), this only sets the rhythm around it.
+ */
 .article__resonances {
-	max-width: 980px;
-	margin: 3rem auto;
-	padding: 0 clamp(1.2rem, 4vw, 3rem);
+	margin-top: 4rem;
+	margin-bottom: 4rem;
 }
 
 .article__resonances-label {
@@ -362,71 +316,12 @@
 	text-transform: uppercase;
 }
 
-.article__resonances-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-	gap: 1.2rem;
-}
-
-.article__resonance-card {
-	padding: 1.2rem 1.3rem 1.4rem;
-	border-top: 3px solid var(--term-color, var(--accent));
-	background: var(--paper-2);
-}
-
-.article__resonance-term {
-	margin: 0 0 .9rem;
-	font-family: var(--font-display);
-	font-size: 1.15rem;
-	font-style: italic;
-	font-weight: 700;
-}
-
-.article__resonance-term a {
-	color: var(--ink);
-	text-decoration: none;
-}
-
-.article__resonance-term a:hover,
-.article__resonance-term a:focus-visible {
-	color: var(--term-color, var(--accent));
-}
-
-.article__resonance-items {
-	display: flex;
-	flex-direction: column;
-	gap: .55rem;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-.article__resonance-item {
-	display: flex;
-	align-items: baseline;
-	gap: .5rem;
-}
-
-.article__resonance-kind {
-	flex-shrink: 0;
-	color: var(--term-color, var(--accent));
-	font-family: var(--font-mono);
-	font-size: .6rem;
-	letter-spacing: .08em;
-	text-transform: uppercase;
-	opacity: .85;
-}
-
-.article__resonance-item a {
-	color: var(--ink);
-	text-decoration: none;
-	border-bottom: 1px solid rgb(20 18 16 / 25%);
-}
-
-.article__resonance-item a:hover,
-.article__resonance-item a:focus-visible {
-	border-color: var(--ink);
-}
+/*
+ * The cards themselves are the shared .rmosaic* mosaic
+ * (assets/styles/components/resonance-mosaic.css), same presentation as the
+ * À propos page: dark --ink cards carrying their own background, so they
+ * hold on this template's flat paper body without any recolouring.
+ */
 
 /*
  * Quick-access résonance tags before the related-content galleries: shared

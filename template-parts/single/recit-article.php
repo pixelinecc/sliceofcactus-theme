@@ -162,115 +162,168 @@ if ( ! empty( $related_photos ) ) {
 		</section>
 	<?php endif; ?>
 
-	<?php if ( ! empty( $related ) ) : ?>
-		<section class="article__gallery" aria-labelledby="<?php echo esc_attr( 'article-creations-' . $post_id ); ?>">
-			<div class="article__gallery-head">
-				<h2 id="<?php echo esc_attr( 'article-creations-' . $post_id ); ?>">
-					<?php esc_html_e( 'Cette histoire accompagne', 'sliceofcactus' ); ?>
-				</h2>
-			</div>
-
-			<div class="article__gallery-grid">
-				<?php foreach ( $related as $creation ) : ?>
-					<?php $cover_id = soc_get_creation_cover_id( $creation->ID ); ?>
-					<a class="article__gallery-card" href="<?php echo esc_url( get_permalink( $creation ) ); ?>">
-						<?php if ( $cover_id ) : ?>
-							<div class="article__gallery-thumb">
-								<?php
-								echo wp_get_attachment_image(
-									$cover_id,
-									'medium',
-									false,
-									array(
-										'class'   => 'article__gallery-plate',
-										'loading' => 'lazy',
-										'alt'     => '',
-									)
-								);
-								?>
-							</div>
-						<?php endif; ?>
-						<div class="article__gallery-cap">
-							<span class="article__gallery-title"><?php echo esc_html( get_the_title( $creation ) ); ?></span>
-							<span class="article__gallery-more"><?php esc_html_e( 'Voir →', 'sliceofcactus' ); ?></span>
-						</div>
-					</a>
-				<?php endforeach; ?>
-			</div>
-		</section>
-	<?php endif; ?>
-
-	<?php if ( ! empty( $related_photos ) ) : ?>
-		<section class="article__gallery article__gallery--photos" aria-labelledby="<?php echo esc_attr( 'article-gallery-' . $post_id ); ?>">
-			<div class="article__gallery-head">
-				<h2 id="<?php echo esc_attr( 'article-gallery-' . $post_id ); ?>">
-					<?php esc_html_e( 'Photos associées', 'sliceofcactus' ); ?>
-				</h2>
-			</div>
-
-			<div class="article__gallery-grid">
-				<?php foreach ( $related_photos as $photo ) : ?>
-					<?php $cover_id = soc_get_photo_cover_id( $photo->ID ); ?>
-					<a class="article__gallery-card" href="<?php echo esc_url( get_permalink( $photo ) ); ?>">
-						<?php if ( $cover_id ) : ?>
-							<div class="article__gallery-thumb">
-								<?php
-								echo wp_get_attachment_image(
-									$cover_id,
-									'medium',
-									false,
-									array(
-										'class'   => 'article__gallery-plate',
-										'loading' => 'lazy',
-										'alt'     => '',
-									)
-								);
-								?>
-							</div>
-						<?php endif; ?>
-						<div class="article__gallery-cap">
-							<span class="article__gallery-title"><?php echo esc_html( get_the_title( $photo ) ); ?></span>
-							<span class="article__gallery-more"><?php esc_html_e( 'Voir la série →', 'sliceofcactus' ); ?></span>
-						</div>
-					</a>
-				<?php endforeach; ?>
-			</div>
-		</section>
-	<?php endif; ?>
-
-	<?php if ( ! empty( $resonance_groups ) ) : ?>
-		<section class="article__resonances" aria-labelledby="<?php echo esc_attr( 'article-resonances-' . $post_id ); ?>">
-			<div class="article__resonances-label" id="<?php echo esc_attr( 'article-resonances-' . $post_id ); ?>">
-				<?php esc_html_e( 'Résonne avec', 'sliceofcactus' ); ?>
-			</div>
-
-			<div class="article__resonances-grid">
-				<?php foreach ( $resonance_groups as $group ) : ?>
-					<div class="article__resonance-card" <?php echo '' !== $group['color'] ? 'style="--term-color:' . esc_attr( $group['color'] ) . '"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-						<h3 class="article__resonance-term">
-							<a href="<?php echo esc_url( get_term_link( $group['term'] ) ); ?>">
-								<?php echo esc_html( $group['term']->name ); ?>
-							</a>
-						</h3>
-						<ul class="article__resonance-items">
-							<?php foreach ( $group['items'] as $entry ) : ?>
-								<li class="article__resonance-item">
-									<span class="article__resonance-kind"><?php echo esc_html( $entry['kind'] ); ?></span>
-									<a href="<?php echo esc_url( get_permalink( $entry['post'] ) ); ?>">
-										<?php echo esc_html( get_the_title( $entry['post'] ) ); ?>
-									</a>
-								</li>
-							<?php endforeach; ?>
-						</ul>
-					</div>
-				<?php endforeach; ?>
-			</div>
-		</section>
-	<?php endif; ?>
-
-	<?php if ( $archive_url ) : ?>
-		<a class="back-link back-link--center" href="<?php echo esc_url( $archive_url ); ?>">
-			<?php esc_html_e( '← Retour aux récits', 'sliceofcactus' ); ?>
-		</a>
-	<?php endif; ?>
 </article>
+
+<?php /* Related content sits outside <article> too: like the résonance
+   mosaic, these are the shared .mag-sommaire + .more-series* blocks
+   (assets/styles/components/magazine-hub.css) already used for "Autres
+   séries" on single-photo — they run at var(--maxw), not in the récit's
+   680px reading column. */ ?>
+<?php if ( ! empty( $related ) ) : ?>
+	<section class="more-series more-series--recit" aria-labelledby="<?php echo esc_attr( 'article-creations-' . $post_id ); ?>">
+		<div class="mag-sommaire">
+			<h2 id="<?php echo esc_attr( 'article-creations-' . $post_id ); ?>">
+				<?php esc_html_e( 'Cette histoire accompagne', 'sliceofcactus' ); ?>
+			</h2>
+			<span><?php esc_html_e( 'atelier', 'sliceofcactus' ); ?></span>
+		</div>
+
+		<div class="more-series__grid">
+			<?php foreach ( $related as $creation ) : ?>
+				<?php $cover_id = soc_get_creation_cover_id( $creation->ID ); ?>
+				<a class="more-series__card" href="<?php echo esc_url( get_permalink( $creation ) ); ?>">
+					<?php if ( $cover_id ) : ?>
+						<div class="more-series__thumb">
+							<?php
+							echo wp_get_attachment_image(
+								$cover_id,
+								'large',
+								false,
+								array(
+									'class'   => 'more-series__plate',
+									'loading' => 'lazy',
+									'alt'     => '',
+								)
+							);
+							?>
+						</div>
+					<?php endif; ?>
+					<div class="more-series__cap">
+						<span class="more-series__title"><?php echo esc_html( get_the_title( $creation ) ); ?></span>
+						<span class="more-series__n"><?php esc_html_e( 'voir', 'sliceofcactus' ); ?></span>
+					</div>
+				</a>
+			<?php endforeach; ?>
+		</div>
+	</section>
+<?php endif; ?>
+
+<?php if ( ! empty( $related_photos ) ) : ?>
+	<section class="more-series more-series--recit more-series--photos" aria-labelledby="<?php echo esc_attr( 'article-gallery-' . $post_id ); ?>">
+		<div class="mag-sommaire">
+			<h2 id="<?php echo esc_attr( 'article-gallery-' . $post_id ); ?>">
+				<?php esc_html_e( 'Photos associées', 'sliceofcactus' ); ?>
+			</h2>
+			<span>
+				<?php
+				printf(
+					/* translators: %s: number of photo series. */
+					esc_html( _n( '%s série à explorer', '%s séries à explorer', count( $related_photos ), 'sliceofcactus' ) ),
+					esc_html( number_format_i18n( count( $related_photos ) ) )
+				);
+				?>
+			</span>
+		</div>
+
+		<div class="more-series__grid">
+			<?php foreach ( $related_photos as $photo ) : ?>
+				<?php
+				$cover_id = soc_get_photo_cover_id( $photo->ID );
+				$poses    = soc_get_photo_pose_count( $photo->ID );
+				$location = soc_get_photo_location( $photo->ID );
+				$country  = soc_get_photo_country( $photo->ID );
+
+				// Same label ladder as the photo archive's .serie-cell: the place
+				// when the série has one, its narration otherwise.
+				if ( ! empty( $location['name'] ) ) {
+					$place = implode(
+						' · ',
+						array_filter( array( $location['name'], $country ? $country->name : '' ) )
+					);
+				} else {
+					$photo_narrations = soc_get_photo_narrations( $photo->ID );
+					$place            = ! empty( $photo_narrations ) ? $photo_narrations[0]->name : '';
+				}
+
+				$photo_meta = array_filter(
+					array(
+						$place,
+						$poses > 0
+							? sprintf(
+								/* translators: %s: number of poses. */
+								_n( '%s pose', '%s poses', $poses, 'sliceofcactus' ),
+								number_format_i18n( $poses )
+							)
+							: '',
+					)
+				);
+				?>
+				<a class="more-series__card" href="<?php echo esc_url( get_permalink( $photo ) ); ?>">
+					<?php if ( $cover_id ) : ?>
+						<div class="more-series__thumb">
+							<?php
+							echo wp_get_attachment_image(
+								$cover_id,
+								'large',
+								false,
+								array(
+									'class'   => 'more-series__plate',
+									'loading' => 'lazy',
+									'alt'     => '',
+								)
+							);
+							?>
+						</div>
+					<?php endif; ?>
+					<div class="more-series__cap">
+						<span class="more-series__title"><?php echo esc_html( get_the_title( $photo ) ); ?></span>
+						<?php if ( ! empty( $photo_meta ) ) : ?>
+							<span class="more-series__n"><?php echo esc_html( implode( ' · ', $photo_meta ) ); ?></span>
+						<?php endif; ?>
+					</div>
+				</a>
+			<?php endforeach; ?>
+		</div>
+	</section>
+<?php endif; ?>
+
+<?php if ( ! empty( $resonance_groups ) ) : ?>
+	<?php /* Outside <article> on purpose: the mosaic runs at the shared
+	   .rmosaic-section width, not the 680px column the récit's own body is
+	   set in. */ ?>
+	<section class="article__resonances rmosaic-section" aria-labelledby="<?php echo esc_attr( 'article-resonances-' . $post_id ); ?>">
+		<div class="article__resonances-label" id="<?php echo esc_attr( 'article-resonances-' . $post_id ); ?>">
+			<?php esc_html_e( 'Résonne avec', 'sliceofcactus' ); ?>
+		</div>
+
+		<div class="rmosaic">
+			<?php foreach ( $resonance_groups as $group ) : ?>
+				<div class="rmosaic-card<?php echo count( $group['items'] ) >= 2 ? ' rmosaic-card--tall' : ''; ?>">
+					<h3 class="rmosaic-card__name"><?php echo esc_html( $group['term']->name ); ?></h3>
+					<?php if ( '' !== $group['intro'] ) : ?>
+						<p class="rmosaic-card__intro"><?php echo esc_html( $group['intro'] ); ?></p>
+					<?php endif; ?>
+					<ul class="rmosaic-card__list">
+						<?php foreach ( $group['items'] as $entry ) : ?>
+							<li>
+								<a href="<?php echo esc_url( get_permalink( $entry['post'] ) ); ?>">
+									<span class="rmosaic-card__kind"><?php echo esc_html( $entry['kind'] ); ?></span>
+									<span class="rmosaic-card__title"><?php echo esc_html( get_the_title( $entry['post'] ) ); ?></span>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+					<a class="rmosaic-card__cta" href="<?php echo esc_url( get_term_link( $group['term'] ) ); ?>">
+						<?php esc_html_e( 'Tout découvrir →', 'sliceofcactus' ); ?>
+					</a>
+				</div>
+			<?php endforeach; ?>
+		</div>
+	</section>
+<?php endif; ?>
+
+<?php if ( $archive_url ) : ?>
+	<a class="back-link back-link--center" href="<?php echo esc_url( $archive_url ); ?>">
+		<?php esc_html_e( '← Retour aux récits', 'sliceofcactus' ); ?>
+	</a>
+<?php endif; ?>

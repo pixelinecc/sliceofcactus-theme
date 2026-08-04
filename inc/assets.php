@@ -64,6 +64,26 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
+	// Résonance mosaic (assets/styles/components/resonance-mosaic.css): the
+	// À propos page's "Les résonances" cards, reused as-is by the single
+	// récit's "Résonne avec" — see that component's own docblock.
+	$needs_resonance_mosaic = is_singular( 'recit' ) || is_page_template( 'page-a-propos.php' );
+	$resonance_mosaic_deps  = array( 'sliceofcactus' );
+
+	if ( $needs_resonance_mosaic ) {
+		$resonance_mosaic_style_path = get_theme_file_path( '/assets/styles/components/resonance-mosaic.css' );
+
+		if ( is_readable( $resonance_mosaic_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-resonance-mosaic',
+				get_theme_file_uri( '/assets/styles/components/resonance-mosaic.css' ),
+				array( 'sliceofcactus' ),
+				(string) filemtime( $resonance_mosaic_style_path )
+			);
+			$resonance_mosaic_deps[] = 'sliceofcactus-resonance-mosaic';
+		}
+	}
+
 	$needs_lightbox = is_singular( 'photo' ) || is_singular( 'creation' ) || is_front_page() || is_page_template( 'page-projet-52.php' );
 	$lightbox_deps  = array( 'sliceofcactus' );
 
@@ -159,36 +179,20 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-single-recit',
 				get_theme_file_uri( '/assets/styles/templates/single-recit.css' ),
-				$recit_deps,
+				array_merge( $recit_deps, $resonance_mosaic_deps ),
 				(string) filemtime( $recit_style_path )
 			);
 		}
 	}
 
 	if ( is_page_template( 'page-a-propos.php' ) ) {
-		// Reuses single-recit.css wholesale (.article, .article__masthead*,
-		// .article__body, .article__resonance-card) instead of redefining
-		// that markup a second time — see page-a-propos.php's own docblock.
-		$about_recit_style_path = get_theme_file_path( '/assets/styles/templates/single-recit.css' );
-		$about_deps             = $magazine_hub_deps;
-
-		if ( is_readable( $about_recit_style_path ) ) {
-			wp_enqueue_style(
-				'sliceofcactus-single-recit',
-				get_theme_file_uri( '/assets/styles/templates/single-recit.css' ),
-				$magazine_hub_deps,
-				(string) filemtime( $about_recit_style_path )
-			);
-			$about_deps[] = 'sliceofcactus-single-recit';
-		}
-
 		$about_style_path = get_theme_file_path( '/assets/styles/templates/page-a-propos.css' );
 
 		if ( is_readable( $about_style_path ) ) {
 			wp_enqueue_style(
 				'sliceofcactus-page-a-propos',
 				get_theme_file_uri( '/assets/styles/templates/page-a-propos.css' ),
-				array_merge( $about_deps, $panels_deps ),
+				array_merge( $magazine_hub_deps, $panels_deps, $resonance_mosaic_deps ),
 				(string) filemtime( $about_style_path )
 			);
 		}

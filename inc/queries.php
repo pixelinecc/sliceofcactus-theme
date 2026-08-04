@@ -904,14 +904,18 @@ function soc_get_resonance_items( WP_Term $term, string $post_type ): array {
  * Gets the other published posts (any type) sharing each of a post's
  * résonance terms, grouped by term.
  *
- * Powers the "Résonne avec" cards on the single récit template: each term
- * carries its own soc_resonance_color (ACF field on the resonance taxonomy),
- * and terms with no other post attached are dropped rather than shown empty.
+ * Powers the "Résonne avec" mosaic on the single récit template, presented
+ * with the same .rmosaic* cards as the À propos page: each term carries its
+ * own soc_resonance_intro (ACF field on the resonance taxonomy) and only its
+ * $limit most recent other posts, pooled across types and sorted by date —
+ * not one-per-type. Terms with no other post attached are dropped rather
+ * than shown empty.
  *
  * @param int $post_id Optional post ID. Defaults to the current post.
- * @return array<int, array{term: WP_Term, color: string, items: array<int, array{post: WP_Post, kind: string}>}>
+ * @param int $limit    Maximum items per term.
+ * @return array<int, array{term: WP_Term, intro: string, items: array<int, array{post: WP_Post, kind: string}>}>
  */
-function soc_get_resonance_groups( int $post_id = 0 ): array {
+function soc_get_resonance_groups( int $post_id = 0, int $limit = 3 ): array {
 	$post_id = $post_id ?: get_the_ID();
 
 	if ( ! $post_id ) {
@@ -952,12 +956,18 @@ function soc_get_resonance_groups( int $post_id = 0 ): array {
 			continue;
 		}
 
-		$color = function_exists( 'get_field' ) ? get_field( 'soc_resonance_color', 'resonance_' . $term->term_id ) : '';
+		usort(
+			$items,
+			static fn( array $a, array $b ): int
+				=> strtotime( $b['post']->post_date ) <=> strtotime( $a['post']->post_date )
+		);
+
+		$intro = function_exists( 'get_field' ) ? get_field( 'soc_resonance_intro', 'resonance_' . $term->term_id ) : '';
 
 		$groups[] = array(
 			'term'  => $term,
-			'color' => is_string( $color ) ? $color : '',
-			'items' => $items,
+			'intro' => is_string( $intro ) ? $intro : '',
+			'items' => array_slice( $items, 0, max( 1, $limit ) ),
 		);
 	}
 

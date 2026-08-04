@@ -7,10 +7,10 @@
  * assets/styles/components/magazine-hub.css, sitting directly on the body's
  * own accent-gradient background (assets/styles/base/elements.css) — no
  * paper flip, no per-section background override, only its own --accent /
- * --accent-deep pair set on the body in page-a-propos.css. The one reused
- * piece from outside that family is .article__resonance-card
- * (single-recit.css), for "Trois formes" — already exactly the small
- * colored-border card this page needs.
+ * --accent-deep pair set on the body in page-a-propos.css. The "Résonances"
+ * mosaic is the shared .rmosaic* component
+ * (assets/styles/components/resonance-mosaic.css), also used by the single
+ * récit's "Résonne avec".
  *
  * "La démarche" is its own sticky-scroll section (.about-sequence): a
  * visual that swaps gradient and number as each step scrolls into view.
@@ -230,14 +230,14 @@ while ( have_posts() ) :
 
 
 		<?php if ( ! empty( $resonance_terms ) ) : ?>
-			<section class="about-resonances-section" aria-labelledby="about-resonances-heading" data-reveal>
+			<section class="rmosaic-section" aria-labelledby="about-resonances-heading" data-reveal>
 				<h2 id="about-resonances-heading" class="about-kicker">
 					<?php esc_html_e( 'Les résonances', 'sliceofcactus' ); ?>
 				</h2>
-				<p class="about-resonances-lead">
+				<p class="rmosaic__lead">
 					<?php esc_html_e( 'Les résonances ne sont pas des catégories : elles relient une photographie, un récit ou un dessin par ce qu\'ils évoquent, au-delà du sujet qui les rassemble.', 'sliceofcactus' ); ?>
 				</p>
-				<div class="about-resonances">
+				<div class="rmosaic">
 					<?php
 					$resonance_kind_labels = array(
 						'recit'    => __( 'Récit', 'sliceofcactus' ),

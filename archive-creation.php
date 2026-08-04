@@ -32,7 +32,7 @@ $total = count( $items );
 
 	<div class="mag-runhead">
 		<span><?php esc_html_e( 'Slice of Cactus — Atelier', 'sliceofcactus' ); ?></span>
-		<span><?php esc_html_e( 'Trait du camélon · hors label 36 poses', 'sliceofcactus' ); ?></span>
+		<span><?php esc_html_e( 'Trait du camélon', 'sliceofcactus' ); ?></span>
 		<span><?php esc_html_e( 'dessins & coloriages', 'sliceofcactus' ); ?></span>
 	</div>
 

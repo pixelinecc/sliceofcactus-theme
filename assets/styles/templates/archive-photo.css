@@ -15,8 +15,8 @@
  */
 body.post-type-archive-photo,
 body.tax-narration {
-	--accent: #8b8d3f;
-	--accent-deep: #64662c;
+	--accent: #27513e;
+	--accent-deep: #193528;
 }
 .serie-grid {
 	display: grid;

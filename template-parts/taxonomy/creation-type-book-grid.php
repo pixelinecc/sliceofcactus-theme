@@ -32,9 +32,9 @@ $total         = count( $items );
 			);
 			?>
 		</span>
-		<span><?php esc_html_e( 'Trait du camélon · hors label 36 poses', 'sliceofcactus' ); ?></span>
+		<span><?php esc_html_e( 'Trait du camélon', 'sliceofcactus' ); ?></span>
 		<span>
-			<?php echo $is_coloriage ? esc_html__( 'tous les livres à colorier', 'sliceofcactus' ) : esc_html__( 'Carnet de croquis', 'sliceofcactus' ); ?>
+			<?php echo $is_coloriage ? esc_html__( 'tous les livres coloriés', 'sliceofcactus' ) : esc_html__( 'Carnet de croquis', 'sliceofcactus' ); ?>
 		</span>
 	</div>
 

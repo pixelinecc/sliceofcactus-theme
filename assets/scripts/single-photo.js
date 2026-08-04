@@ -22,6 +22,7 @@
 		}
 
 		let resizeFrame = 0;
+		const separators = [];
 
 		const items = figures.map((figure, index) => {
 			const image = figure.querySelector('img');
@@ -61,6 +62,7 @@
 				separatorLabel.textContent = `Pellicule ${filmNumber}`;
 				separator.append(separatorLabel);
 				figure.before(separator);
+				separators.push(separator);
 			}
 
 			return {
@@ -87,6 +89,7 @@
 
 		const layout = () => {
 			figures.forEach(resizeItem);
+			separators.forEach(resizeItem);
 		};
 
 		figures.forEach((figure) => {

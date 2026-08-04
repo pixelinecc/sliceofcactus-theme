@@ -16,16 +16,6 @@ body.tax-resonance {
 	--accent-deep: #201d1b;
 }
 
-/*
- * .view-toggle's default background (magazine-hub.css) is a barely-there
- * dark tint, meant for lighter --accent pages — against this dark #312c2a
- * it loses almost all contrast with the ink-colored tab text.
- */
-.soc-resonances .view-toggle,
-.soc-resonance-archive .view-toggle {
-	background: var(--paper);
-}
-
 .resonance-row {
 	margin-top: 3rem;
 }

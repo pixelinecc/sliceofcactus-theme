@@ -27,6 +27,18 @@ body.soc-rubrique-coloriage {
 	margin-right: var(--gutter);
 }
 
+/*
+ * .mag-masthead__title's default clamp (magazine-hub.css) is sized for the
+ * one- or two-word rubrique headers it was built for (Photo, Atelier…).
+ * A creation's own title runs through the same markup and can be a full
+ * sentence, so it needs the article-scale clamp used by single-recit.css
+ * instead, or it renders gigantic and unreadable.
+ */
+.soc-creation .mag-masthead__title {
+	font-size: clamp(2.4rem, 6vw, 6.2rem);
+	text-wrap: balance;
+}
+
 .book-credit {
 	display: flex;
 	align-items: center;

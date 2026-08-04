@@ -40,22 +40,14 @@ $suggestions    = soc_get_photo_suggestions( $post_id, 6 );
 $related_recits = soc_get_photo_related_recits( $post_id );
 $sheet_id       = 'soc-photo-sheet-' . $post_id;
 $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
+
+$archive_back_label = __( '← Retour aux photos', 'sliceofcactus' );
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'soc-photo soc-photo--contact-sheet' ); ?>>
 	<header class="serie-hero">
 		<?php if ( $archive_url ) : ?>
 			<a class="serie-hero__back" href="<?php echo esc_url( $archive_url ); ?>">
-				<?php if ( $is_color_your_life ) : ?>
-					<?php esc_html_e( '← Color Your Life', 'sliceofcactus' ); ?>
-				<?php else : ?>
-					<?php
-					printf(
-						/* translators: %s: narration name. */
-						esc_html__( '← %s · 36 poses', 'sliceofcactus' ),
-						esc_html( $active_narration ? $active_narration->name : __( 'Photo', 'sliceofcactus' ) )
-					);
-					?>
-				<?php endif; ?>
+				<?php echo esc_html( $archive_back_label ); ?>
 			</a>
 		<?php endif; ?>
 
@@ -193,6 +185,17 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 	<?php endif; ?>
 
 	<?php if ( ! empty( $suggestions ) ) : ?>
+		<?php if ( $archive_url ) : ?>
+			<div class="serie-map-nav">
+				<a class="back-link" href="<?php echo esc_url( $archive_url ); ?>">
+					<?php echo esc_html( $archive_back_label ); ?>
+				</a>
+				<a class="serie-map-nav__cta" href="<?php echo esc_url( home_url( '/voyage-carte/' ) ); ?>">
+					<?php esc_html_e( 'Voir la carte', 'sliceofcactus' ); ?>
+				</a>
+			</div>
+		<?php endif; ?>
+
 		<section class="more-series" aria-labelledby="<?php echo esc_attr( 'soc-more-photos-' . $post_id ); ?>">
 			<div class="mag-sommaire">
 				<h2 id="<?php echo esc_attr( 'soc-more-photos-' . $post_id ); ?>">
@@ -232,6 +235,12 @@ $lightbox_id    = 'soc-photo-lightbox-' . $post_id;
 					</a>
 				<?php endforeach; ?>
 			</div>
+
+			<?php if ( $archive_url ) : ?>
+				<a class="back-link back-link--center" href="<?php echo esc_url( $archive_url ); ?>">
+					<?php echo esc_html( $archive_back_label ); ?>
+				</a>
+			<?php endif; ?>
 		</section>
 	<?php endif; ?>
 

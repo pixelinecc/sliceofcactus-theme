@@ -288,6 +288,48 @@
 	padding-top: .2rem;
 }
 
+/*
+ * Map discovery link: rides the same row as the top back-link (before
+ * "Autres séries") instead of its own section, so every single-photo page
+ * surfaces /voyage-carte/ without adding page weight below the fold.
+ */
+.serie-map-nav {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	max-width: var(--maxw);
+	margin: 1rem auto 0;
+	padding: 0 var(--gutter);
+}
+
+.serie-map-nav .back-link {
+	margin: 0;
+}
+
+.serie-map-nav__cta {
+	display: inline-flex;
+	align-items: center;
+	padding: .5rem 1.1rem;
+	border: 1px solid rgb(255 255 255 / 35%);
+	border-radius: 40px;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background .3s, color .3s, border-color .3s;
+}
+
+.serie-map-nav__cta:hover,
+.serie-map-nav__cta:focus-visible {
+	border-color: var(--paper);
+	background: var(--paper);
+	color: var(--ink);
+}
+
 @media (max-width: 900px) {
 	.sheet-grid {
 		grid-template-columns: repeat(4, 1fr);
@@ -315,6 +357,7 @@
 	.sheet-grid .pose,
 	.sheet-grid .pose img,
 	.more-series__plate,
+	.serie-map-nav__cta,
 	.serie-recit-stamp {
 		transition-duration: .01ms;
 	}

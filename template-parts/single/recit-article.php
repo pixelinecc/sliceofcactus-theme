@@ -267,4 +267,10 @@ if ( ! empty( $related_photos ) ) {
 			</div>
 		</section>
 	<?php endif; ?>
+
+	<?php if ( $archive_url ) : ?>
+		<a class="back-link back-link--center" href="<?php echo esc_url( $archive_url ); ?>">
+			<?php esc_html_e( '← Retour aux récits', 'sliceofcactus' ); ?>
+		</a>
+	<?php endif; ?>
 </article>

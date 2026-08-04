@@ -200,6 +200,16 @@
 	opacity: 1;
 }
 
+/* Centered .back-link, repeated around the more-series/"Autres…" section
+   (and at the foot of récit, which has no such section) so a reader who
+   scrolled past the top .back-link still has an easy way back to the
+   archive without scrolling back up. */
+.back-link--center {
+	display: flex;
+	justify-content: center;
+	margin: 2.4rem 0 0;
+}
+
 .more-series {
 	max-width: var(--maxw);
 	margin: 4.5rem auto;

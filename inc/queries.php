@@ -180,16 +180,19 @@ function soc_compare_photos_by_year_desc( WP_Post $a, WP_Post $b ): int {
  * Gets the creations displayed after a single creation.
  *
  * Mirrors the `others` list of sliceofcactus-astro's dessin/[id].astro and
- * coloriage/[id].astro: every other creation sharing the same rubrique, with
- * no limit or shuffling (no manual curation, matching Astro).
+ * coloriage/[id].astro: every other creation sharing the same rubrique,
+ * newest first, capped like soc_get_photo_suggestions() so a large rubrique
+ * doesn't turn the more-series grid into a full archive listing.
  *
  * @param int $post_id Optional current creation ID.
+ * @param int $limit   Maximum number of results.
  * @return WP_Post[]
  */
-function soc_get_creation_suggestions( int $post_id = 0 ): array {
+function soc_get_creation_suggestions( int $post_id = 0, int $limit = 6 ): array {
 	$post_id = $post_id ?: get_the_ID();
+	$limit   = max( 0, min( 12, $limit ) );
 
-	if ( ! $post_id || 'creation' !== get_post_type( $post_id ) ) {
+	if ( ! $post_id || 0 === $limit || 'creation' !== get_post_type( $post_id ) ) {
 		return array();
 	}
 
@@ -203,7 +206,7 @@ function soc_get_creation_suggestions( int $post_id = 0 ): array {
 		array(
 			'post_type'           => 'creation',
 			'post_status'         => 'publish',
-			'posts_per_page'      => -1,
+			'posts_per_page'      => $limit,
 			'post__not_in'        => array( $post_id ),
 			'orderby'             => 'date',
 			'order'               => 'DESC',

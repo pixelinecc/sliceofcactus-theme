@@ -23,11 +23,14 @@ $accroche       = soc_get_creation_intro( $post_id );
 $resonances     = get_the_terms( $post_id, 'resonance' );
 $resonances     = is_array( $resonances ) ? $resonances : array();
 $gallery_ids    = soc_get_creation_gallery_ids( $post_id );
-$suggestions    = soc_get_creation_suggestions( $post_id );
+$suggestions    = soc_get_creation_suggestions( $post_id, 6 );
 $related_recits = soc_get_creation_related_recits( $post_id );
 $accent_color   = soc_get_creation_accent_color( $post_id );
 $sheet_id       = 'soc-creation-sheet-' . $post_id;
 $lightbox_id    = 'soc-creation-lightbox-' . $post_id;
+
+$rubrique_back_url   = soc_get_creation_rubrique_archive_link( $is_coloriage ? 'coloriage' : 'dessin' );
+$rubrique_back_label = $is_coloriage ? __( '← Retour aux coloriages', 'sliceofcactus' ) : __( '← Retour aux dessins', 'sliceofcactus' );
 
 if ( $is_coloriage ) {
 	$card_by      = __( 'feutres & crayons', 'sliceofcactus' );
@@ -61,18 +64,15 @@ $lead_rest   = function_exists( 'mb_substr' ) ? mb_substr( $accroche, 1 ) : subs
 		<span>
 			<?php
 			echo $is_coloriage
-				? esc_html__( 'Carnet de voyage · hors label 36 poses', 'sliceofcactus' )
-				: esc_html__( 'Trait du camélon · hors label 36 poses', 'sliceofcactus' );
+				? esc_html__( 'Trait du camélon', 'sliceofcactus' )
+				: esc_html__( 'Trait du camélon', 'sliceofcactus' );
 			?>
 		</span>
 		<span><?php the_title(); ?></span>
 	</div>
 
-	<a
-		class="back-link"
-		href="<?php echo esc_url( soc_get_creation_rubrique_archive_link( $is_coloriage ? 'coloriage' : 'dessin' ) ); ?>"
-	>
-		<?php echo $is_coloriage ? esc_html__( '‹ Tous les coloriages', 'sliceofcactus' ) : esc_html__( '‹ Toutes les techniques', 'sliceofcactus' ); ?>
+	<a class="back-link" href="<?php echo esc_url( $rubrique_back_url ); ?>">
+		<?php echo esc_html( $rubrique_back_label ); ?>
 	</a>
 
 	<header class="mag-masthead">
@@ -192,6 +192,10 @@ $lead_rest   = function_exists( 'mb_substr' ) ? mb_substr( $accroche, 1 ) : subs
 	</section>
 
 	<?php if ( ! empty( $suggestions ) ) : ?>
+		<a class="back-link back-link--center" href="<?php echo esc_url( $rubrique_back_url ); ?>">
+			<?php echo esc_html( $rubrique_back_label ); ?>
+		</a>
+
 		<section class="more-series">
 			<div class="mag-sommaire">
 				<h2>
@@ -251,6 +255,10 @@ $lead_rest   = function_exists( 'mb_substr' ) ? mb_substr( $accroche, 1 ) : subs
 					</a>
 				<?php endforeach; ?>
 			</div>
+
+			<a class="back-link back-link--center" href="<?php echo esc_url( $rubrique_back_url ); ?>">
+				<?php echo esc_html( $rubrique_back_label ); ?>
+			</a>
 		</section>
 	<?php endif; ?>
 

@@ -549,13 +549,13 @@ function soc_get_color_your_life_series(): array {
  * points (one per distinct location name) and the flat list of every
  * series it contains.
  *
- * A "voyage" series is only placed on the map once it carries both a
- * location (name + coordinates) and a "pays" term: the country is what
- * the map now groups and filters by, so a series without one can't be
- * placed. Series within a country (and within each point) are sorted by
- * most recent photo_year first, falling back to publish date via
- * soc_get_photo_year() — the photographic chronology of the trip, not
- * necessarily the order series were published in.
+ * Any photo series is placed on the map once it carries both a location
+ * (name + coordinates) and a "pays" term — narration/category doesn't
+ * matter, the country is what the map now groups and filters by, so a
+ * series without one can't be placed. Series within a country (and within
+ * each point) are sorted by most recent photo_year first, falling back to
+ * publish date via soc_get_photo_year() — the photographic chronology of
+ * the trip, not necessarily the order series were published in.
  *
  * @return array<int, array{name: string, slug: string, points: array<int, array{name: string, lat: float, lon: float, series: WP_Post[]}>, series: WP_Post[]}>
  */
@@ -569,13 +569,6 @@ function soc_get_voyage_map_destinations(): array {
 			'order'               => 'DESC',
 			'ignore_sticky_posts' => true,
 			'no_found_rows'       => true,
-			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-				array(
-					'taxonomy' => 'narration',
-					'field'    => 'slug',
-					'terms'    => array( 'voyage' ),
-				),
-			),
 		)
 	);
 

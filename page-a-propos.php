@@ -173,6 +173,47 @@ while ( have_posts() ) :
 			<?php the_content(); ?>
 		</div>
 
+		<?php
+		// Palette: every rubrique accent (--accent-*, minus their --accent-deep-*
+		// counterparts) from assets/styles/settings/tokens.css, the theme's only
+		// source for these colors. Hex text is filled in by JS
+		// (assets/scripts/page-a-propos.js) reading each swatch's computed
+		// background — so this list only has to name the CSS var, never its value.
+		$palette = array(
+			array( 'var' => '--accent', 'label' => __( 'Signature', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-photo', 'label' => __( 'Photo', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-carte', 'label' => __( 'Carte', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-color-your-life', 'label' => __( 'Color Your Life', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-p52', 'label' => __( 'Projet 52', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-atelier', 'label' => __( 'Atelier', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-atelier-dessin', 'label' => __( 'Atelier · dessin', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-atelier-coloriage', 'label' => __( 'Atelier · coloriage', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-apropos', 'label' => __( 'À propos', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-recit', 'label' => __( 'Récits', 'sliceofcactus' ) ),
+			array( 'var' => '--accent-resonance', 'label' => __( 'Résonances', 'sliceofcactus' ) ),
+		);
+		?>
+		<section class="about-palette" aria-labelledby="about-palette-heading" data-reveal>
+			<div class="about-palette__in">
+				<div class="about-palette__intro">
+					<h2 id="about-palette-heading" class="about-kicker">
+						<?php esc_html_e( 'La palette', 'sliceofcactus' ); ?>
+					</h2>
+					<p class="about-palette__lead">
+						<?php esc_html_e( 'Une couleur par rubrique, jamais interchangeable.', 'sliceofcactus' ); ?>
+					</p>
+				</div>
+				<div class="about-palette__grid" data-palette>
+					<?php foreach ( $palette as $swatch ) : ?>
+						<div class="about-palette__swatch" style="background:var(<?php echo esc_attr( $swatch['var'] ); ?>)">
+							<span class="about-palette__hex" data-hex></span>
+							<span class="about-palette__label"><?php echo esc_html( $swatch['label'] ); ?></span>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		</section>
+
 		<section class="about-sequence" aria-labelledby="about-sequence-heading">
 			<div class="about-sequence__in">
 				<div class="about-sequence__sticky">

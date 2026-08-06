@@ -91,6 +91,72 @@ body.page-template-page-a-propos-php {
     .about-sequence-item { min-height: auto; padding: 48px 0; }
 }
 
+/* La palette: one swatch per rubrique accent, hex text filled in by JS
+   (assets/scripts/page-a-propos.js) reading each swatch's own computed
+   background — tokens.css stays the only place an actual hex value lives. */
+.about-palette {
+	max-width: var(--maxw);
+	margin: 4.5rem auto 4.5rem;
+	padding: 0 var(--gutter);
+}
+
+.about-palette__in {
+	display: grid;
+	grid-template-columns: .9fr 1.6fr;
+	gap: clamp(30px, 6vw, 90px);
+	align-items: start;
+}
+
+.about-palette__lead {
+	max-width: 32ch;
+	margin-top: .6rem;
+	color: rgb(255 255 255 / 74%);
+	font-family: var(--font-display);
+	font-size: 1.1rem;
+}
+
+.about-palette__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+	gap: .8rem;
+}
+
+@media (max-width: 860px) {
+	.about-palette__in {
+		grid-template-columns: 1fr;
+	}
+}
+
+.about-palette__swatch {
+	aspect-ratio: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: .7rem;
+	border-radius: 4px;
+}
+
+.about-palette__hex {
+	font-family: var(--font-mono);
+	font-size: .78rem;
+	letter-spacing: .02em;
+	text-transform: uppercase;
+}
+
+.about-palette__label {
+	font-family: var(--font-mono);
+	font-size: .68rem;
+	letter-spacing: .02em;
+}
+
+/* Text color per swatch is set by JS (assets/scripts/page-a-propos.js) after
+   it measures each background's luminance — some rubrique accents are too
+   light for --paper text to stay readable. */
+.about-palette__swatch--on-dark .about-palette__hex { color: var(--paper); }
+.about-palette__swatch--on-dark .about-palette__label { color: rgb(255 255 255 / 74%); }
+.about-palette__swatch--on-light .about-palette__hex { color: var(--ink); }
+.about-palette__swatch--on-light .about-palette__label { color: rgb(28 28 35 / 74%); }
+
 /* Trois formes: .universe/.upanel* (assets/styles/components/panels.css) —
    same panels as the front page's "Trois univers" section. This override
    just trims .universe's own 7rem top padding to match this page's

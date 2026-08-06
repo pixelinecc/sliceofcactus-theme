@@ -392,6 +392,31 @@ function soc_darken_hex( string $hex, float $amount = 0.35 ): string {
 }
 
 /**
+ * Picks a readable text modifier ("on-light" or "on-dark") for a swatch of
+ * this hex color, from its perceived (WCAG-ish) luminance. Used wherever a
+ * hex value becomes its own background — a récit's soc_recit_palette
+ * (template-parts/single/recit-article.php) — so the label text stays
+ * legible without a hand-kept light/dark list per color.
+ *
+ * @param string $hex Hex color, with or without a leading #.
+ * @return string "on-light", or "on-dark" as the default/fallback.
+ */
+function soc_get_readable_text_modifier( string $hex ): string {
+	$hex = ltrim( trim( $hex ), '#' );
+
+	if ( 6 !== strlen( $hex ) || ! ctype_xdigit( $hex ) ) {
+		return 'on-dark';
+	}
+
+	$r         = hexdec( substr( $hex, 0, 2 ) );
+	$g         = hexdec( substr( $hex, 2, 2 ) );
+	$b         = hexdec( substr( $hex, 4, 2 ) );
+	$luminance = ( 0.299 * $r + 0.587 * $g + 0.114 * $b ) / 255;
+
+	return $luminance > 0.6 ? 'on-light' : 'on-dark';
+}
+
+/**
  * Gets the default accent color of a narration (soc_narration_accent ACF
  * field on the narration taxonomy), e.g. the distinct tone given to
  * "voyage" or "lifestyle" series. Lets editors add a narration and give it

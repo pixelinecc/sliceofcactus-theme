@@ -17,6 +17,13 @@
  * The "Résonne avec" cards at the foot of the article are the shared
  * .rmosaic* mosaic (assets/styles/components/resonance-mosaic.css), same
  * presentation as the À propos page.
+ *
+ * .recit-palette (soc_recit_palette ACF field, template-parts/single/
+ * recit-article.php): optional, shown once right after the body, still
+ * inside .article so it sits in the same 680px reading column as the text.
+ * Text color per swatch is a PHP-side modifier class, computed from the
+ * swatch's own hex luminance — same approach as the À propos page's
+ * palette, minus the JS (ACF already gives the literal hex here).
  */
 
 .soc-recit-main {
@@ -428,6 +435,71 @@
  * À propos page: dark --ink cards carrying their own background, so they
  * hold on this template's flat paper body without any recolouring.
  */
+
+.recit-palette {
+	margin: 4rem auto 0;
+}
+
+.recit-palette__title {
+	margin-bottom: 1.2rem;
+	color: var(--grey);
+	font-family: var(--font-mono);
+	font-size: .68rem;
+	letter-spacing: .18em;
+	text-transform: uppercase;
+}
+
+.recit-palette__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+	gap: .8rem;
+}
+
+/* Mini variant: a plain row of small squares under the "planche insérée"
+   visual (template-parts/single/recit-article.php) — no title, no hex/label
+   text, just a quick color cue right under the photo it echoes. */
+.recit-palette--mini {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: .3rem;
+    margin: -1.2rem 0 1rem;
+    justify-content: space-evenly;
+}
+
+.recit-palette--mini .recit-palette__swatch {
+    width: 50px;
+    height: 8px;
+	aspect-ratio: 1;
+	padding: 0;
+	border-radius: 2px;
+}
+
+.recit-palette__swatch {
+	aspect-ratio: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: .7rem;
+	border-radius: 4px;
+}
+
+.recit-palette__hex {
+	font-family: var(--font-mono);
+	font-size: .78rem;
+	letter-spacing: .02em;
+	text-transform: uppercase;
+}
+
+.recit-palette__label {
+	font-family: var(--font-mono);
+	font-size: .68rem;
+	letter-spacing: .02em;
+}
+
+.recit-palette__swatch--on-dark .recit-palette__hex { color: var(--paper); }
+.recit-palette__swatch--on-dark .recit-palette__label { color: rgb(255 255 255 / 74%); }
+.recit-palette__swatch--on-light .recit-palette__hex { color: var(--ink); }
+.recit-palette__swatch--on-light .recit-palette__label { color: rgb(28 28 35 / 74%); }
 
 /*
  * Quick-access résonance tags before the related-content galleries: shared

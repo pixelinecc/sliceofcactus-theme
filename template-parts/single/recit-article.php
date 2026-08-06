@@ -33,6 +33,8 @@ $resonance_groups = soc_get_resonance_groups( $post_id );
 $related          = soc_get_recit_related_creations( $post_id );
 $related_photos   = soc_get_recit_photos( $post_id );
 $reading_minutes  = soc_get_recit_reading_minutes( $post_id );
+$palette          = get_field( 'soc_recit_palette' );
+$palette          = ! empty( $palette ) ? $palette : array();
 
 $use_cover  = $has_hero_image && 'cover' === $hero_layout;
 $use_plate  = $has_hero_image && 'plate' === $hero_layout;
@@ -111,6 +113,20 @@ if ( ! empty( $related_photos ) ) {
 					<?php echo get_the_post_thumbnail( $post_id, 'large' ); ?>
 				</div>
 			</figure>
+			<?php if ( ! empty( $palette ) ) : ?>
+				<div class="recit-palette recit-palette--mini">
+					<?php foreach ( $palette as $swatch ) : ?>
+						<?php
+						$hex = is_string( $swatch['hex'] ?? null ) ? $swatch['hex'] : '';
+
+						if ( '' === $hex ) {
+							continue;
+						}
+						?>
+						<div class="recit-palette__swatch" style="background:<?php echo esc_attr( $hex ); ?>"></div>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
 			<?php
 			$plate_html    = ob_get_clean();
 			$content_html  = apply_filters( 'the_content', get_the_content() );
@@ -146,6 +162,31 @@ if ( ! empty( $related_photos ) ) {
 			<?php the_content(); ?>
 		<?php endif; ?>
 	</div>
+
+	<?php if ( ! empty( $palette ) ) : ?>
+		<section class="recit-palette" aria-labelledby="<?php echo esc_attr( 'recit-palette-title-' . $post_id ); ?>">
+			<h2 id="<?php echo esc_attr( 'recit-palette-title-' . $post_id ); ?>" class="recit-palette__title">
+				<?php esc_html_e( 'Palette', 'sliceofcactus' ); ?>
+			</h2>
+			<div class="recit-palette__grid">
+				<?php foreach ( $palette as $swatch ) : ?>
+					<?php
+					$hex = is_string( $swatch['hex'] ?? null ) ? $swatch['hex'] : '';
+
+					if ( '' === $hex ) {
+						continue;
+					}
+					?>
+					<div class="recit-palette__swatch recit-palette__swatch--<?php echo esc_attr( soc_get_readable_text_modifier( $hex ) ); ?>" style="background:<?php echo esc_attr( $hex ); ?>">
+						<span class="recit-palette__hex"><?php echo esc_html( strtoupper( $hex ) ); ?></span>
+						<?php if ( ! empty( $swatch['label'] ) ) : ?>
+							<span class="recit-palette__label"><?php echo esc_html( $swatch['label'] ); ?></span>
+						<?php endif; ?>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</section>
+	<?php endif; ?>
 
 	<?php if ( ! empty( $resonances ) ) : ?>
 		<section class="serie-resonances" aria-label="<?php esc_attr_e( 'Résonances', 'sliceofcactus' ); ?>">

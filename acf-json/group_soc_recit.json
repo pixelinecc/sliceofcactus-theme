@@ -100,6 +100,72 @@
             ],
             "bidirectional": 0,
             "bidirectional_target": []
+        },
+        {
+            "key": "field_soc_recit_palette",
+            "label": "Palette de couleurs",
+            "name": "soc_recit_palette",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Facultatif. Affichée automatiquement après le contenu du récit si des couleurs sont renseignées.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Ajouter une couleur",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_soc_recit_palette_hex",
+                    "label": "Couleur",
+                    "name": "hex",
+                    "aria-label": "",
+                    "type": "color_picker",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "enable_opacity": 0,
+                    "return_format": "string",
+                    "allow_in_bindings": 1,
+                    "show_custom_palette": 0,
+                    "show_color_wheel": 1,
+                    "custom_palette_source": "",
+                    "palette_colors": ""
+                },
+                {
+                    "key": "field_soc_recit_palette_label",
+                    "label": "Nom",
+                    "name": "label",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Facultatif.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "60",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "Bleu océan",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
         }
     ],
     "location": [
@@ -123,5 +189,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785413739
+    "modified": 1786032048
 }

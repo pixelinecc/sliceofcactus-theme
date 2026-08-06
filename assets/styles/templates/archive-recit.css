@@ -9,8 +9,8 @@
 
 body.post-type-archive-recit,
 body.single-recit {
-	--accent: #8B663F;
-	--accent-deep: #523a20;
+	--accent: var(--accent-recit);
+	--accent-deep: var(--accent-deep-recit);
 	background: var(--paper);
 	color: var(--ink);
 }

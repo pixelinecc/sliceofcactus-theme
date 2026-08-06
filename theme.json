@@ -9,44 +9,7 @@
 			"customGradient": false,
 			"defaultPalette": false,
 			"defaultDuotone": false,
-			"defaultGradients": false,
-			"palette": [
-				{
-					"color": "#141210",
-					"name": "Encre",
-					"slug": "ink"
-				},
-				{
-					"color": "#fbeeda",
-					"name": "Papier",
-					"slug": "paper"
-				},
-				{
-					"color": "#F1E6D8",
-					"name": "Papier secondaire",
-					"slug": "paper-2"
-				},
-				{
-					"color": "#E9FF43",
-					"name": "Flash",
-					"slug": "flash"
-				},
-				{
-					"color": "#8b8378",
-					"name": "Gris",
-					"slug": "grey"
-				},
-				{
-					"color": "#12B26A",
-					"name": "Accent",
-					"slug": "accent"
-				},
-				{
-					"color": "#0C7A48",
-					"name": "Accent profond",
-					"slug": "accent-deep"
-				}
-			]
+			"defaultGradients": false
 		},
 		"layout": {
 			"contentSize": "680px",
@@ -64,7 +27,7 @@
 	},
 	"styles": {
 		"color": {
-			"text": "var:preset|color|paper"
+			"text": "#fbeeda"
 		},
 		"elements": {
 			"heading": {

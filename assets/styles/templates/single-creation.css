@@ -13,13 +13,13 @@
  */
 
 body.soc-rubrique-dessin {
-	--accent: #e0592f;
-	--accent-deep: #b23f1c;
+	--accent: var(--accent-atelier-dessin);
+    --accent-deep: var(--accent-deep-atelier-dessin);
 }
 
 body.soc-rubrique-coloriage {
-	--accent: #7c3aed;
-	--accent-deep: #5b27b0;
+	--accent: var(--accent-atelier-coloriage);
+    --accent-deep: var(--accent-deep-atelier-coloriage);
 }
 
 .soc-creation > .mag-sommaire {

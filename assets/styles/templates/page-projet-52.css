@@ -8,8 +8,8 @@
  */
 
 body.page-template-page-projet-52-php {
-	--accent: #c2542e;
-	--accent-deep: #8f3a1e;
+	--accent: var(--accent-p52);
+	--accent-deep: var(--accent-deep-p52);
 }
 
 .p52-head {

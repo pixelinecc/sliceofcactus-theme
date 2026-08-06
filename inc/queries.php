@@ -354,6 +354,46 @@ function soc_get_creation_archive_items( string $rubrique_slug ): array {
 }
 
 /**
+ * Gets the creations tagged with a given medium (technique) term, most
+ * recent first — the medium equivalent of soc_get_creation_archive_items(),
+ * powering the medium taxonomy archive (taxonomy-medium.php). A medium
+ * isn't scoped to one rubrique, so results span both dessin and coloriage,
+ * same as soc_get_creation_archive_series() on the Atelier archive —
+ * filtered to a cover image for the same reason: the book-grid card always
+ * needs one.
+ *
+ * @param WP_Term $term Medium term.
+ * @return WP_Post[]
+ */
+function soc_get_creation_archive_items_by_medium( WP_Term $term ): array {
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'creation',
+			'post_status'         => 'publish',
+			'posts_per_page'      => -1,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'tax_query'           => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'medium',
+					'field'    => 'term_id',
+					'terms'    => array( $term->term_id ),
+				),
+			),
+		)
+	);
+
+	return array_values(
+		array_filter(
+			$query->posts,
+			static fn( WP_Post $item ): bool => soc_get_creation_cover_id( $item->ID ) > 0
+		)
+	);
+}
+
+/**
  * Gets the creations shown on the combined Atelier archive.
  *
  * No Astro equivalent (Astro only has separate dessin/coloriage index

@@ -196,6 +196,37 @@
 	opacity: 1;
 }
 
+@media (max-width: 720px) {
+	.universe__panels {
+		flex-direction: column;
+		height: auto;
+	}
+
+	.upanel,
+	.universe__panels:hover .upanel,
+	.universe__panels .upanel:hover,
+	.universe__panels .upanel:focus-visible {
+		flex: none;
+		height: clamp(280px, 76vw, 420px);
+	}
+
+	.upanel__bg {
+		filter: grayscale(0) brightness(.78);
+		transform: scale(1);
+	}
+
+	.upanel::before {
+		transform: scaleY(1);
+	}
+
+	.upanel__d,
+	.upanel__cta {
+		max-height: none;
+		margin-top: .8rem;
+		opacity: 1;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.upanel,
 	.upanel__bg,

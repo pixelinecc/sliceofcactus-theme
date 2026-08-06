@@ -27,7 +27,7 @@ function soc_enqueue_assets(): void {
 		$style_version
 	);
 
-	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'creation' ) || is_post_type_archive( 'recit' ) || is_tax( 'creation_type' ) || is_tax( 'resonance' ) || is_tax( 'narration' ) || is_page_template( 'page-projet-52.php' ) || is_page_template( 'page-color-your-life.php' ) || is_page_template( 'page-voyage-carte.php' ) || is_page_template( 'page-a-propos.php' ) || is_page_template( 'page-resonances.php' );
+	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'creation' ) || is_post_type_archive( 'recit' ) || is_tax( 'creation_type' ) || is_tax( 'medium' ) || is_tax( 'resonance' ) || is_tax( 'narration' ) || is_page_template( 'page-projet-52.php' ) || is_page_template( 'page-color-your-life.php' ) || is_page_template( 'page-voyage-carte.php' ) || is_page_template( 'page-a-propos.php' ) || is_page_template( 'page-resonances.php' );
 	$magazine_hub_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_magazine_hub ) {
@@ -116,7 +116,7 @@ function soc_enqueue_assets(): void {
 
 	$creation_deps = $magazine_hub_deps;
 
-	if ( is_singular( 'creation' ) || is_tax( 'creation_type' ) ) {
+	if ( is_singular( 'creation' ) || is_tax( 'creation_type' ) || is_tax( 'medium' ) ) {
 		$creation_style_path = get_theme_file_path( '/assets/styles/templates/single-creation.css' );
 
 		if ( is_readable( $creation_style_path ) ) {
@@ -143,7 +143,7 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
-	if ( is_tax( 'creation_type' ) || is_post_type_archive( 'creation' ) ) {
+	if ( is_tax( 'creation_type' ) || is_tax( 'medium' ) || is_post_type_archive( 'creation' ) ) {
 		$creation_type_archive_style_path = get_theme_file_path( '/assets/styles/templates/taxonomy-creation-type.css' );
 
 		if ( is_readable( $creation_type_archive_style_path ) ) {

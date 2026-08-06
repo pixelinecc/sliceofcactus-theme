@@ -15,6 +15,16 @@
  * needed.
  */
 
+body.single-photo {
+	/* Baseline when neither soc_photo_color nor the narration's
+	   soc_narration_accent is set: the Photo rubrique's own accent
+	   (tokens.css), same default as archive-photo.css, instead of falling
+	   through to the site-wide --accent. soc_photo_accent_style() prints
+	   an !important inline override on top of this when a color exists. */
+	--accent: var(--accent-photo);
+	--accent-deep: var(--accent-deep-photo);
+}
+
 .serie-hero {
 	max-width: var(--maxw);
 	margin: 0 auto;

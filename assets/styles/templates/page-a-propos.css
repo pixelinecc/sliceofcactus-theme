@@ -12,11 +12,8 @@
  */
 
 body.page-template-page-a-propos-php {
-	/* Darkened by the same ~28% the other templates apply from their own
-	   --accent to their own --accent-deep (e.g. archive-recit.css,
-	   single-photo.css, single-creation.css). */
-	--accent: #efa9ed;
-	--accent-deep: #ac7aab;
+	--accent: var(--accent-apropos);
+	--accent-deep: var(--accent-deep-apropos);
 }
 
 .about-body {

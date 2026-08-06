@@ -13,8 +13,8 @@
  */
 
 body.page-template-page-voyage-carte-php {
-	--accent: #27513e;
-	--accent-deep: #193528;
+	--accent: var(--accent-carte);
+	--accent-deep: var(--accent-deep-carte);
 }
 
 .map-wrap {

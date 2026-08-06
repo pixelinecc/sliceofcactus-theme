@@ -10,8 +10,8 @@
  */
 
 body.page-template-page-color-your-life-php {
-	--accent: #423F8D;
-	--accent-deep: #272553;
+	--accent: var(--accent-color-your-life);
+	--accent-deep: var(--accent-deep-color-your-life);
 }
 
 .spectrum {

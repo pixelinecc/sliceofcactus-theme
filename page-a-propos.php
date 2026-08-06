@@ -200,6 +200,7 @@ while ( have_posts() ) :
 			</div>
 		</section>
 
+		<?php /*
 		<section class="universe about-forms" id="trois-formes">
 			<div class="section-head">
 				<h2 class="section-head__title" data-reveal><?php esc_html_e( 'Trois formes', 'sliceofcactus' ); ?></h2>
@@ -227,6 +228,7 @@ while ( have_posts() ) :
 				<?php endforeach; ?>
 			</div>
 		</section>
+		*/ ?>
 
 
 		<?php if ( ! empty( $resonance_terms ) ) : ?>

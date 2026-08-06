@@ -1,0 +1,141 @@
+/**
+ * Résonance mosaic: dark --ink cards, all text-only, all paper-toned — no
+ * per-term color, no imagery: up to 3 posts already tagged with a résonance
+ * (any CPT, pooled and sorted by date, not one-per-type), each shown as its
+ * type then its title. Cards with 2+ previews span two grid rows — the only
+ * "hierarchy" here is how much is actually tagged, not an editorial ranking.
+ *
+ * Built for page-a-propos.php's "Les résonances", reused as-is by the single
+ * récit's own "Résonne avec" (template-parts/single/recit-article.php): the
+ * cards carry their own background, so they hold on the about page's accent
+ * gradient and on the récit's flat paper body alike. Only .rmosaic__lead
+ * inherits its color from the surrounding page.
+ */
+
+.rmosaic-section {
+	max-width: var(--maxw);
+	margin: 4rem auto 0;
+	padding: 0 var(--gutter);
+}
+
+.rmosaic__lead {
+	max-width: 60ch;
+	margin-bottom: 2rem;
+	color: inherit;
+	font-family: var(--font-display);
+	font-style: italic;
+	font-size: 1.4rem;
+	line-height: 1.5;
+	opacity: .88;
+}
+
+.rmosaic {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+	grid-auto-rows: 1fr;
+	gap: 2.2rem;
+}
+
+.rmosaic-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+	padding: 2.6rem 2.4rem 2.8rem;
+	border-top: 4px solid var(--flash);
+	background: #312c2a; /* accent de la page résonances (resonances.css) */
+}
+
+.rmosaic-card--tall {
+	grid-row: span 2;
+}
+
+.rmosaic-card__name {
+	color: var(--paper);
+	font-family: var(--font-head);
+	font-size: clamp(2.1rem, 3.6vw, 2.7rem);
+	line-height: .95;
+	text-transform: uppercase;
+}
+
+.rmosaic-card__intro {
+	color: rgb(255 255 255 / 82%);
+	font-family: var(--font-display);
+	font-style: italic;
+	font-size: 1.2rem;
+	line-height: 1.5;
+}
+
+.rmosaic-card__list {
+	display: flex;
+	flex-direction: column;
+	gap: .7rem;
+	margin-top: auto;
+	padding-top: .6rem;
+	list-style: none;
+}
+
+.rmosaic-card__list a {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: .1rem .6rem;
+}
+
+.rmosaic-card__kind {
+	color: var(--flash);
+	font-family: var(--font-mono);
+	font-size: .8rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+
+.rmosaic-card__title {
+	color: var(--paper);
+	font-family: var(--font-display);
+	font-size: 1.15rem;
+	line-height: 1.3;
+	border-bottom: 1px solid rgb(251 238 218 / 35%);
+}
+
+.rmosaic-card__list a:hover .rmosaic-card__title,
+.rmosaic-card__list a:focus-visible .rmosaic-card__title {
+	border-color: var(--paper);
+}
+
+.rmosaic-card__cta {
+	margin-top: .3rem;
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .78rem;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+	transition: opacity .3s;
+}
+
+.rmosaic-card__cta:hover,
+.rmosaic-card__cta:focus-visible {
+	opacity: .7;
+}
+
+@media (max-width: 700px) {
+	.rmosaic {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.rmosaic-card--tall {
+		grid-row: span 1;
+	}
+}
+
+@media (max-width: 480px) {
+	.rmosaic {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.rmosaic-card__cta {
+		transition-duration: .01ms;
+	}
+}

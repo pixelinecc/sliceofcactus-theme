@@ -208,82 +208,71 @@ if ( ! empty( $related_photos ) ) {
 	</section>
 <?php endif; ?>
 
+<?php if ( $archive_url ) : ?>
+	<a class="back-link back-link--center" href="<?php echo esc_url( $archive_url ); ?>">
+		<?php esc_html_e( '← Retour aux récits', 'sliceofcactus' ); ?>
+	</a>
+<?php endif; ?>
+
 <?php if ( ! empty( $related_photos ) ) : ?>
-	<section class="more-series more-series--recit more-series--photos" aria-labelledby="<?php echo esc_attr( 'article-gallery-' . $post_id ); ?>">
-		<div class="mag-sommaire">
-			<h2 id="<?php echo esc_attr( 'article-gallery-' . $post_id ); ?>">
-				<?php esc_html_e( 'Photos associées', 'sliceofcactus' ); ?>
-			</h2>
-			<span>
-				<?php
-				printf(
-					/* translators: %s: number of photo series. */
-					esc_html( _n( '%s série à explorer', '%s séries à explorer', count( $related_photos ), 'sliceofcactus' ) ),
-					esc_html( number_format_i18n( count( $related_photos ) ) )
-				);
-				?>
-			</span>
-		</div>
+	<?php
+	$featured_photo    = $related_photos[0];
+	$secondary_photos  = array_slice( $related_photos, 1 );
+	$featured_cover_id = soc_get_photo_cover_id( $featured_photo->ID );
+	$featured_poses    = soc_get_photo_pose_count( $featured_photo->ID );
+	$featured_location = soc_get_photo_location( $featured_photo->ID );
+	$featured_country  = soc_get_photo_country( $featured_photo->ID );
 
-		<div class="more-series__grid">
-			<?php foreach ( $related_photos as $photo ) : ?>
-				<?php
-				$cover_id = soc_get_photo_cover_id( $photo->ID );
-				$poses    = soc_get_photo_pose_count( $photo->ID );
-				$location = soc_get_photo_location( $photo->ID );
-				$country  = soc_get_photo_country( $photo->ID );
+	// Same label ladder as the photo archive's .serie-cell: the place when
+	// the série has one, its narration otherwise.
+	if ( ! empty( $featured_location['name'] ) ) {
+		$featured_place = implode(
+			' · ',
+			array_filter( array( $featured_location['name'], $featured_country ? $featured_country->name : '' ) )
+		);
+	} else {
+		$featured_narrations = soc_get_photo_narrations( $featured_photo->ID );
+		$featured_place      = ! empty( $featured_narrations ) ? $featured_narrations[0]->name : '';
+	}
 
-				// Same label ladder as the photo archive's .serie-cell: the place
-				// when the série has one, its narration otherwise.
-				if ( ! empty( $location['name'] ) ) {
-					$place = implode(
-						' · ',
-						array_filter( array( $location['name'], $country ? $country->name : '' ) )
-					);
-				} else {
-					$photo_narrations = soc_get_photo_narrations( $photo->ID );
-					$place            = ! empty( $photo_narrations ) ? $photo_narrations[0]->name : '';
-				}
+	$featured_meta = array_filter(
+		array(
+			$featured_place,
+			$featured_poses > 0
+				? sprintf(
+					/* translators: %s: number of poses. */
+					_n( '%s pose', '%s poses', $featured_poses, 'sliceofcactus' ),
+					number_format_i18n( $featured_poses )
+				)
+				: '',
+		)
+	);
+	?>
+	<section class="article-photo-banner" id="<?php echo esc_attr( 'article-gallery-' . $post_id ); ?>" aria-label="<?php esc_attr_e( 'Photos associées', 'sliceofcactus' ); ?>">
+		<a
+			class="article-photo-banner__link"
+			href="<?php echo esc_url( get_permalink( $featured_photo ) ); ?>"
+			<?php if ( $featured_cover_id ) : ?>
+				style="background-image: url('<?php echo esc_url( wp_get_attachment_image_url( $featured_cover_id, 'large' ) ); ?>');"
+			<?php endif; ?>
+		>
+			<span class="article-photo-banner__kicker"><?php esc_html_e( 'Photos associées', 'sliceofcactus' ); ?></span>
+			<span class="article-photo-banner__title"><?php echo esc_html( get_the_title( $featured_photo ) ); ?></span>
+			<?php if ( ! empty( $featured_meta ) ) : ?>
+				<span class="article-photo-banner__meta"><?php echo esc_html( implode( ' · ', $featured_meta ) ); ?></span>
+			<?php endif; ?>
+			<span class="article-photo-banner__cta"><?php esc_html_e( 'Voir la série →', 'sliceofcactus' ); ?></span>
+		</a>
 
-				$photo_meta = array_filter(
-					array(
-						$place,
-						$poses > 0
-							? sprintf(
-								/* translators: %s: number of poses. */
-								_n( '%s pose', '%s poses', $poses, 'sliceofcactus' ),
-								number_format_i18n( $poses )
-							)
-							: '',
-					)
-				);
-				?>
-				<a class="more-series__card" href="<?php echo esc_url( get_permalink( $photo ) ); ?>">
-					<?php if ( $cover_id ) : ?>
-						<div class="more-series__thumb">
-							<?php
-							echo wp_get_attachment_image(
-								$cover_id,
-								'large',
-								false,
-								array(
-									'class'   => 'more-series__plate',
-									'loading' => 'lazy',
-									'alt'     => '',
-								)
-							);
-							?>
-						</div>
-					<?php endif; ?>
-					<div class="more-series__cap">
-						<span class="more-series__title"><?php echo esc_html( get_the_title( $photo ) ); ?></span>
-						<?php if ( ! empty( $photo_meta ) ) : ?>
-							<span class="more-series__n"><?php echo esc_html( implode( ' · ', $photo_meta ) ); ?></span>
-						<?php endif; ?>
-					</div>
-				</a>
-			<?php endforeach; ?>
-		</div>
+		<?php if ( ! empty( $secondary_photos ) ) : ?>
+			<ul class="article-photo-banner__more">
+				<?php foreach ( $secondary_photos as $photo ) : ?>
+					<li>
+						<a href="<?php echo esc_url( get_permalink( $photo ) ); ?>"><?php echo esc_html( get_the_title( $photo ) ); ?></a>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
 	</section>
 <?php endif; ?>
 
@@ -320,10 +309,4 @@ if ( ! empty( $related_photos ) ) {
 			<?php endforeach; ?>
 		</div>
 	</section>
-<?php endif; ?>
-
-<?php if ( $archive_url ) : ?>
-	<a class="back-link back-link--center" href="<?php echo esc_url( $archive_url ); ?>">
-		<?php esc_html_e( '← Retour aux récits', 'sliceofcactus' ); ?>
-	</a>
 <?php endif; ?>

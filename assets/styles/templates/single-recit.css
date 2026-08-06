@@ -256,13 +256,15 @@
 }
 
 /*
- * Related content ("Cette histoire accompagne", "Photos associées"): the
- * shared .mag-sommaire + .more-series* blocks
- * (assets/styles/components/magazine-hub.css), same presentation as "Autres
- * séries" on single-photo. Both sections sit outside <article> (see
- * recit-article.php) so they run at var(--maxw); the rules below only flip
- * that component's paper-on-dark chrome to ink-on-paper, the same way
+ * Related content ("Cette histoire accompagne"): the shared .mag-sommaire +
+ * .more-series* blocks (assets/styles/components/magazine-hub.css), same
+ * presentation as "Autres séries" on single-photo. Sits outside <article>
+ * (see recit-article.php) so it runs at var(--maxw); the rules below only
+ * flip that component's paper-on-dark chrome to ink-on-paper, the same way
  * .mag-runhead and .serie-resonances are flipped elsewhere in this file.
+ * "Photos associées" (.article-photo-banner, below) has its own dark
+ * treatment instead — a single related série reads oddly in a 3-up grid,
+ * so it gets a full-width banner rather than this card pattern.
  */
 .more-series--recit .mag-sommaire {
 	border-top-color: rgb(20 18 16 / 22%);
@@ -285,16 +287,120 @@
 	box-shadow: 0 14px 28px -16px rgb(20 18 16 / 35%);
 }
 
-/* Photo séries arrive desaturated and regain their color on hover, as on the
-   photo archive's .serie-cell — dessins (the section above) keep theirs. */
-.more-series--photos .more-series__plate {
-	filter: grayscale(1) contrast(1.03);
-	transition: transform .6s var(--ease), filter .7s var(--ease);
+/*
+ * "Photos associées": full-width cover-image banner, same mechanics as
+ * .article__masthead--cover above (image background + dark gradient for
+ * legibility, text overlaid) rather than a card, since there's usually
+ * just one related série to feature. Any further séries (the ACF field
+ * allows more) list as plain links below instead of stacking more banners.
+ */
+.article-photo-banner {
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	margin-top: 4rem;
 }
 
-.more-series--photos .more-series__card:hover .more-series__plate,
-.more-series--photos .more-series__card:focus-visible .more-series__plate {
-	filter: grayscale(0) contrast(1.05);
+.article-photo-banner__link {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	min-height: 42vh;
+	padding: 2.6rem var(--gutter);
+	background-color: var(--ink);
+	background-position: center;
+	background-size: cover;
+	color: var(--paper);
+	text-decoration: none;
+}
+
+.article-photo-banner__link::before {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgb(20 18 16 / 10%) 0%, rgb(20 18 16 / 55%) 55%, var(--ink) 100%);
+	content: "";
+}
+
+.article-photo-banner__kicker,
+.article-photo-banner__title,
+.article-photo-banner__meta,
+.article-photo-banner__cta {
+	position: relative;
+	display: block;
+}
+
+.article-photo-banner__kicker {
+	margin-bottom: .5rem;
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .2em;
+	text-transform: uppercase;
+	opacity: .85;
+}
+
+.article-photo-banner__title {
+	font-family: var(--font-head);
+	font-size: clamp(1.8rem, 4vw, 3.2rem);
+	letter-spacing: .01em;
+	line-height: 1.05;
+	text-transform: uppercase;
+	text-wrap: balance;
+}
+
+.article-photo-banner__meta {
+	margin-top: .5rem;
+	font-family: var(--font-mono);
+	font-size: .8rem;
+	letter-spacing: .06em;
+	opacity: .85;
+}
+
+.article-photo-banner__cta {
+	display: inline-block;
+	margin-top: 1.2rem;
+	padding-bottom: .1rem;
+	border-bottom: 1px solid var(--paper);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	transition: opacity .3s;
+}
+
+.article-photo-banner__link:hover .article-photo-banner__cta,
+.article-photo-banner__link:focus-visible .article-photo-banner__cta {
+	opacity: .65;
+}
+
+.article-photo-banner__more {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem 1.4rem;
+	max-width: var(--maxw);
+	margin: 1.2rem auto 0;
+	padding: 0 var(--gutter);
+	list-style: none;
+}
+
+.article-photo-banner__more a {
+	color: var(--ink);
+	font-family: var(--font-mono);
+	font-size: .78rem;
+	letter-spacing: .04em;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+	.article-photo-banner__link {
+		min-height: 32vh;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.article-photo-banner__cta {
+		transition-duration: .01ms;
+	}
 }
 
 /*
@@ -342,4 +448,14 @@
 	border-color: var(--ink);
 	background: var(--ink);
 	color: var(--paper);
+}
+
+/*
+ * .back-link (magazine-hub.css) defaults to paper text for the dark
+ * accent pages it was built for — invisible here, since body.single-recit
+ * is a flat paper background. Same recolour as .serie-resonances__list;
+ * its existing opacity-based :hover (magazine-hub.css) still applies.
+ */
+.back-link {
+	color: var(--ink);
 }

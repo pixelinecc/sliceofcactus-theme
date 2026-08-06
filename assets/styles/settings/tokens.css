@@ -1,17 +1,45 @@
 /**
- * Tokens extracted from sliceofcactus-astro/public/css/style.css.
- *
- * Shared Gutenberg values come from theme.json generated properties.
+ * Seule source des couleurs du thème (base + accents de rubrique).
+ * theme.json n'a plus de palette Gutenberg : ces valeurs ne sont définies
+ * qu'ici.
  */
 
 :root {
-	--ink: var(--wp--preset--color--ink);
-	--paper: var(--wp--preset--color--paper);
-	--paper-2: var(--wp--preset--color--paper-2);
-	--flash: var(--wp--preset--color--flash);
-	--grey: var(--wp--preset--color--grey);
-	--accent: var(--wp--preset--color--accent);
-	--accent-deep: var(--wp--preset--color--accent-deep);
+	--ink: #141210;
+	--paper: #fbeeda;
+	--flash: #E9FF43;
+	--grey: #8b8378;
+	--accent: #12B26A;
+	--accent-deep: #0C7A48;
+
+	/*
+	 * Accents par rubrique (Coolors: https://coolors.co/1c1c23-12b26a-e9ff43-fbeeda-8b8e3e-8d423f-423f8e-8b663f-7c90db-f49cbb),
+	 * appliqués via body class dans chaque templates/*.css.
+	 */
+	--accent-photo: #8b8e3e;
+	--accent-deep-photo: #5B5D2A;
+
+	--accent-atelier: #8d423f;
+	--accent-deep-atelier: #6d2611;
+	--accent-atelier-dessin: #8d423f;
+	--accent-deep-atelier-dessin: #6d2611;
+	--accent-atelier-coloriage: #8d423f;
+	--accent-deep-atelier-coloriage: #6d2611;
+
+	--accent-apropos: #423f8e;
+	--accent-deep-apropos: #2f2d64;
+
+	--accent-recit: #8b663f;
+	--accent-deep-recit: #523a20;
+
+	--accent-color-your-life: #7c90db;
+	--accent-deep-color-your-life: #4c5a8f;
+
+	--accent-p52: #ed89ac;
+	--accent-deep-p52: #b35f7e;
+	
+	--accent-carte: #4d5127;
+	--accent-deep-carte: #2e3018;
 
 	--font-head: "Anton", "Arial Narrow", sans-serif;
 	--font-display: "Cormorant Garamond", Georgia, serif;

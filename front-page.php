@@ -27,7 +27,7 @@ $universe_recit  = soc_get_recit_archive_items();
 $universe_panels = array(
 	array(
 		'href'   => get_post_type_archive_link( 'photo' ),
-		'color'  => '#12B26A',
+		'color'  => 'var(--accent-photo)',
 		'image'  => ! empty( $universe_photo ) ? soc_get_photo_cover_id( $universe_photo[0]->ID ) : 0,
 		'num'    => '01',
 		'kicker' => __( 'Photographie · 36 poses', 'sliceofcactus' ),
@@ -37,7 +37,7 @@ $universe_panels = array(
 	),
 	array(
 		'href'   => get_post_type_archive_link( 'creation' ),
-		'color'  => '#E0592F',
+		'color'  => 'var(--accent-atelier)',
 		'image'  => ! empty( $universe_dessin ) ? soc_get_creation_cover_id( $universe_dessin[0]->ID ) : 0,
 		'num'    => '02',
 		'kicker' => __( 'Dessin & coloriage · trait du camélon', 'sliceofcactus' ),
@@ -47,7 +47,7 @@ $universe_panels = array(
 	),
 	array(
 		'href'   => get_post_type_archive_link( 'recit' ),
-		'color'  => '#2B4A6F',
+		'color'  => 'var(--accent-recit)',
 		'image'  => ! empty( $universe_recit ) ? absint( get_post_thumbnail_id( $universe_recit[0]->ID ) ) : 0,
 		'num'    => '03',
 		'kicker' => __( 'Carnets d\'écriture', 'sliceofcactus' ),
@@ -65,7 +65,7 @@ $explore_tiles = array(
 	array(
 		'class'  => ' xtile--lead',
 		'href'   => home_url( '/voyage-carte/' ),
-		'color'  => '#27513E',
+		'color'  => 'var(--accent-carte)',
 		'image'  => ( ! empty( $explore_voyage ) && ! empty( $explore_voyage[0]['series'] ) )
 			? soc_get_photo_cover_id( $explore_voyage[0]['series'][0]->ID )
 			: 0,
@@ -76,7 +76,7 @@ $explore_tiles = array(
 	array(
 		'class'  => '',
 		'href'   => home_url( '/color-your-life/' ),
-		'color'  => '#E11D74',
+		'color'  => 'var(--accent-color-your-life)',
 		'image'  => ! empty( $explore_color ) ? soc_get_photo_cover_id( $explore_color[0]->ID ) : 0,
 		'kicker' => __( 'Par couleur', 'sliceofcactus' ),
 		'title'  => __( 'Color Your Life', 'sliceofcactus' ),
@@ -85,7 +85,7 @@ $explore_tiles = array(
 	array(
 		'class'  => '',
 		'href'   => home_url( '/projet-52/' ),
-		'color'  => '#C2542E',
+		'color'  => 'var(--accent-p52)',
 		'image'  => ! empty( $explore_p52 ) ? soc_get_photo_cover_id( $explore_p52[0]->ID ) : 0,
 		'kicker' => __( 'Semaine après semaine', 'sliceofcactus' ),
 		'title'  => __( 'Projet 52', 'sliceofcactus' ),

@@ -120,10 +120,13 @@ body.single-recit .mag-runhead > span:last-child {
 
 .journal-name .sub {
 	margin-top: .35rem;
-	color: rgb(251 238 218 / 80%);
+	color: var(--paper);
 	font-family: var(--font-display);
+	font-size: clamp(.66rem, 2.2vw, 1.43rem);
 	font-style: italic;
-	font-size: 1.1rem;
+	line-height: 1;
+	letter-spacing: 0;
+	opacity: .88;
 }
 
 .journal-folio {

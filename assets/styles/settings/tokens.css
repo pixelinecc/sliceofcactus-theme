@@ -5,19 +5,59 @@
  */
 
 :root {
-	--ink: #141210;
+	--ink: #1C1C23;
 	--paper: #fbeeda;
 	--flash: #E9FF43;
 	--grey: #8b8378;
+	/*
+	 * Couleur signature en recherche (2026-08-06) : chaude, distincte des
+	 * accents de rubrique déjà pris (atelier ~2°, p52 ~20°, récit ~31°),
+	 * assez sombre/saturée pour rester lisible avec du texte --paper dessus.
+	 * Bascule active = vermillon vif. Les autres pistes écartées restent en
+	 * commentaire pour mémoire.
+	 */
+	/*--accent: #12B26A;*/
 	--accent: #12B26A;
-	--accent-deep: #0C7A48;
+	--accent-deep: #0A6B46;
+
+	/*--accent: #B18725;   ocre/or profond — écarté (trop proche des bruns atelier/récit)
+	--accent-deep: #735818;*/
+
+	/*--accent: #772230;   bordeaux profond
+	--accent-deep: #4B151E;*/
+
+	/*--accent: #3E8E42;   vert vif
+	--accent-deep: #255528;*/
+
+	/*--accent: #449C49;   vert moyen
+	--accent-deep: #2B5C2B;*/
+
+	/*--accent: #d3af3c;   jaune doré — écarté (contraste ~1.8:1 avec --paper)
+	--accent-deep: #7c5e1f;*/
 
 	/*
 	 * Accents par rubrique (Coolors: https://coolors.co/1c1c23-12b26a-e9ff43-fbeeda-8b8e3e-8d423f-423f8e-8b663f-7c90db-f49cbb),
 	 * appliqués via body class dans chaque templates/*.css.
 	 */
-	--accent-photo: #8b8e3e;
-	--accent-deep-photo: #5B5D2A;
+	/*
+	 * Seule exception : --accent-photo n'est qu'un défaut.
+	 * Une série peut le remplacer via son champ ACF soc_photo_color, et une
+	 * narration (Photos > Narrations) via soc_narration_accent — ces deux
+	 * champs, quand ils sont remplis, priment sur la valeur ci-dessous
+	 * (voir soc_get_photo_effective_accent_color(), inc/template-tags.php).
+	 */
+	/*--accent-photo: #1F4A3B;*/
+	--accent-photo: #295E46;
+	--accent-deep-photo: #1B3D2E;
+
+	--accent-carte: #1A3B2C;
+	--accent-deep-carte: #0F261A;
+
+	--accent-color-your-life: #4CB0A7;
+	--accent-deep-color-your-life: #2D6B63;
+
+	--accent-p52: #B35612;
+	--accent-deep-p52: #6B2D0A;
 
 	--accent-atelier: #8d423f;
 	--accent-deep-atelier: #6d2611;
@@ -26,20 +66,17 @@
 	--accent-atelier-coloriage: #8d423f;
 	--accent-deep-atelier-coloriage: #6d2611;
 
-	--accent-apropos: #423f8e;
-	--accent-deep-apropos: #2f2d64;
+	/*--accent-apropos: #4f3f8e;*/
+	--accent-apropos: #804cb1;
+	--accent-deep-apropos: #512f70;
 
-	--accent-recit: #8b663f;
-	--accent-deep-recit: #523a20;
+	--accent-recit: #a77947;
+	--accent-deep-recit: #a77947;
 
-	--accent-color-your-life: #7c90db;
-	--accent-deep-color-your-life: #4c5a8f;
 
-	--accent-p52: #ed89ac;
-	--accent-deep-p52: #b35f7e;
-	
-	--accent-carte: #4d5127;
-	--accent-deep-carte: #2e3018;
+	/*--accent-resonance: #312c2a;*/
+	--accent-resonance: #4C4EB0;
+	--accent-deep-resonance: #312c2a;
 
 	--font-head: "Anton", "Arial Narrow", sans-serif;
 	--font-display: "Cormorant Garamond", Georgia, serif;

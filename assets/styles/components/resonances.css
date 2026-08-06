@@ -12,8 +12,8 @@
 
 body.page-template-page-resonances-php,
 body.tax-resonance {
-	--accent: #312c2a;
-	--accent-deep: #201d1b;
+	--accent: var(--accent-resonance);
+	--accent-deep: var(--accent-deep-resonance);
 }
 
 .resonance-row {

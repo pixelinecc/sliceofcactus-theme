@@ -139,7 +139,7 @@
 	bottom: -14%;
 	left: -8%;
 	width: min(44vw, 520px);
-	background: radial-gradient(circle at 40% 40%, #1fd487, var(--accent-deep));
+	background: radial-gradient(circle at 40% 40%, var(--accent), var(--accent-deep));
 	animation-delay: -6s;
 }
 
@@ -147,7 +147,7 @@
 	top: 26%;
 	left: 34%;
 	width: min(30vw, 360px);
-	background: radial-gradient(circle at 50% 50%, #0e8f56, transparent 70%);
+	background: radial-gradient(circle at 50% 50%, var(--accent-deep), transparent 70%);
 	opacity: .4;
 	animation-delay: -12s;
 }
@@ -372,6 +372,7 @@
 .btn--line:hover {
 	border-color: var(--flash);
 	background: var(--flash);
+	color: var(--ink);
 }
 
 /* ---------- TYPEWRITER ---------- */
@@ -425,9 +426,9 @@
 /* ---------- EXPLORER AUTREMENT ---------- */
 
 .explore {
-	max-width: var(--maxw);
-	margin: 7rem auto;
-	padding: 2rem clamp(1.2rem, 4vw, 3rem);
+	width: 100vw;
+	padding: 9rem max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+	/*background: var(--accent-color-your-life);*/
 }
 
 .explore__grid {
@@ -566,6 +567,7 @@
 	position: relative;
 	padding: 7rem 0;
 	background: var(--ink);
+	/*background: var(--accent-photo);*/
 	color: var(--paper);
 }
 
@@ -673,6 +675,7 @@
 	position: relative;
 	padding: 8rem 0;
 	overflow: hidden;
+	/*background: var(--accent-apropos);*/
 }
 
 .manifeste__blob {
@@ -683,7 +686,7 @@
 	width: min(50vw, 560px);
 	aspect-ratio: 1;
 	border-radius: 60% 40% 50% 50% / 55% 45% 55% 45%;
-	background: radial-gradient(circle at 60% 40%, var(--accent), var(--accent-deep));
+	background: radial-gradient(circle at 60% 40%, var(--accent-apropos), var(--accent-deep-apropos));
 	filter: blur(4px);
 	opacity: .18;
 	animation: soc-blob 20s var(--ease) infinite reverse;
@@ -727,9 +730,9 @@
 /* ---------- RÉCITS À LA UNE ---------- */
 
 .home-recits {
-	max-width: var(--maxw);
-	margin: 7rem auto;
-	padding: 2rem clamp(1.2rem, 4vw, 3rem);
+	width: 100vw;
+	padding: 9rem max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+	/*background: var(--accent-recit);*/
 }
 
 .home-recits__grid {

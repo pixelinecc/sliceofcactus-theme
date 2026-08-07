@@ -106,7 +106,7 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
-	$needs_lightbox = is_singular( 'photo' ) || is_singular( 'creation' ) || is_front_page() || is_page_template( 'page-projet-52.php' );
+	$needs_lightbox = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_front_page() || is_page_template( 'page-projet-52.php' );
 	$lightbox_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_lightbox ) {
@@ -201,7 +201,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-single-recit',
 				get_theme_file_uri( '/assets/styles/templates/single-recit.css' ),
-				array_merge( $recit_deps, $resonance_mosaic_deps ),
+				array_merge( $recit_deps, $resonance_mosaic_deps, $lightbox_deps ),
 				(string) filemtime( $recit_style_path )
 			);
 		}
@@ -367,6 +367,21 @@ function soc_enqueue_assets(): void {
 				true
 			);
 			wp_script_add_data( 'sliceofcactus-single-creation', 'strategy', 'defer' );
+		}
+	}
+
+	if ( is_singular( 'recit' ) ) {
+		$recit_script_path = get_theme_file_path( '/assets/scripts/single-recit.js' );
+
+		if ( is_readable( $recit_script_path ) ) {
+			wp_enqueue_script(
+				'sliceofcactus-single-recit',
+				get_theme_file_uri( '/assets/scripts/single-recit.js' ),
+				$lightbox_script_deps,
+				(string) filemtime( $recit_script_path ),
+				true
+			);
+			wp_script_add_data( 'sliceofcactus-single-recit', 'strategy', 'defer' );
 		}
 	}
 

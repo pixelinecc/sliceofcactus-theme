@@ -9,7 +9,9 @@
  * - "plate": inserted as a framed plate at the top of the body.
  * - "cover": used as the masthead's background instead of a flat fill.
  * - "margin": tucked beside the body text like a snapshot taped into a
- *   notebook.
+ *   notebook, click to open in a single-image lightbox (shared
+ *   assets/scripts/components/lightbox.js controller, own JS in
+ *   assets/scripts/single-recit.js).
  *
  * Without a featured image, none of the three applies — the masthead shows
  * alone, which is also why it never depends on having a good photo to show.
@@ -151,8 +153,27 @@ if ( ! empty( $related_photos ) ) {
 			?>
 		<?php else : ?>
 			<?php if ( $use_margin ) : ?>
-				<figure class="article__snapshot">
-					<?php echo get_the_post_thumbnail( $post_id, 'medium' ); ?>
+				<?php
+				$snapshot_id         = get_post_thumbnail_id( $post_id );
+				$snapshot_src        = wp_get_attachment_image_src( $snapshot_id, 'medium' );
+				$is_portrait         = is_array( $snapshot_src ) && $snapshot_src[2] > $snapshot_src[1] * 1.05;
+				$snapshot_class      = 'article__snapshot' . ( $is_portrait ? ' article__snapshot--portrait' : '' );
+				$snapshot_lightbox   = 'soc-recit-snapshot-' . $post_id;
+				$snapshot_full_url   = wp_get_attachment_image_url( $snapshot_id, 'large' );
+				?>
+				<figure class="<?php echo esc_attr( $snapshot_class ); ?>">
+					<a
+						class="article__snapshot-link"
+						href="<?php echo esc_url( $snapshot_full_url ); ?>"
+						data-lightbox="<?php echo esc_attr( $snapshot_lightbox ); ?>"
+						data-full="<?php echo esc_url( $snapshot_full_url ); ?>"
+						<?php if ( '' !== $hero_caption ) : ?>
+							data-caption="<?php echo esc_attr( $hero_caption ); ?>"
+						<?php endif; ?>
+						aria-label="<?php esc_attr_e( 'Agrandir la photo', 'sliceofcactus' ); ?>"
+					>
+						<?php echo get_the_post_thumbnail( $post_id, 'medium' ); ?>
+					</a>
 					<?php if ( '' !== $hero_caption ) : ?>
 						<figcaption class="article__snapshot-cap"><?php echo esc_html( $hero_caption ); ?></figcaption>
 					<?php endif; ?>
@@ -350,4 +371,21 @@ if ( ! empty( $related_photos ) ) {
 			<?php endforeach; ?>
 		</div>
 	</section>
+<?php endif; ?>
+
+<?php if ( $use_margin ) : ?>
+	<div
+		class="lightbox"
+		id="<?php echo esc_attr( $snapshot_lightbox ); ?>"
+		role="dialog"
+		aria-modal="true"
+		aria-label="<?php esc_attr_e( 'Visionneuse de la photo', 'sliceofcactus' ); ?>"
+		aria-hidden="true"
+	>
+		<button class="lightbox__close" type="button" aria-label="<?php esc_attr_e( 'Fermer', 'sliceofcactus' ); ?>">×</button>
+		<figure class="lightbox__fig">
+			<img alt="">
+			<figcaption></figcaption>
+		</figure>
+	</div>
 <?php endif; ?>

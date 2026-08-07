@@ -190,7 +190,7 @@
 	clear: right;
 	width: 220px;
 	margin: .3rem 0 1.4rem 2rem;
-	padding: 9px 9px 0;
+	padding: 9px;
 	border-radius: 3px;
 	background: #fbf8f2;
 	box-shadow: 0 18px 30px -14px rgb(10 8 7 / 60%);
@@ -226,12 +226,24 @@
 	transform: rotate(6deg);
 }
 
+.article__snapshot-link {
+	display: block;
+}
+
 .article__snapshot img {
 	display: block;
 	width: 100%;
 	aspect-ratio: 1;
 	object-fit: cover;
 	filter: grayscale(.12) contrast(1.03);
+}
+
+/* Portrait-format source (soc_get_recit_hero_layout() === 'margin', see
+   recit-article.php's $is_portrait): the default square crop above cuts
+   off too much of a tall image. Same 4/5 portrait ratio already used by
+   .colo-card__img (single-creation.css) instead of forcing a square. */
+.article__snapshot--portrait img {
+	aspect-ratio: 4 / 5;
 }
 
 .article__snapshot-cap {

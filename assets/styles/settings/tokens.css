@@ -61,15 +61,17 @@
 	--accent-color-your-life: #4CB0A7;
 	--accent-deep-color-your-life: #2D6B63;
 
-	--accent-p52: #4d66df;
-	--accent-deep-p52: #2b3e8f;
+	--accent-p52: #58A66B;
+	--accent-deep-p52: #2D6B63;
 
 	--accent-atelier: #8d423f;
 	--accent-deep-atelier: #6d2611;
-	--accent-atelier-dessin: #e98ea7;
-	--accent-deep-atelier-dessin: #b14f6a;
-	--accent-atelier-coloriage: #FE6847;
-	--accent-deep-atelier-coloriage: #B13A2A;
+	/*--accent-atelier-dessin: #e98ea7;*/
+    --accent-atelier-dessin: #FF908C;
+    --accent-deep-atelier-dessin: #ff645d;
+	/*--accent-atelier-coloriage: #FE6847;*/
+	--accent-atelier-coloriage: #b33931;
+	--accent-deep-atelier-coloriage: #7C2A26;
 
 	/*--accent-apropos: #4f3f8e;*/
 	--accent-apropos: #804cb1;

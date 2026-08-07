@@ -1,39 +1,16 @@
 /**
- * Page À propos: swaps the sticky visual and big number of "la démarche"
- * to match whichever .about-sequence-item is currently in view.
+ * Page À propos — reads each [data-fill] element's own computed background
+ * and picks a readable text color for it: "La palette" swatches (hex label
+ * included) and "Des chemins de traverse"'s crossing words (background
+ * only, no hex). The values only live in CSS (--accent-* custom
+ * properties, assets/styles/settings/tokens.css), so this can't be
+ * resolved server-side.
  */
 (() => {
 	'use strict';
 
-	const initSequence = (root) => {
-		const visual = root.querySelector('[data-visual]');
-		const big = root.querySelector('[data-big]');
-		const items = [...root.querySelectorAll('.about-sequence-item')];
-
-		if (!visual || !big || !items.length) {
-			return;
-		}
-
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-					if (entry.target.dataset.bg) {
-						visual.style.background = entry.target.dataset.bg;
-					}
-					if (entry.target.dataset.val) {
-						big.textContent = entry.target.dataset.val;
-					}
-				}
-			});
-		}, { threshold: [0.5], rootMargin: '-20% 0px -20% 0px' });
-
-		items.forEach((item) => observer.observe(item));
-	};
-
-	document.querySelectorAll('.about-sequence').forEach(initSequence);
-
 	const initPalette = (root) => {
-		root.querySelectorAll('.about-palette__swatch').forEach((swatch) => {
+		root.querySelectorAll('[data-fill]').forEach((swatch) => {
 			const rgb = getComputedStyle(swatch).backgroundColor.match(/[\d.]+/g);
 
 			if (!rgb || rgb.length < 3) {

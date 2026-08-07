@@ -17,8 +17,13 @@
 	 * commentaire pour mémoire.
 	 */
 	/*--accent: #12B26A;*/
-	--accent: #12B26A;
-	--accent-deep: #0A6B46;
+	--accent: #3FCA7E;
+	--accent-deep: #1C5B3A;
+	/* Copie stable de --accent ci-dessus, pour "La palette" (page-a-propos.php) :
+	   --accent est réécrit par chaque page (body.page-template-*), donc le
+	   swatch "Signature" a besoin de son propre token pour ne pas afficher
+	   l'accent de la page courante. */
+	--accent-signature: #3FCA7E;
 
 	/*--accent: #B18725;   ocre/or profond — écarté (trop proche des bruns atelier/récit)
 	--accent-deep: #735818;*/
@@ -56,15 +61,15 @@
 	--accent-color-your-life: #4CB0A7;
 	--accent-deep-color-your-life: #2D6B63;
 
-	--accent-p52: #C85C16;
-	--accent-deep-p52: #7C3A0D;
+	--accent-p52: #4d66df;
+	--accent-deep-p52: #2b3e8f;
 
 	--accent-atelier: #8d423f;
 	--accent-deep-atelier: #6d2611;
 	--accent-atelier-dessin: #e98ea7;
 	--accent-deep-atelier-dessin: #b14f6a;
-	--accent-atelier-coloriage: #8d423f;
-	--accent-deep-atelier-coloriage: #6d2611;
+	--accent-atelier-coloriage: #FE6847;
+	--accent-deep-atelier-coloriage: #B13A2A;
 
 	/*--accent-apropos: #4f3f8e;*/
 	--accent-apropos: #804cb1;
@@ -75,10 +80,8 @@
 	--accent-recit: #B97A3D;
 	--accent-deep-recit: #7C4F2A;
 
-
-	/*--accent-resonance: #312c2a;*/
-	--accent-resonance: #4C4EB0;
-	--accent-deep-resonance: #312c2a;
+	--accent-resonance: #312c2a;
+	--accent-deep-resonance: #1c1c23;
 
 	--font-head: "Anton", "Arial Narrow", sans-serif;
 	--font-display: "Cormorant Garamond", Georgia, serif;

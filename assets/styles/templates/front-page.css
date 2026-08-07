@@ -345,35 +345,9 @@
 
 /* ---------- BOUTONS ---------- */
 
-.btn {
-	display: inline-flex;
-	align-items: center;
-	gap: .5rem;
-	padding: .95rem 1.6rem;
-	border-radius: 100px;
-	font-size: 1rem;
-	font-weight: 500;
-	transition: transform .3s var(--ease), background .3s, color .3s;
-}
-
-.btn--fill {
-	background: var(--ink);
-	color: var(--paper);
-}
-
-.btn--fill:hover {
-	background: var(--accent);
-}
-
-.btn--line {
-	border: 2px solid var(--paper);
-}
-
-.btn--line:hover {
-	border-color: var(--flash);
-	background: var(--flash);
-	color: var(--ink);
-}
+/* .btn/.btn--fill/.btn--line now live in
+   assets/styles/components/buttons.css — also used by page-a-propos.php's
+   "Trois façons d'entrer". */
 
 /* ---------- TYPEWRITER ---------- */
 

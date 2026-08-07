@@ -5,11 +5,15 @@
  * type then its title. Cards with 2+ previews span two grid rows — the only
  * "hierarchy" here is how much is actually tagged, not an editorial ranking.
  *
- * Built for page-a-propos.php's "Les résonances", reused as-is by the single
- * récit's own "Résonne avec" (template-parts/single/recit-article.php): the
- * cards carry their own background, so they hold on the about page's accent
- * gradient and on the récit's flat paper body alike. Only .rmosaic__lead
- * inherits its color from the surrounding page.
+ * Used by the single récit's own "Résonne avec"
+ * (template-parts/single/recit-article.php): the cards carry their own
+ * background, so they hold on the récit's flat paper body. Only
+ * .rmosaic__lead inherits its color from the surrounding page.
+ *
+ * page-a-propos.php's own "Les résonances" doesn't use this component —
+ * it went through a card grid and then an accordion built on this same
+ * markup family, both since replaced by a plain color palette
+ * (.about-resonances-palette in page-a-propos.css).
  */
 
 .rmosaic-section {

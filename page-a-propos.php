@@ -2,20 +2,31 @@
 /**
  * Template Name: À propos
  *
+ * Rewritten 2026-08-06 into a short, personal page instead of the site's
+ * "documentation" page it had drifted into — see the brief's own beats:
+ * header (WP title + hardcoded subtitle + the_content() intro), portrait,
+ * "Regarder, garder, partager", "La palette" (every rubrique accent,
+ * restored from the previous version of this page — see below), "Des
+ * chemins de traverse" (2026-08-07 — Photo/Atelier/Récits as big scattered
+ * words filled with their own palette color, Résonances crossing them;
+ * replaced the earlier plain text + CTA link), "Dire bonjour"
+ * (.about-contact, 2026-08-07 — replaced the former plain-text
+ * .about-conclusion with the same email/Instagram links as the footer).
+ * ("Trois façons d'entrer" — Photo/Atelier/Récits as .btn buttons — was
+ * removed after the fact; assets/styles/components/buttons.css is no
+ * longer loaded on this page, see inc/assets.php.)
+ *
  * Structured like the other bespoke rubrique pages (archive-creation.php,
  * page-projet-52.php): .mag-runhead and .mag-masthead straight from
  * assets/styles/components/magazine-hub.css, sitting directly on the body's
  * own accent-gradient background (assets/styles/base/elements.css) — no
  * paper flip, no per-section background override, only its own --accent /
- * --accent-deep pair set on the body in page-a-propos.css. The "Résonances"
- * mosaic is the shared .rmosaic* component
- * (assets/styles/components/resonance-mosaic.css), also used by the single
- * récit's "Résonne avec".
+ * --accent-deep pair set on the body in page-a-propos.css.
  *
- * "La démarche" is its own sticky-scroll section (.about-sequence): a
- * visual that swaps gradient and number as each step scrolls into view.
- * Its JS lives in assets/scripts/page-a-propos.js, its CSS alongside the
- * rest of this page in assets/styles/templates/page-a-propos.css.
+ * "La palette" reads --accent-* CSS custom properties (tokens.css is the
+ * only place their hex actually lives), so its hex label and on-dark/
+ * on-light contrast class can only be resolved client-side, in
+ * assets/scripts/page-a-propos.js.
  *
  * @package SliceOfCactus
  */
@@ -30,169 +41,127 @@ while ( have_posts() ) :
 	the_post();
 
 	$post_id = get_the_ID();
-	$lead    = get_the_excerpt();
 
-	$resonance_terms = get_terms(
+	// "Des chemins de traverse" → the general "Résonances" page
+	// (page-resonances.php), wherever it's been placed in wp-admin.
+	$resonances_url = soc_get_page_url_by_template( 'page-resonances.php' );
+
+	// "La palette": every rubrique accent (--accent-*, minus their
+	// --accent-deep-* counterparts) from assets/styles/settings/tokens.css,
+	// the theme's only source for these colors. Hex text is filled in by JS
+	// (assets/scripts/page-a-propos.js) reading each swatch's computed
+	// background — so this list only has to name the CSS var, never its
+	// value. Each swatch also links to its rubrique's own page/archive.
+	$palette = array(
 		array(
-			'taxonomy'   => 'resonance',
-			'hide_empty' => false,
-		)
-	);
-
-	if ( is_wp_error( $resonance_terms ) ) {
-		$resonance_terms = array();
-	}
-
-	usort(
-		$resonance_terms,
-		static function ( WP_Term $a, WP_Term $b ): int {
-			$order_a = function_exists( 'get_field' ) ? (int) get_field( 'soc_resonance_order', 'resonance_' . $a->term_id ) : 0;
-			$order_b = function_exists( 'get_field' ) ? (int) get_field( 'soc_resonance_order', 'resonance_' . $b->term_id ) : 0;
-
-			return $order_a <=> $order_b;
-		}
-	);
-
-	// "Trois formes": same .universe/.upanel panels as the front page's own
-	// "Trois univers" section (assets/styles/components/panels.css), fed by
-	// the single most recent post of each type — same cover-fetching helpers
-	// front-page.php already uses, just without its narration/rubrique
-	// filtering (this isn't curating one series, just picking an example).
-	$latest_photo = ( new WP_Query(
-		array(
-			'post_type'           => 'photo',
-			'post_status'         => 'publish',
-			'posts_per_page'      => 1,
-			'orderby'             => 'date',
-			'order'               => 'DESC',
-			'ignore_sticky_posts' => true,
-			'no_found_rows'       => true,
-		)
-	) )->posts;
-
-	$latest_creation = ( new WP_Query(
-		array(
-			'post_type'           => 'creation',
-			'post_status'         => 'publish',
-			'posts_per_page'      => 1,
-			'orderby'             => 'date',
-			'order'               => 'DESC',
-			'ignore_sticky_posts' => true,
-			'no_found_rows'       => true,
-		)
-	) )->posts;
-
-	$latest_recit = soc_get_recit_archive_items();
-
-	$forms = array(
-		array(
-			'num'    => '01',
-			'kicker' => __( 'Photographie · 36 poses', 'sliceofcactus' ),
-			'title'  => __( 'Photo', 'sliceofcactus' ),
-			'desc'   => __( 'Des séries, des voyages, un projet au long cours.', 'sliceofcactus' ),
-			'cta'    => __( 'Explorer Photo →', 'sliceofcactus' ),
-			'url'    => get_post_type_archive_link( 'photo' ),
-			'color'  => '#27513e',
-			'image'  => ! empty( $latest_photo ) ? soc_get_photo_cover_id( $latest_photo[0]->ID ) : 0,
+			'var'   => '--accent-signature',
+			'label' => __( 'Signature', 'sliceofcactus' ),
+			'url'   => home_url( '/' ),
 		),
 		array(
-			'num'    => '02',
-			'kicker' => __( 'Dessin & coloriage · trait du camélon', 'sliceofcactus' ),
-			'title'  => __( 'Atelier', 'sliceofcactus' ),
-			'desc'   => __( 'Dessins et coloriages, un geste qui prolonge le regard.', 'sliceofcactus' ),
-			'cta'    => __( 'Explorer l\'atelier →', 'sliceofcactus' ),
-			'url'    => get_post_type_archive_link( 'creation' ),
-			'color'  => '#e0592f',
-			'image'  => ! empty( $latest_creation ) ? soc_get_creation_cover_id( $latest_creation[0]->ID ) : 0,
+			'var'   => '--accent-photo',
+			'label' => __( 'Photo', 'sliceofcactus' ),
+			'url'   => get_post_type_archive_link( 'photo' ),
 		),
 		array(
-			'num'    => '03',
-			'kicker' => __( 'Carnets d\'écriture', 'sliceofcactus' ),
-			'title'  => __( 'Récits', 'sliceofcactus' ),
-			'desc'   => __( 'Des textes courts, un fil plutôt qu\'un compte-rendu.', 'sliceofcactus' ),
-			'cta'    => __( 'Lire les récits →', 'sliceofcactus' ),
-			'url'    => get_post_type_archive_link( 'recit' ),
-			'color'  => '#6f4e2b',
-			'image'  => ! empty( $latest_recit ) ? absint( get_post_thumbnail_id( $latest_recit[0]->ID ) ) : 0,
+			'var'   => '--accent-carte',
+			'label' => __( 'Carte', 'sliceofcactus' ),
+			'url'   => soc_get_page_url_by_template( 'page-voyage-carte.php' ),
+		),
+		array(
+			'var'   => '--accent-color-your-life',
+			'label' => __( 'Color Your Life', 'sliceofcactus' ),
+			'url'   => soc_get_page_url_by_template( 'page-color-your-life.php' ),
+		),
+		array(
+			'var'   => '--accent-p52',
+			'label' => __( 'Projet 52', 'sliceofcactus' ),
+			'url'   => soc_get_page_url_by_template( 'page-projet-52.php' ),
+		),
+		array(
+			'var'   => '--accent-atelier',
+			'label' => __( 'Atelier', 'sliceofcactus' ),
+			'url'   => get_post_type_archive_link( 'creation' ),
+		),
+		array(
+			'var'   => '--accent-atelier-dessin',
+			'label' => __( 'Atelier · dessin', 'sliceofcactus' ),
+			'url'   => soc_get_creation_rubrique_archive_link( 'dessin' ),
+		),
+		array(
+			'var'   => '--accent-atelier-coloriage',
+			'label' => __( 'Atelier · coloriage', 'sliceofcactus' ),
+			'url'   => soc_get_creation_rubrique_archive_link( 'coloriage' ),
+		),
+		array(
+			'var'   => '--accent-apropos',
+			'label' => __( 'À propos', 'sliceofcactus' ),
+			'url'   => get_permalink( $post_id ),
+		),
+		array(
+			'var'   => '--accent-recit',
+			'label' => __( 'Récits', 'sliceofcactus' ),
+			'url'   => get_post_type_archive_link( 'recit' ),
+		),
+		array(
+			'var'   => '--accent-resonance',
+			'label' => __( 'Résonances', 'sliceofcactus' ),
+			'url'   => $resonances_url,
 		),
 	);
 
-	// La démarche: each step's gradient is its color darkened ~28%, same
-	// ratio as this page's own --accent / --accent-deep pair.
-	$steps = array(
-		array(
-			'title'    => __( 'Observer', 'sliceofcactus' ),
-			'text'     => __( 'Regarder autrement ce qui semblait ordinaire.', 'sliceofcactus' ),
-			'gradient' => 'linear-gradient(160deg, #efa9ed 0%, #ac7aab 100%)',
-		),
-		array(
-			'title'    => __( 'Raconter', 'sliceofcactus' ),
-			'text'     => __( 'Donner une forme aux images et aux instants.', 'sliceofcactus' ),
-			'gradient' => 'linear-gradient(160deg, #e9ff43 0%, #a8b830 100%)',
-		),
-		array(
-			'title'    => __( 'Créer', 'sliceofcactus' ),
-			'text'     => __( 'Dessiner, colorier, prolonger le geste.', 'sliceofcactus' ),
-			'gradient' => 'linear-gradient(160deg, #e0592f 0%, #a14022 100%)',
-		),
-		array(
-			'title'    => __( 'Partager', 'sliceofcactus' ),
-			'text'     => __( 'Donner à voir, sans tout dire.', 'sliceofcactus' ),
-			'gradient' => 'linear-gradient(160deg, #27513e 0%, #1c3a2d 100%)',
-		),
-	);
+	// "Des chemins de traverse": Photo/Atelier/Récits' own archive URLs,
+	// already resolved above for their palette swatches — reused here so
+	// the crossing words below link to the same place.
+	$palette_urls = wp_list_pluck( $palette, 'url', 'var' );
+	$photo_url    = $palette_urls['--accent-photo'] ?? '';
+	$atelier_url  = $palette_urls['--accent-atelier'] ?? '';
+	$recit_url    = $palette_urls['--accent-recit'] ?? '';
 	?>
 	<main id="main-content" class="soc-about rubrique-page">
 
 		<div class="mag-runhead">
 			<span><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( '← Retour à l\'accueil', 'sliceofcactus' ); ?></a></span>
-			<span><?php esc_html_e( 'Page', 'sliceofcactus' ); ?></span>
-			<span><b><?php the_title(); ?></b></span>
+			<span><?php esc_html_e( 'Regarder, créeer, partager', 'sliceofcactus' ); ?></span>
+			<span><?php esc_html_e( 'A propos', 'sliceofcactus' ); ?></span>
 		</div>
 
 		<header class="mag-masthead">
 			<h1 class="mag-masthead__title">
 				<?php the_title(); ?>
-				<em><?php esc_html_e( 'sélectionner plutôt qu\'accumuler', 'sliceofcactus' ); ?></em>
+				<em><?php esc_html_e( 'Derrière Slice of Cactus', 'sliceofcactus' ); ?></em>
 			</h1>
-			<?php if ( '' !== $lead ) : ?>
-				<?php
-				$lead_first = mb_substr( $lead, 0, 1 );
-				$lead_rest  = mb_substr( $lead, 1 );
-				?>
-				<div class="mag-masthead__lead" data-reveal>
-					<p>
-						<span class="drop"><?php echo esc_html( $lead_first ); ?></span>
-						<?php echo esc_html( $lead_rest ); ?>
-					</p>
-				</div>
-			<?php endif; ?>
+			<div class="mag-masthead__lead" data-reveal>
+				<?php the_excerpt(); ?>
+			</div>
 		</header>
 
-		<div class="about-body" data-reveal>
-			<?php the_content(); ?>
+		<div class="about-intro">
+			<div class="about-body" data-reveal>
+				<?php the_content(); ?>
+			</div>
+
+			<?php if ( has_post_thumbnail( $post_id ) ) : ?>
+				<figure class="about-portrait" data-reveal>
+					<div class="about-portrait__frame">
+						<?php
+						echo get_the_post_thumbnail(
+							$post_id,
+							'large',
+							array(
+								'class' => 'about-portrait__img',
+								'alt'   => __( 'Quatre autoportraits spontanés de Céline, créatrice de Slice of Cactus', 'sliceofcactus' ),
+							)
+						);
+						?>
+					</div>
+					<figcaption class="about-portrait__cap">
+						<?php esc_html_e( 'Quatre essais. Toujours pas de photo sérieuse.', 'sliceofcactus' ); ?>
+					</figcaption>
+				</figure>
+			<?php endif; ?>
 		</div>
 
-		<?php
-		// Palette: every rubrique accent (--accent-*, minus their --accent-deep-*
-		// counterparts) from assets/styles/settings/tokens.css, the theme's only
-		// source for these colors. Hex text is filled in by JS
-		// (assets/scripts/page-a-propos.js) reading each swatch's computed
-		// background — so this list only has to name the CSS var, never its value.
-		$palette = array(
-			array( 'var' => '--accent', 'label' => __( 'Signature', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-photo', 'label' => __( 'Photo', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-carte', 'label' => __( 'Carte', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-color-your-life', 'label' => __( 'Color Your Life', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-p52', 'label' => __( 'Projet 52', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-atelier', 'label' => __( 'Atelier', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-atelier-dessin', 'label' => __( 'Atelier · dessin', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-atelier-coloriage', 'label' => __( 'Atelier · coloriage', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-apropos', 'label' => __( 'À propos', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-recit', 'label' => __( 'Récits', 'sliceofcactus' ) ),
-			array( 'var' => '--accent-resonance', 'label' => __( 'Résonances', 'sliceofcactus' ) ),
-		);
-		?>
 		<section class="about-palette" aria-labelledby="about-palette-heading" data-reveal>
 			<div class="about-palette__in">
 				<div class="about-palette__intro">
@@ -202,157 +171,117 @@ while ( have_posts() ) :
 					<p class="about-palette__lead">
 						<?php esc_html_e( 'Une couleur par rubrique, jamais interchangeable.', 'sliceofcactus' ); ?>
 					</p>
+
+					<div class="about-palette__legend">
+						<p>
+							<?php esc_html_e( 'Chaque rubrique a sa couleur, chaque couleur son usage.', 'sliceofcactus' ); ?>
+						</p>
+						<p>
+							<?php
+							esc_html_e(
+								'Photo réunit les séries et carnets de voyage — Carte pour les repères géographiques, Color Your Life et Projet 52 pour les temps longs. Atelier rassemble le dessin et le coloriage. Récits porte les textes. Résonances relie tout le reste par ce qu\'il évoque.',
+								'sliceofcactus'
+							);
+							?>
+						</p>
+					</div>
 				</div>
-				<div class="about-palette__grid" data-palette>
-					<?php foreach ( $palette as $swatch ) : ?>
-						<div class="about-palette__swatch" style="background:var(<?php echo esc_attr( $swatch['var'] ); ?>)">
-							<span class="about-palette__hex" data-hex></span>
-							<span class="about-palette__label"><?php echo esc_html( $swatch['label'] ); ?></span>
-						</div>
-					<?php endforeach; ?>
+
+				<div class="about-palette__content">
+					<div class="about-palette__grid" data-palette>
+						<?php foreach ( $palette as $swatch ) : ?>
+							<?php
+							$swatch_url = is_string( $swatch['url'] ) ? $swatch['url'] : '';
+							$swatch_tag = '' !== $swatch_url ? 'a' : 'div';
+							?>
+							<<?php echo tag_escape( $swatch_tag ); ?>
+								class="about-palette__swatch"
+								style="background:var(<?php echo esc_attr( $swatch['var'] ); ?>)"
+								data-fill
+								<?php echo '' !== $swatch_url ? 'href="' . esc_url( $swatch_url ) . '"' : ''; ?>
+							>
+								<span class="about-palette__hex" data-hex></span>
+								<span class="about-palette__label"><?php echo esc_html( $swatch['label'] ); ?></span>
+							</<?php echo tag_escape( $swatch_tag ); ?>>
+						<?php endforeach; ?>
+					</div>
 				</div>
 			</div>
 		</section>
 
-		<section class="about-sequence" aria-labelledby="about-sequence-heading">
-			<div class="about-sequence__in">
-				<div class="about-sequence__sticky">
-					<span class="about-kicker" id="about-sequence-heading">
-						<?php esc_html_e( 'La démarche', 'sliceofcactus' ); ?>
-					</span>
-					<div class="about-sequence__visual" data-visual style="background:<?php echo esc_attr( $steps[0]['gradient'] ); ?>">
-						<div class="about-sequence__big" data-big>01</div>
-					</div>
-					<div class="about-sequence__heading">
-						<?php esc_html_e( 'Quatre gestes, dans cet ordre.', 'sliceofcactus' ); ?>
-					</div>
-				</div>
+		<section class="about-crossroads" aria-labelledby="about-crossroads-heading" data-reveal>
+			<h2 id="about-crossroads-heading" class="about-kicker">
+				<?php esc_html_e( 'Des chemins de traverse', 'sliceofcactus' ); ?>
+			</h2>
 
-				<div class="about-sequence__list">
-					<?php foreach ( $steps as $i => $step ) : ?>
-						<?php $no = str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ); ?>
-						<div class="about-sequence-item" data-val="<?php echo esc_attr( $no ); ?>" data-bg="<?php echo esc_attr( $step['gradient'] ); ?>">
-							<div class="about-sequence-item__no"><?php echo esc_html( $no ); ?></div>
-							<h3><?php echo esc_html( $step['title'] ); ?></h3>
-							<p><?php echo esc_html( $step['text'] ); ?></p>
-						</div>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</section>
-
-		<?php /*
-		<section class="universe about-forms" id="trois-formes">
-			<div class="section-head">
-				<h2 class="section-head__title" data-reveal><?php esc_html_e( 'Trois formes', 'sliceofcactus' ); ?></h2>
-				<p class="section-head__sub" data-reveal>
-					<?php esc_html_e( 'Une même main, trois manières de regarder. Survolez pour entrer.', 'sliceofcactus' ); ?>
-				</p>
-			</div>
-			<div class="universe__panels">
-				<?php foreach ( $forms as $form ) : ?>
-					<?php if ( ! $form['url'] ) : ?>
-						<?php continue; ?>
+			<div class="about-crossroads__words" data-palette>
+				<div class="about-crossroads__row">
+					<?php if ( '' !== $photo_url ) : ?>
+						<a class="about-crossroads__word about-crossroads__word--photo" style="--word-color:var(--accent-photo)" data-fill href="<?php echo esc_url( $photo_url ); ?>">
+							<?php esc_html_e( 'Photo', 'sliceofcactus' ); ?>
+						</a>
 					<?php endif; ?>
-					<a
-						class="upanel"
-						href="<?php echo esc_url( $form['url'] ); ?>"
-						style="--c: <?php echo esc_attr( $form['color'] ); ?>;<?php echo $form['image'] ? ' --img: url(' . esc_url( wp_get_attachment_image_url( $form['image'], 'large' ) ) . ')' : ''; ?>"
-					>
-						<span class="upanel__bg" aria-hidden="true"></span>
-						<span class="upanel__num"><?php echo esc_html( $form['num'] ); ?></span>
-						<span class="upanel__k"><?php echo esc_html( $form['kicker'] ); ?></span>
-						<h3 class="upanel__t"><?php echo esc_html( $form['title'] ); ?></h3>
-						<p class="upanel__d"><?php echo esc_html( $form['desc'] ); ?></p>
-						<span class="upanel__cta"><?php echo esc_html( $form['cta'] ); ?></span>
-					</a>
-				<?php endforeach; ?>
-			</div>
-		</section>
-		*/ ?>
-
-
-		<?php if ( ! empty( $resonance_terms ) ) : ?>
-			<section class="rmosaic-section" aria-labelledby="about-resonances-heading" data-reveal>
-				<h2 id="about-resonances-heading" class="about-kicker">
-					<?php esc_html_e( 'Les résonances', 'sliceofcactus' ); ?>
-				</h2>
-				<p class="rmosaic__lead">
-					<?php esc_html_e( 'Les résonances ne sont pas des catégories : elles relient une photographie, un récit ou un dessin par ce qu\'ils évoquent, au-delà du sujet qui les rassemble.', 'sliceofcactus' ); ?>
-				</p>
-				<div class="rmosaic">
-					<?php
-					$resonance_kind_labels = array(
-						'recit'    => __( 'Récit', 'sliceofcactus' ),
-						'photo'    => __( 'Photo', 'sliceofcactus' ),
-						'creation' => __( 'Atelier', 'sliceofcactus' ),
-					);
-					?>
-					<?php foreach ( $resonance_terms as $term ) : ?>
-						<?php
-						$intro = function_exists( 'get_field' ) ? get_field( 'soc_resonance_intro', 'resonance_' . $term->term_id ) : '';
-
-						// Every CPT tagged with this résonance, pooled together and
-						// sorted by date — not one-per-type, just whatever's
-						// actually most recent, mixed.
-						$pool = array();
-
-						foreach ( $resonance_kind_labels as $post_type => $kind_label ) {
-							foreach ( soc_get_resonance_items( $term, $post_type ) as $item ) {
-								$pool[] = array(
-									'post' => $item,
-									'kind' => $kind_label,
-								);
-							}
-						}
-
-						usort(
-							$pool,
-							static function ( array $a, array $b ): int {
-								return strtotime( $b['post']->post_date ) <=> strtotime( $a['post']->post_date );
-							}
-						);
-
-						$previews = array_slice( $pool, 0, 3 );
-						?>
-						<div class="rmosaic-card<?php echo count( $previews ) >= 2 ? ' rmosaic-card--tall' : ''; ?>">
-							<h3 class="rmosaic-card__name"><?php echo esc_html( $term->name ); ?></h3>
-							<?php if ( is_string( $intro ) && '' !== $intro ) : ?>
-								<p class="rmosaic-card__intro"><?php echo esc_html( $intro ); ?></p>
-							<?php endif; ?>
-							<?php if ( ! empty( $previews ) ) : ?>
-								<ul class="rmosaic-card__list">
-									<?php foreach ( $previews as $preview ) : ?>
-										<li>
-											<a href="<?php echo esc_url( get_permalink( $preview['post'] ) ); ?>">
-												<span class="rmosaic-card__kind"><?php echo esc_html( $preview['kind'] ); ?></span>
-												<span class="rmosaic-card__title"><?php echo esc_html( get_the_title( $preview['post'] ) ); ?></span>
-											</a>
-										</li>
-									<?php endforeach; ?>
-								</ul>
-							<?php endif; ?>
-							<a class="rmosaic-card__cta" href="<?php echo esc_url( get_term_link( $term ) ); ?>">
-								<?php esc_html_e( 'Tout découvrir →', 'sliceofcactus' ); ?>
-							</a>
-						</div>
-					<?php endforeach; ?>
+					<?php if ( '' !== $atelier_url ) : ?>
+						<a class="about-crossroads__word about-crossroads__word--atelier" style="--word-color:var(--accent-atelier)" data-fill href="<?php echo esc_url( $atelier_url ); ?>">
+							<?php esc_html_e( 'Atelier', 'sliceofcactus' ); ?>
+						</a>
+					<?php endif; ?>
+					<?php if ( '' !== $recit_url ) : ?>
+						<a class="about-crossroads__word about-crossroads__word--recit" style="--word-color:var(--accent-recit)" data-fill href="<?php echo esc_url( $recit_url ); ?>">
+							<?php esc_html_e( 'Récits', 'sliceofcactus' ); ?>
+						</a>
+					<?php endif; ?>
 				</div>
-			</section>
-		<?php endif; ?>
 
-		<section class="about-invite" data-reveal>
-			<p class="about-invite__line"><?php esc_html_e( 'La suite se lit mieux qu\'elle ne s\'explique.', 'sliceofcactus' ); ?></p>
-			<div class="about-invite__links">
-				<a class="about-invite__link is-solid" href="<?php echo esc_url( get_post_type_archive_link( 'recit' ) ); ?>">
-					<?php esc_html_e( 'Commencer un récit', 'sliceofcactus' ); ?>
+				<?php if ( '' !== $resonances_url ) : ?>
+					<a class="about-crossroads__word about-crossroads__word--resonance" style="--word-color:var(--accent-resonance)" data-fill href="<?php echo esc_url( $resonances_url ); ?>">
+						<?php esc_html_e( 'Résonances', 'sliceofcactus' ); ?>
+					</a>
+				<?php endif; ?>
+			</div>
+
+			<div class="about-crossroads__text">
+				<p>
+					<?php esc_html_e( 'Photo, Atelier et Récits indiquent la forme des contenus. Les Résonances révèlent ce qui les relie : une couleur, une émotion, un souvenir ou une manière de regarder le monde.', 'sliceofcactus' ); ?>
+				</p>
+				<p>
+					<?php esc_html_e( 'Un même contenu peut suivre plusieurs chemins. Il suffit de choisir celui qui vous attire aujourd\'hui.', 'sliceofcactus' ); ?>
+				</p>
+			</div>
+
+			<?php if ( '' !== $resonances_url ) : ?>
+				<a class="about-crossroads__cta" href="<?php echo esc_url( $resonances_url ); ?>">
+					<?php esc_html_e( 'Voir les résonances', 'sliceofcactus' ); ?>
 				</a>
-				<a class="about-invite__link" href="<?php echo esc_url( get_post_type_archive_link( 'photo' ) ); ?>">
-					<?php esc_html_e( 'Explorer une série', 'sliceofcactus' ); ?>
-				</a>
-				<a class="about-invite__link" href="<?php echo esc_url( get_post_type_archive_link( 'creation' ) ); ?>">
-					<?php esc_html_e( 'Découvrir l\'atelier', 'sliceofcactus' ); ?>
-				</a>
+			<?php endif; ?>
+		</section>
+
+		<section class="about-contact" aria-labelledby="about-contact-heading" data-reveal>
+			<div class="about-contact__in">
+				<div class="about-contact__intro">
+					<h2 id="about-contact-heading" class="about-kicker">
+						<?php esc_html_e( 'Dire', 'sliceofcactus' ); ?>
+						<em><?php esc_html_e( 'bonjour.', 'sliceofcactus' ); ?></em>
+					</h2>
+					<p class="about-contact__lead">
+						<?php esc_html_e( 'Une photo qui vous a parlé, une question, une envie d\'échanger : passez le mot.', 'sliceofcactus' ); ?>
+					</p>
+				</div>
+
+				<ul class="about-contact__list">
+					<li class="about-contact__item">
+						<span class="about-contact__label"><?php esc_html_e( 'Email', 'sliceofcactus' ); ?></span>
+						<a class="about-contact__value" href="mailto:bonjour@sliceofcactus.fr">bonjour@sliceofcactus.fr</a>
+					</li>
+					<li class="about-contact__item">
+						<span class="about-contact__label"><?php esc_html_e( 'Instagram · Photo', 'sliceofcactus' ); ?></span>
+						<a class="about-contact__value" href="https://www.instagram.com/sliceofcactus/" target="_blank" rel="noopener noreferrer">@sliceofcactus</a>
+					</li>
+					<li class="about-contact__item">
+						<span class="about-contact__label"><?php esc_html_e( 'Instagram · Dessin', 'sliceofcactus' ); ?></span>
+						<a class="about-contact__value" href="https://www.instagram.com/traitducameleon/" target="_blank" rel="noopener noreferrer">@traitducameleon</a>
+					</li>
+				</ul>
 			</div>
 		</section>
 

@@ -1037,4 +1037,33 @@ function soc_photo_page_template_theme_color_meta(): void {
 		}
 	}
 }
+
+/**
+ * Gets the front-end URL of the published page assigned a given template
+ * file — e.g. the general "Résonances" overview (page-resonances.php),
+ * whose slug is picked in wp-admin, not fixed in the theme.
+ *
+ * @param string $template Template file name, e.g. 'page-resonances.php'.
+ * @return string Permalink, or '' if no published page uses that template.
+ */
+function soc_get_page_url_by_template( string $template ): string {
+	$pages = get_posts(
+		array(
+			'post_type'      => 'page',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'meta_key'       => '_wp_page_template',
+			'meta_value'     => $template,
+			'no_found_rows'  => true,
+		)
+	);
+
+	if ( empty( $pages ) ) {
+		return '';
+	}
+
+	$link = get_permalink( $pages[0] );
+
+	return is_string( $link ) ? $link : '';
+}
 add_action( 'wp_head', 'soc_photo_page_template_theme_color_meta' );

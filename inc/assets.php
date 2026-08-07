@@ -45,9 +45,10 @@ function soc_enqueue_assets(): void {
 	}
 
 	// Section-head + "univers" panels (assets/styles/components/panels.css):
-	// built for the front page, reused as-is by page-a-propos.php's "Trois
-	// formes" — see that file's own docblock.
-	$needs_panels = is_front_page() || is_page_template( 'page-a-propos.php' );
+	// front page's "Trois univers" only — page-a-propos.php's own former
+	// "Trois formes" (same component) is gone, replaced by "Trois façons
+	// d'entrer" (.btn buttons, see $needs_buttons below).
+	$needs_panels = is_front_page();
 	$panels_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_panels ) {
@@ -64,10 +65,31 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
+	// Site-wide pill button (assets/styles/components/buttons.css): the
+	// front page's hero CTAs. page-a-propos.php's "Trois façons d'entrer",
+	// which used to need it too, has been removed.
+	$needs_buttons = is_front_page();
+	$buttons_deps  = array( 'sliceofcactus' );
+
+	if ( $needs_buttons ) {
+		$buttons_style_path = get_theme_file_path( '/assets/styles/components/buttons.css' );
+
+		if ( is_readable( $buttons_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-buttons',
+				get_theme_file_uri( '/assets/styles/components/buttons.css' ),
+				array( 'sliceofcactus' ),
+				(string) filemtime( $buttons_style_path )
+			);
+			$buttons_deps[] = 'sliceofcactus-buttons';
+		}
+	}
+
 	// Résonance mosaic (assets/styles/components/resonance-mosaic.css): the
-	// À propos page's "Les résonances" cards, reused as-is by the single
-	// récit's "Résonne avec" — see that component's own docblock.
-	$needs_resonance_mosaic = is_singular( 'recit' ) || is_page_template( 'page-a-propos.php' );
+	// single récit's "Résonne avec" card grid. page-a-propos.php's own
+	// "Les résonances" no longer uses it (simplified to a color palette,
+	// see .about-resonances-palette in page-a-propos.css).
+	$needs_resonance_mosaic = is_singular( 'recit' );
 	$resonance_mosaic_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_resonance_mosaic ) {
@@ -192,7 +214,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-page-a-propos',
 				get_theme_file_uri( '/assets/styles/templates/page-a-propos.css' ),
-				array_merge( $magazine_hub_deps, $panels_deps, $resonance_mosaic_deps ),
+				$magazine_hub_deps,
 				(string) filemtime( $about_style_path )
 			);
 		}
@@ -281,7 +303,7 @@ function soc_enqueue_assets(): void {
 			wp_enqueue_style(
 				'sliceofcactus-front-page',
 				get_theme_file_uri( '/assets/styles/templates/front-page.css' ),
-				array_merge( $lightbox_deps, $panels_deps ),
+				array_merge( $lightbox_deps, $panels_deps, $buttons_deps ),
 				(string) filemtime( $front_page_style_path )
 			);
 		}

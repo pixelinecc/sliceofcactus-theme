@@ -57,7 +57,7 @@
     "rest_namespace": "wp\/v2",
     "rest_controller_class": "WP_REST_Terms_Controller",
     "show_tagcloud": 0,
-    "show_in_quick_edit": 0,
+    "show_in_quick_edit": 1,
     "show_admin_column": 1,
     "rewrite": {
         "permalink_rewrite": "custom_permalink",
@@ -76,5 +76,5 @@
     "meta_box_sanitize_cb": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785493505
+    "modified": 1786047986
 }

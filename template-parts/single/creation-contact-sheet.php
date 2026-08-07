@@ -96,7 +96,7 @@ $lead_rest   = function_exists( 'mb_substr' ) ? mb_substr( $accroche, 1 ) : subs
 	<div class="view-switch">
 		<div class="view-toggle" role="tablist" aria-label="<?php esc_attr_e( 'Explorer le dessin', 'sliceofcactus' ); ?>">
 			<a href="<?php echo esc_url( get_post_type_archive_link( 'creation' ) ); ?>">
-				<?php esc_html_e( 'Toutes', 'sliceofcactus' ); ?>
+				<?php esc_html_e( 'Tout', 'sliceofcactus' ); ?>
 			</a>
 			<a
 				href="<?php echo esc_url( soc_get_creation_rubrique_archive_link( 'dessin' ) ); ?>"

@@ -76,3 +76,27 @@ add_action( 'after_setup_theme', 'soc_setup' );
  * srcset candidate that then gets stretched by object-fit and blurs.
  */
 add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );
+
+/**
+ * Prints the Matomo analytics tracking snippet.
+ */
+function soc_matomo_tracking(): void {
+	?>
+	<!-- Matomo -->
+	<script>
+	  var _paq = window._paq = window._paq || [];
+	  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  (function() {
+	    var u="https://matomo.shokola.com/";
+	    _paq.push(['setTrackerUrl', u+'matomo.php']);
+	    _paq.push(['setSiteId', '9']);
+	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+	    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>
+	<!-- End Matomo Code -->
+	<?php
+}
+add_action( 'wp_head', 'soc_matomo_tracking' );

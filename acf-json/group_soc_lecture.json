@@ -1,0 +1,287 @@
+{
+    "key": "group_soc_lecture",
+    "title": "Lecture — Fiche du livre",
+    "fields": [
+        {
+            "key": "field_soc_lecture_livre",
+            "label": "Titre du livre",
+            "name": "soc_lecture_livre",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Facultatif. Si vide, le titre de l’article est utilisé sur la fiche et les cartes.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_soc_lecture_auteur",
+            "label": "Auteur",
+            "name": "soc_lecture_auteur",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_soc_lecture_format",
+            "label": "Type",
+            "name": "soc_lecture_format",
+            "aria-label": "",
+            "type": "radio",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "roman": "Roman",
+                "trilogie": "Trilogie",
+                "serie": "Série"
+            },
+            "default_value": "roman",
+            "return_format": "value",
+            "allow_null": 0,
+            "other_choice": 0,
+            "layout": "horizontal",
+            "save_other_choice": 0
+        },
+        {
+            "key": "field_soc_lecture_statut",
+            "label": "Statut de lecture",
+            "name": "soc_lecture_statut",
+            "aria-label": "",
+            "type": "radio",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "termine": "Terminé",
+                "abandonne": "Abandonné",
+                "en_cours": "En cours"
+            },
+            "default_value": "termine",
+            "return_format": "value",
+            "allow_null": 0,
+            "other_choice": 0,
+            "layout": "horizontal",
+            "save_other_choice": 0
+        },
+        {
+            "key": "field_soc_lecture_date",
+            "label": "Date de lecture",
+            "name": "soc_lecture_date",
+            "aria-label": "",
+            "type": "date_picker",
+            "instructions": "Fin de lecture (la date de publication WordPress reste celle de l’article).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "d\/m\/Y",
+            "return_format": "Y-m-d",
+            "first_day": 1
+        },
+        {
+            "key": "field_soc_lecture_note",
+            "label": "Note globale (\/10)",
+            "name": "soc_lecture_note",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Par pas de 0,5. Pour une trilogie, saisir la note globale à la main (si vide, la moyenne des tomes est affichée).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": 0,
+            "max": 10,
+            "step": 0.5,
+            "placeholder": "",
+            "prepend": "",
+            "append": "\/10"
+        },
+        {
+            "key": "field_soc_lecture_pages",
+            "label": "Nombre de pages",
+            "name": "soc_lecture_pages",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": 1,
+            "max": "",
+            "step": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_soc_lecture_serie",
+            "label": "Série \/ saga",
+            "name": "soc_lecture_serie",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Facultatif. Nom de la série à laquelle appartient le livre.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "70",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_soc_lecture_tome",
+            "label": "N° de tome",
+            "name": "soc_lecture_tome",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Facultatif. Pour un livre seul d’une série.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "30",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": 1,
+            "max": "",
+            "step": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_soc_lecture_tomes",
+            "label": "Tomes (trilogie \/ série)",
+            "name": "soc_lecture_tomes",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Facultatif. Une ligne par tome lu, avec sa note.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Ajouter un tome",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_soc_lecture_tome_titre",
+                    "label": "Tome",
+                    "name": "titre",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "60",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "Tome 1",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_soc_lecture_tome_note",
+                    "label": "Note",
+                    "name": "note",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "min": 0,
+                    "max": 10,
+                    "step": 0.5,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "\/10"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "lecture"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1790000000
+}

@@ -1,0 +1,186 @@
+/**
+ * Lectures archive: grid of book cards, plus the .lecture-note badge shared
+ * with the single lecture's fiche (single-lecture.css).
+ *
+ * The journal chrome (paper background, .mag-runhead, .journal-name,
+ * pagination) is the Récits one — see archive-recit.css, which also targets
+ * the lecture bodies.
+ */
+
+/* Own blue accent, overriding the Récits one set in archive-recit.css. */
+body.post-type-archive-lecture,
+body.single-lecture {
+	--accent: var(--accent-lecture);
+	--accent-deep: var(--accent-deep-lecture);
+}
+
+.lecture-note {
+	display: inline-flex;
+	align-items: baseline;
+	gap: .12em;
+	padding: .3rem .55rem .25rem;
+	border-radius: 2px;
+	background: var(--ink);
+	color: var(--flash);
+	font-family: var(--font-head);
+	font-size: 1.3rem;
+	line-height: 1;
+}
+
+.lecture-note b {
+	font-weight: 400;
+}
+
+.lecture-note span {
+	color: var(--paper);
+	font-family: var(--font-mono);
+	font-size: .5em;
+	letter-spacing: .06em;
+	opacity: .75;
+}
+
+.lecture-filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: center;
+	gap: 1rem 1.4rem;
+	padding: 1.8rem var(--gutter) 0;
+	color: var(--ink);
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+}
+
+.lecture-filters label {
+	display: grid;
+	gap: .3rem;
+}
+
+.lecture-filters label span {
+	color: var(--grey);
+}
+
+.lecture-filters select {
+	padding: .45rem .7rem;
+	border: 1px solid var(--ink);
+	border-radius: 2px;
+	background: var(--paper);
+	color: var(--ink);
+	font: inherit;
+	letter-spacing: inherit;
+	text-transform: inherit;
+}
+
+.lecture-filters button {
+	padding: .5rem 1.1rem;
+	border: 1px solid var(--ink);
+	border-radius: 2px;
+	background: var(--ink);
+	color: var(--paper);
+	font: inherit;
+	letter-spacing: inherit;
+	text-transform: inherit;
+	cursor: pointer;
+}
+
+.lecture-filters button:hover,
+.lecture-filters button:focus-visible {
+	border-color: var(--accent);
+	background: var(--accent);
+}
+
+.lecture-filters a {
+	padding-bottom: .55rem;
+	color: var(--accent);
+}
+
+.lecture-empty {
+	padding: 3rem var(--gutter);
+	color: var(--ink);
+	font-family: var(--font-display);
+	font-size: 1.3rem;
+	font-style: italic;
+	text-align: center;
+}
+
+.lecture-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+	gap: 2.4rem clamp(1rem, 3vw, 2rem);
+	padding: 2.8rem var(--gutter) 3.5rem;
+}
+
+.lecture-card {
+	display: block;
+	color: var(--ink);
+	text-decoration: none;
+	cursor: none;
+}
+
+.lecture-card__cover {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	border-radius: 3px;
+	background: var(--accent);
+	aspect-ratio: 2 / 3;
+	box-shadow: 0 14px 28px -16px rgb(20 18 16 / 60%);
+}
+
+.lecture-card__cover img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .6s var(--ease);
+}
+
+.lecture-card:hover .lecture-card__cover img,
+.lecture-card:focus-visible .lecture-card__cover img {
+	transform: scale(1.04);
+}
+
+.lecture-card .lecture-note {
+	position: absolute;
+	right: .5rem;
+	bottom: .5rem;
+	font-size: 1.1rem;
+}
+
+.lecture-card__kicker {
+	display: block;
+	margin-top: .8rem;
+	color: var(--accent);
+	font-family: var(--font-mono);
+	font-size: .62rem;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+}
+
+.lecture-card__kicker em {
+	margin-left: .4em;
+	color: var(--grey);
+	font-style: normal;
+}
+
+.lecture-card__title {
+	margin: .25rem 0 .2rem;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 1.35rem;
+	line-height: 1.1;
+}
+
+.lecture-card:hover .lecture-card__title,
+.lecture-card:focus-visible .lecture-card__title {
+	color: var(--accent);
+}
+
+.lecture-card__author {
+	display: block;
+	color: #4a443c;
+	font-family: var(--font-display);
+	font-size: 1.05rem;
+	font-style: italic;
+}

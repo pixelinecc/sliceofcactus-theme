@@ -449,7 +449,7 @@ function soc_get_recit_archive_items(): array {
 }
 
 /**
- * Paginates the récits archive's main query at 12 per page.
+ * Paginates the récits (and lectures) archive's main query at 12 per page.
  *
  * archive-recit.php reads the main loop directly (have_posts()/the_post())
  * instead of a second WP_Query, so WordPress's own pagination — paginate_links(),
@@ -461,11 +461,119 @@ function soc_get_recit_archive_items(): array {
  * @return void
  */
 function soc_set_recit_archive_query( WP_Query $query ): void {
-	if ( ! is_admin() && $query->is_main_query() && is_post_type_archive( 'recit' ) ) {
+	if ( ! is_admin() && $query->is_main_query() && is_post_type_archive( array( 'recit', 'lecture' ) ) ) {
 		$query->set( 'posts_per_page', 12 );
 	}
 }
 add_action( 'pre_get_posts', 'soc_set_recit_archive_query' );
+
+/**
+ * Gets the sort options of the Lectures archive, keyed by their ?tri= value.
+ *
+ * @return array<string, string>
+ */
+function soc_get_lecture_sort_options(): array {
+	return array(
+		'recent'    => __( 'Plus récentes', 'sliceofcactus' ),
+		'lu'        => __( 'Date de lecture', 'sliceofcactus' ),
+		'note-desc' => __( 'Mieux notées', 'sliceofcactus' ),
+		'note-asc'  => __( 'Moins bien notées', 'sliceofcactus' ),
+	);
+}
+
+/**
+ * Gets the statut choices of the Lectures archive from the ACF field itself,
+ * so the labels live in one place only.
+ *
+ * @return array<string, string>
+ */
+function soc_get_lecture_status_options(): array {
+	$field = function_exists( 'acf_get_field' ) ? acf_get_field( 'soc_lecture_statut' ) : false;
+
+	return is_array( $field ) && ! empty( $field['choices'] ) ? $field['choices'] : array();
+}
+
+/**
+ * Reads the Lectures archive filters from the URL (?lecture_genre=,
+ * ?statut=, ?tri=), keeping only known values.
+ *
+ * @return array{genre: string, statut: string, tri: string}
+ */
+function soc_get_lecture_filters(): array {
+	// Read-only display filters: no state change, so no nonce.
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
+	$statut = sanitize_key( wp_unslash( $_GET['statut'] ?? '' ) );
+	$tri    = sanitize_key( wp_unslash( $_GET['tri'] ?? '' ) );
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+	return array(
+		'genre'  => sanitize_title( (string) get_query_var( 'lecture_genre' ) ),
+		'statut' => array_key_exists( $statut, soc_get_lecture_status_options() ) ? $statut : '',
+		'tri'    => array_key_exists( $tri, soc_get_lecture_sort_options() ) ? $tri : 'recent',
+	);
+}
+
+/**
+ * Applies the statut filter and the sort order to the Lectures archive.
+ *
+ * The genre filter is native (lecture_genre query var). Notes and reading
+ * dates are sorted through an OR group so lectures without a value stay
+ * listed (last) instead of disappearing.
+ *
+ * @param WP_Query $query The main query.
+ * @return void
+ */
+function soc_filter_lecture_archive_query( WP_Query $query ): void {
+	if ( is_admin() || ! $query->is_main_query() || ! $query->is_post_type_archive( 'lecture' ) ) {
+		return;
+	}
+
+	$filters = soc_get_lecture_filters();
+	$clauses = array();
+
+	if ( '' !== $filters['statut'] ) {
+		$clauses[] = array(
+			'key'   => 'soc_lecture_statut',
+			'value' => $filters['statut'],
+		);
+	}
+
+	$sort_keys = array(
+		'lu'        => array( 'soc_lecture_date', 'DESC' ),
+		'note-desc' => array( 'soc_lecture_note', 'DESC' ),
+		'note-asc'  => array( 'soc_lecture_note', 'ASC' ),
+	);
+
+	if ( isset( $sort_keys[ $filters['tri'] ] ) ) {
+		list( $meta_key, $direction ) = $sort_keys[ $filters['tri'] ];
+
+		$clauses[] = array(
+			'relation'    => 'OR',
+			'sort_clause' => array(
+				'key'     => $meta_key,
+				'type'    => 'NUMERIC',
+				'compare' => 'EXISTS',
+			),
+			array(
+				'key'     => $meta_key,
+				'compare' => 'NOT EXISTS',
+			),
+		);
+
+		$query->set(
+			'orderby',
+			array(
+				'sort_clause' => $direction,
+				'date'        => 'DESC',
+			)
+		);
+	}
+
+	if ( ! empty( $clauses ) ) {
+		$query->set( 'meta_query', array_merge( array( 'relation' => 'AND' ), $clauses ) );
+	}
+}
+add_action( 'pre_get_posts', 'soc_filter_lecture_archive_query' );
 
 /**
  * Gets the Projet 52 grid: one gallery image per week, grouped by calendar

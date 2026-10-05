@@ -1000,14 +1000,14 @@ function soc_get_recit_photos( int $post_id = 0 ): array {
 
 /**
  * Prints the mobile browser theme-color meta tag for the Récits archive
- * and single récits.
+ * and single récits (Lectures share the same journal look).
  *
  * Récits use one fixed color (unlike Photo/Création, which vary per
  * narration/medium), matching the constant themeColor prop of
  * sliceofcactus-astro's recits pages.
  */
 function soc_recit_theme_color_meta(): void {
-	if ( ! is_singular( 'recit' ) && ! is_post_type_archive( 'recit' ) ) {
+	if ( ! is_singular( array( 'recit', 'lecture' ) ) && ! is_post_type_archive( array( 'recit', 'lecture' ) ) ) {
 		return;
 	}
 
@@ -1067,3 +1067,104 @@ function soc_get_page_url_by_template( string $template ): string {
 	return is_string( $link ) ? $link : '';
 }
 add_action( 'wp_head', 'soc_photo_page_template_theme_color_meta' );
+
+
+/**
+ * Gets the per-volume notes of a lecture (trilogy, series), as entered in
+ * the soc_lecture_tomes repeater.
+ *
+ * @param int $post_id Optional lecture ID. Defaults to the current post.
+ * @return array<int, array{titre: string, note: float|null}>
+ */
+function soc_get_lecture_tomes( int $post_id = 0 ): array {
+	$post_id = $post_id ?: get_the_ID();
+	$rows    = function_exists( 'get_field' ) ? get_field( 'soc_lecture_tomes', $post_id ) : array();
+	$tomes   = array();
+
+	foreach ( is_array( $rows ) ? $rows : array() as $row ) {
+		$note = $row['note'] ?? '';
+
+		$tomes[] = array(
+			'titre' => (string) ( $row['titre'] ?? '' ),
+			'note'  => is_numeric( $note ) ? (float) $note : null,
+		);
+	}
+
+	return $tomes;
+}
+
+/**
+ * Gets the note (/10) of a lecture: its own global note, or the average of
+ * its volumes' notes when none is set.
+ *
+ * @param int $post_id Optional lecture ID. Defaults to the current post.
+ * @return float|null Null when nothing is rated.
+ */
+function soc_get_lecture_note( int $post_id = 0 ): ?float {
+	$post_id = $post_id ?: get_the_ID();
+	$note    = function_exists( 'get_field' ) ? get_field( 'soc_lecture_note', $post_id ) : '';
+
+	if ( is_numeric( $note ) ) {
+		return (float) $note;
+	}
+
+	$notes = array_filter(
+		array_column( soc_get_lecture_tomes( $post_id ), 'note' ),
+		static fn( $value ): bool => null !== $value
+	);
+
+	return ! empty( $notes ) ? round( array_sum( $notes ) / count( $notes ), 1 ) : null;
+}
+
+/**
+ * Formats a /10 note the French way, without a useless decimal (7,5 / 7).
+ *
+ * @param float $note Note out of 10.
+ * @return string
+ */
+function soc_format_lecture_note( float $note ): string {
+	return rtrim( rtrim( number_format_i18n( $note, 1 ), '0' ), ',.' );
+}
+
+/**
+ * Gets the label of a choice field of a lecture (soc_lecture_statut or
+ * soc_lecture_format).
+ *
+ * @param string $field   ACF field name.
+ * @param int    $post_id Optional lecture ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_lecture_choice_label( string $field, int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+	$object  = function_exists( 'get_field_object' ) ? get_field_object( $field, $post_id ) : false;
+	$value   = is_array( $object ) ? (string) ( $object['value'] ?? '' ) : '';
+
+	return is_array( $object ) && isset( $object['choices'][ $value ] ) ? (string) $object['choices'][ $value ] : '';
+}
+
+/**
+ * Gets the short French month label of a lecture's reading date.
+ *
+ * @param int $post_id Optional lecture ID. Defaults to the current post.
+ * @return string Empty when no reading date is set.
+ */
+function soc_get_lecture_date_label( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+	$date    = function_exists( 'get_field' ) ? get_field( 'soc_lecture_date', $post_id ) : '';
+
+	return is_string( $date ) && '' !== $date ? soc_format_recit_date( $date ) : '';
+}
+
+/**
+ * Gets the title of the book itself, which can differ from the article's
+ * title; falls back to the latter.
+ *
+ * @param int $post_id Optional lecture ID. Defaults to the current post.
+ * @return string
+ */
+function soc_get_lecture_book_title( int $post_id = 0 ): string {
+	$post_id = $post_id ?: get_the_ID();
+	$title   = function_exists( 'get_field' ) ? trim( (string) get_field( 'soc_lecture_livre', $post_id ) ) : '';
+
+	return '' !== $title ? $title : get_the_title( $post_id );
+}

@@ -27,7 +27,7 @@ function soc_enqueue_assets(): void {
 		$style_version
 	);
 
-	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'creation' ) || is_post_type_archive( 'recit' ) || is_tax( 'creation_type' ) || is_tax( 'medium' ) || is_tax( 'resonance' ) || is_tax( 'narration' ) || is_page_template( 'page-projet-52.php' ) || is_page_template( 'page-color-your-life.php' ) || is_page_template( 'page-voyage-carte.php' ) || is_page_template( 'page-a-propos.php' ) || is_page_template( 'page-resonances.php' );
+	$needs_magazine_hub = is_singular( 'photo' ) || is_singular( 'creation' ) || is_singular( 'recit' ) || is_singular( 'lecture' ) || is_post_type_archive( 'lecture' ) || is_post_type_archive( 'photo' ) || is_post_type_archive( 'creation' ) || is_post_type_archive( 'recit' ) || is_tax( 'creation_type' ) || is_tax( 'medium' ) || is_tax( 'resonance' ) || is_tax( 'narration' ) || is_page_template( 'page-projet-52.php' ) || is_page_template( 'page-color-your-life.php' ) || is_page_template( 'page-voyage-carte.php' ) || is_page_template( 'page-a-propos.php' ) || is_page_template( 'page-resonances.php' );
 	$magazine_hub_deps  = array( 'sliceofcactus' );
 
 	if ( $needs_magazine_hub ) {
@@ -180,7 +180,9 @@ function soc_enqueue_assets(): void {
 
 	$recit_deps = $magazine_hub_deps;
 
-	if ( is_singular( 'recit' ) || is_post_type_archive( 'recit' ) ) {
+	// Lectures reuse the Récits journal look (paper background, masthead,
+	// reading column): same stylesheets, plus their own below.
+	if ( is_singular( array( 'recit', 'lecture' ) ) || is_post_type_archive( array( 'recit', 'lecture' ) ) ) {
 		$recit_archive_style_path = get_theme_file_path( '/assets/styles/templates/archive-recit.css' );
 
 		if ( is_readable( $recit_archive_style_path ) ) {
@@ -194,7 +196,7 @@ function soc_enqueue_assets(): void {
 		}
 	}
 
-	if ( is_singular( 'recit' ) ) {
+	if ( is_singular( array( 'recit', 'lecture' ) ) ) {
 		$recit_style_path = get_theme_file_path( '/assets/styles/templates/single-recit.css' );
 
 		if ( is_readable( $recit_style_path ) ) {
@@ -204,6 +206,34 @@ function soc_enqueue_assets(): void {
 				array_merge( $recit_deps, $resonance_mosaic_deps, $lightbox_deps ),
 				(string) filemtime( $recit_style_path )
 			);
+		}
+	}
+
+	if ( is_post_type_archive( 'lecture' ) || is_singular( 'lecture' ) ) {
+		$lecture_archive_style_path = get_theme_file_path( '/assets/styles/templates/archive-lecture.css' );
+
+		if ( is_readable( $lecture_archive_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-archive-lecture',
+				get_theme_file_uri( '/assets/styles/templates/archive-lecture.css' ),
+				array( 'sliceofcactus-archive-recit' ),
+				(string) filemtime( $lecture_archive_style_path )
+			);
+		}
+	}
+
+	if ( is_singular( 'lecture' ) ) {
+		foreach ( array( 'templates/single-lecture', 'components/lecture-spoilers' ) as $lecture_style ) {
+			$lecture_style_path = get_theme_file_path( "/assets/styles/{$lecture_style}.css" );
+
+			if ( is_readable( $lecture_style_path ) ) {
+				wp_enqueue_style(
+					'sliceofcactus-' . basename( $lecture_style ),
+					get_theme_file_uri( "/assets/styles/{$lecture_style}.css" ),
+					array( 'sliceofcactus-single-recit', 'sliceofcactus-archive-lecture' ),
+					(string) filemtime( $lecture_style_path )
+				);
+			}
 		}
 	}
 

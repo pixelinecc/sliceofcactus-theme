@@ -1,0 +1,145 @@
+/**
+ * Single lecture: the book's fiche (cover, author, details, note).
+ *
+ * The masthead, reading column and back link are the récit ones
+ * (single-recit.css); the .lecture-note badge lives in archive-lecture.css
+ * and the spoiler section in components/lecture-spoilers.css.
+ */
+
+.lecture-fiche {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+	align-items: start;
+	gap: 1.6rem 2rem;
+	margin: 3rem 0 0;
+	padding: 1.8rem 0;
+	border-top: 1px solid rgb(20 18 16 / 22%);
+	border-bottom: 1px solid rgb(20 18 16 / 22%);
+	color: var(--ink);
+}
+
+.lecture-fiche__cover img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 3px;
+	box-shadow: 0 14px 28px -16px rgb(20 18 16 / 60%);
+}
+
+.lecture-fiche__title {
+	margin: 0 0 .2rem;
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: 1.9rem;
+	line-height: 1.05;
+}
+
+.lecture-fiche__author {
+	margin: 0 0 1rem;
+	font-family: var(--font-display);
+	font-size: 1.5rem;
+	font-style: italic;
+	line-height: 1.1;
+}
+
+.lecture-fiche__author b {
+	font-style: normal;
+}
+
+.lecture-fiche__meta {
+	margin: 0;
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+.lecture-fiche__meta > div {
+	display: flex;
+	gap: 1rem;
+	padding: .35rem 0;
+	border-bottom: 1px solid rgb(20 18 16 / 14%);
+}
+
+.lecture-fiche__meta dt {
+	flex: 0 0 5.5rem;
+	color: var(--grey);
+}
+
+.lecture-fiche__meta dd {
+	margin: 0;
+}
+
+.lecture-fiche__meta a {
+	color: var(--accent);
+}
+
+.lecture-fiche__note {
+	grid-column: 1 / -1;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .8rem 1.4rem;
+	padding-top: 1.2rem;
+	border-top: 1px solid rgb(20 18 16 / 14%);
+}
+
+.lecture-fiche__note-label {
+	color: var(--grey);
+	font-family: var(--font-mono);
+	font-size: .7rem;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+}
+
+.lecture-fiche .lecture-note {
+	font-size: 2.4rem;
+}
+
+.lecture-fiche__tomes {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .4rem 1.4rem;
+	margin: 0 0 0 auto;
+	padding: 0;
+	list-style: none;
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+
+.lecture-fiche__tomes li {
+	display: flex;
+	gap: .6rem;
+}
+
+.lecture-fiche__tomes b {
+	color: var(--accent);
+}
+
+@media (max-width: 560px) {
+	.lecture-fiche {
+		grid-template-columns: 96px 1fr;
+		gap: 1.2rem;
+	}
+
+	.lecture-fiche__tomes {
+		margin-left: 0;
+	}
+}
+
+.single-lecture .article__body h2,
+.single-lecture .article__body h3 {
+	margin-top: 2.4rem;
+	margin-bottom: 1.2rem;
+}
+
+/* The spoiler title opens its own box: no extra space above it. */
+.single-lecture .article__body .lecture-spoilers > :first-child {
+	margin-top: 0;
+}
+
+.single-lecture .back-link--center {
+	margin-bottom: 4rem;
+}

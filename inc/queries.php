@@ -474,47 +474,63 @@ add_action( 'pre_get_posts', 'soc_set_recit_archive_query' );
  */
 function soc_get_lecture_sort_options(): array {
 	return array(
-		'recent'    => __( 'Plus récentes', 'sliceofcactus' ),
 		'lu'        => __( 'Date de lecture', 'sliceofcactus' ),
+		'recent'    => __( 'Date de publication', 'sliceofcactus' ),
 		'note-desc' => __( 'Mieux notées', 'sliceofcactus' ),
 		'note-asc'  => __( 'Moins bien notées', 'sliceofcactus' ),
 	);
 }
 
 /**
- * Gets the statut choices of the Lectures archive from the ACF field itself,
- * so the labels live in one place only.
+ * Gets the minimum-note thresholds of the Lectures archive (?note=N keeps
+ * lectures rated N/10 or more), highest first.
  *
+ * @return int[]
+ */
+function soc_get_lecture_note_thresholds(): array {
+	return array( 9, 8, 7, 6, 5 );
+}
+
+/**
+ * Gets the choices of a Lectures ACF choice field (soc_lecture_statut,
+ * soc_lecture_ressenti…) from the field itself, so the labels live in one
+ * place only.
+ *
+ * @param string $field ACF field name.
  * @return array<string, string>
  */
-function soc_get_lecture_status_options(): array {
-	$field = function_exists( 'acf_get_field' ) ? acf_get_field( 'soc_lecture_statut' ) : false;
+function soc_get_lecture_choices( string $field ): array {
+	$object = function_exists( 'acf_get_field' ) ? acf_get_field( $field ) : false;
 
-	return is_array( $field ) && ! empty( $field['choices'] ) ? $field['choices'] : array();
+	return is_array( $object ) && ! empty( $object['choices'] ) ? $object['choices'] : array();
 }
 
 /**
  * Reads the Lectures archive filters from the URL (?lecture_genre=,
- * ?statut=, ?tri=), keeping only known values.
+ * ?statut=, ?ressenti=, ?note=, ?tri=), keeping only known values.
  *
- * @return array{genre: string, statut: string, tri: string}
+ * @return array{genre: string, statut: string, ressenti: string, note: int, tri: string}
  */
 function soc_get_lecture_filters(): array {
 	// Read-only display filters: no state change, so no nonce.
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended
-	$statut = sanitize_key( wp_unslash( $_GET['statut'] ?? '' ) );
-	$tri    = sanitize_key( wp_unslash( $_GET['tri'] ?? '' ) );
+	$statut   = sanitize_key( wp_unslash( $_GET['statut'] ?? '' ) );
+	$tri      = sanitize_key( wp_unslash( $_GET['tri'] ?? '' ) );
+	$ressenti = sanitize_key( wp_unslash( $_GET['ressenti'] ?? '' ) );
+	$note     = absint( $_GET['note'] ?? 0 );
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	return array(
-		'genre'  => sanitize_title( (string) get_query_var( 'lecture_genre' ) ),
-		'statut' => array_key_exists( $statut, soc_get_lecture_status_options() ) ? $statut : '',
-		'tri'    => array_key_exists( $tri, soc_get_lecture_sort_options() ) ? $tri : 'recent',
+		'genre'    => sanitize_title( (string) get_query_var( 'lecture_genre' ) ),
+		'statut'   => array_key_exists( $statut, soc_get_lecture_choices( 'soc_lecture_statut' ) ) ? $statut : '',
+		'ressenti' => array_key_exists( $ressenti, soc_get_lecture_choices( 'soc_lecture_ressenti' ) ) ? $ressenti : '',
+		'note'     => in_array( $note, soc_get_lecture_note_thresholds(), true ) ? $note : 0,
+		'tri'      => array_key_exists( $tri, soc_get_lecture_sort_options() ) ? $tri : 'lu',
 	);
 }
 
 /**
- * Applies the statut filter and the sort order to the Lectures archive.
+ * Applies the statut, ressenti and minimum-note filters and the sort order to the Lectures archive.
  *
  * The genre filter is native (lecture_genre query var). Notes and reading
  * dates are sorted through an OR group so lectures without a value stay
@@ -535,6 +551,22 @@ function soc_filter_lecture_archive_query( WP_Query $query ): void {
 		$clauses[] = array(
 			'key'   => 'soc_lecture_statut',
 			'value' => $filters['statut'],
+		);
+	}
+
+	if ( '' !== $filters['ressenti'] ) {
+		$clauses[] = array(
+			'key'   => 'soc_lecture_ressenti',
+			'value' => $filters['ressenti'],
+		);
+	}
+
+	if ( $filters['note'] > 0 ) {
+		$clauses[] = array(
+			'key'     => 'soc_lecture_note',
+			'value'   => $filters['note'],
+			'type'    => 'NUMERIC',
+			'compare' => '>=',
 		);
 	}
 

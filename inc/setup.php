@@ -36,7 +36,6 @@ function soc_setup(): void {
 			'assets/styles/base/elements.css',
 			'assets/styles/layout/containers.css',
 			'assets/styles/utilities/utilities.css',
-			'assets/styles/components/lecture-spoilers.css',
 			'assets/styles/editor.css',
 		)
 	);

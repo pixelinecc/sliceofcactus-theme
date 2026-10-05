@@ -3,7 +3,7 @@
  * Lectures archive: a grid of book cards.
  *
  * Reads the main loop. Filters are a plain GET form: genre is the native
- * query var of the lecture_genre taxonomy; statut and tri are applied in
+ * query var of the lecture_genre taxonomy; statut, ressenti, note and tri are applied in
  * soc_filter_lecture_archive_query() (inc/queries.php).
  *
  * @package SliceOfCactus
@@ -20,7 +20,17 @@ $archive_url = get_post_type_archive_link( 'lecture' );
 $filters     = soc_get_lecture_filters();
 $genres_list = get_terms( array( 'taxonomy' => 'lecture_genre' ) );
 $genres_list = is_array( $genres_list ) ? $genres_list : array();
-$is_filtered = '' !== $filters['genre'] || '' !== $filters['statut'] || 'recent' !== $filters['tri'];
+$is_filtered = '' !== $filters['genre'] || '' !== $filters['statut'] || '' !== $filters['ressenti'] || $filters['note'] > 0 || 'lu' !== $filters['tri'];
+
+// Ressenti pills are links: they keep the other active filters.
+$pill_args = array_filter(
+	array(
+		'lecture_genre' => $filters['genre'],
+		'statut'        => $filters['statut'],
+		'note'          => $filters['note'] > 0 ? $filters['note'] : '',
+		'tri'           => 'lu' !== $filters['tri'] ? $filters['tri'] : '',
+	)
+);
 ?>
 <main id="main-content" class="soc-recit-archive rubrique-page">
 
@@ -43,6 +53,17 @@ $is_filtered = '' !== $filters['genre'] || '' !== $filters['statut'] || 'recent'
 		<p class="sub"><?php esc_html_e( 'Livres lus, avis et notes', 'sliceofcactus' ); ?></p>
 	</div>
 
+	<nav class="lecture-pills" aria-label="<?php esc_attr_e( 'Filtrer par ressenti', 'sliceofcactus' ); ?>">
+		<a class="lecture-pill<?php echo '' === $filters['ressenti'] ? ' is-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( $pill_args, $archive_url ) ); ?>" <?php echo '' === $filters['ressenti'] ? 'aria-current="true"' : ''; ?>>
+			<?php esc_html_e( 'Tous', 'sliceofcactus' ); ?>
+		</a>
+		<?php foreach ( soc_get_lecture_choices( 'soc_lecture_ressenti' ) as $value => $label ) : ?>
+			<a class="lecture-pill<?php echo $value === $filters['ressenti'] ? ' is-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( array_merge( $pill_args, array( 'ressenti' => $value ) ), $archive_url ) ); ?>" <?php echo $value === $filters['ressenti'] ? 'aria-current="true"' : ''; ?>>
+				<?php echo esc_html( $label ); ?>
+			</a>
+		<?php endforeach; ?>
+	</nav>
+
 	<?php /* Plain GET form: genre is the taxonomy's native query var; statut/tri are read in soc_filter_lecture_archive_query(). */ ?>
 	<form class="lecture-filters" method="get" action="<?php echo esc_url( $archive_url ); ?>">
 		<?php if ( ! empty( $genres_list ) ) : ?>
@@ -61,8 +82,19 @@ $is_filtered = '' !== $filters['genre'] || '' !== $filters['statut'] || 'recent'
 			<span><?php esc_html_e( 'Statut', 'sliceofcactus' ); ?></span>
 			<select name="statut">
 				<option value=""><?php esc_html_e( 'Tous', 'sliceofcactus' ); ?></option>
-				<?php foreach ( soc_get_lecture_status_options() as $value => $label ) : ?>
+				<?php foreach ( soc_get_lecture_choices( 'soc_lecture_statut' ) as $value => $label ) : ?>
 					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $filters['statut'], $value ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php endforeach; ?>
+			</select>
+		</label>
+
+		<label>
+			<span><?php esc_html_e( 'Note', 'sliceofcactus' ); ?></span>
+			<select name="note">
+				<option value=""><?php esc_html_e( 'Toutes', 'sliceofcactus' ); ?></option>
+				<?php foreach ( soc_get_lecture_note_thresholds() as $threshold ) : ?>
+					<?php /* translators: %s: minimum note out of 10. */ ?>
+					<option value="<?php echo esc_attr( $threshold ); ?>" <?php selected( $filters['note'], $threshold ); ?>><?php echo esc_html( sprintf( __( '%s/10 et plus', 'sliceofcactus' ), $threshold ) ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</label>
@@ -75,6 +107,10 @@ $is_filtered = '' !== $filters['genre'] || '' !== $filters['statut'] || 'recent'
 				<?php endforeach; ?>
 			</select>
 		</label>
+
+		<?php if ( '' !== $filters['ressenti'] ) : ?>
+			<input type="hidden" name="ressenti" value="<?php echo esc_attr( $filters['ressenti'] ); ?>">
+		<?php endif; ?>
 
 		<button type="submit"><?php esc_html_e( 'Filtrer', 'sliceofcactus' ); ?></button>
 		<?php if ( $is_filtered ) : ?>
@@ -91,6 +127,7 @@ $is_filtered = '' !== $filters['genre'] || '' !== $filters['statut'] || 'recent'
 				$author        = (string) get_field( 'soc_lecture_auteur' );
 				$serie         = (string) get_field( 'soc_lecture_serie' );
 				$note          = soc_get_lecture_note();
+				$ressenti      = soc_get_lecture_choice_label( 'soc_lecture_ressenti' );
 				$is_unfinished = 'termine' !== (string) get_field( 'soc_lecture_statut' );
 				$genres        = get_the_terms( get_the_ID(), 'lecture_genre' );
 				$genre_name    = is_array( $genres ) && ! empty( $genres ) ? $genres[0]->name : '';
@@ -128,6 +165,9 @@ $is_filtered = '' !== $filters['genre'] || '' !== $filters['statut'] || 'recent'
 					<h2 class="lecture-card__title"><?php echo esc_html( $book_title ); ?></h2>
 					<?php if ( '' !== $author ) : ?>
 						<span class="lecture-card__author"><?php echo esc_html( $author ); ?></span>
+					<?php endif; ?>
+					<?php if ( '' !== $ressenti ) : ?>
+						<span class="lecture-tag"><?php echo esc_html( $ressenti ); ?></span>
 					<?php endif; ?>
 				</a>
 			<?php endwhile; ?>

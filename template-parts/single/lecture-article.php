@@ -26,6 +26,10 @@ $pages       = (int) get_field( 'soc_lecture_pages', $post_id );
 $note        = soc_get_lecture_note( $post_id );
 $has_own_note = is_numeric( get_field( 'soc_lecture_note', $post_id ) );
 $tomes       = soc_get_lecture_tomes( $post_id );
+$summary     = trim( (string) get_field( 'soc_lecture_resume', $post_id ) );
+$ressenti    = soc_get_lecture_choice_label( 'soc_lecture_ressenti', $post_id );
+$traits_all  = soc_get_lecture_choices( 'soc_lecture_traits' );
+$traits      = array_intersect_key( $traits_all, array_flip( array_filter( (array) get_field( 'soc_lecture_traits', $post_id ), 'is_string' ) ) );
 $genres      = get_the_terms( $post_id, 'lecture_genre' );
 $genres      = is_array( $genres ) ? $genres : array();
 
@@ -46,6 +50,14 @@ if ( '' !== $serie && $tome > 0 ) {
 }
 
 // Label => already-escaped HTML. Empty values are skipped in the loop below.
+$traits_html = implode(
+	' ',
+	array_map(
+		static fn( string $label ): string => '<span class="lecture-tag">' . esc_html( $label ) . '</span>',
+		$traits
+	)
+);
+
 $meta = array(
 	__( 'Type', 'sliceofcactus' )   => esc_html( $format ),
 	__( 'Genre', 'sliceofcactus' )  => implode( ', ', $genre_links ),
@@ -53,6 +65,8 @@ $meta = array(
 	__( 'Lu en', 'sliceofcactus' )  => esc_html( $read_label ),
 	__( 'Pages', 'sliceofcactus' )  => $pages > 0 ? esc_html( number_format_i18n( $pages ) ) : '',
 	__( 'Statut', 'sliceofcactus' ) => esc_html( $status ),
+	__( 'Ressenti', 'sliceofcactus' ) => esc_html( $ressenti ),
+	__( 'Aussi', 'sliceofcactus' )  => $traits_html,
 );
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'article' ); ?>>
@@ -140,6 +154,17 @@ $meta = array(
 			</div>
 		<?php endif; ?>
 	</section>
+
+	<?php if ( '' !== $summary ) : ?>
+		<section class="lecture-summary" aria-label="<?php esc_attr_e( 'Résumé de l’éditeur', 'sliceofcactus' ); ?>">
+			<h2 class="lecture-summary__label"><?php esc_html_e( 'Résumé de l’éditeur', 'sliceofcactus' ); ?></h2>
+			<?php echo wp_kses_post( wpautop( esc_html( $summary ) ) ); ?>
+		</section>
+	<?php endif; ?>
+
+	<div class="lecture-notice">
+		<?php esc_html_e( 'Ce qui suit peut contenir des informations sur le livre qui risquent de gâcher l’histoire si vous ne l’avez pas lu.', 'sliceofcactus' ); ?>
+	</div>
 
 	<div class="article__body">
 		<?php the_content(); ?>

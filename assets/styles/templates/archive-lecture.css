@@ -39,6 +39,40 @@ body.single-lecture {
 	opacity: .75;
 }
 
+.lecture-pills {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: .6rem;
+	padding: 2rem var(--gutter) 0;
+	font-family: var(--font-mono);
+	font-size: .72rem;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+}
+
+.lecture-pill {
+	display: inline-block;
+	padding: .45rem .9rem;
+	border: 1px solid var(--ink);
+	border-radius: 999px;
+	color: var(--ink);
+	text-decoration: none;
+	transition: background .2s, color .2s;
+}
+
+.lecture-pill:hover,
+.lecture-pill:focus-visible {
+	border-color: var(--accent);
+	color: var(--accent);
+}
+
+.lecture-pill.is-active {
+	background: var(--ink);
+	color: var(--flash);
+}
+
 .lecture-filters {
 	display: flex;
 	flex-wrap: wrap;
@@ -162,6 +196,19 @@ body.single-lecture {
 	margin-left: .4em;
 	color: var(--grey);
 	font-style: normal;
+}
+
+.lecture-tag {
+	display: inline-block;
+	margin-top: .5rem;
+	padding: .15rem .5rem;
+	border: 1px solid var(--accent);
+	border-radius: 999px;
+	color: var(--accent);
+	font-family: var(--font-mono);
+	font-size: .62rem;
+	letter-spacing: .1em;
+	text-transform: uppercase;
 }
 
 .lecture-card__title {

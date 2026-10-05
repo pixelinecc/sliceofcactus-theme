@@ -95,6 +95,61 @@
             "save_other_choice": 0
         },
         {
+            "key": "field_soc_lecture_ressenti",
+            "label": "Ressenti",
+            "name": "soc_lecture_ressenti",
+            "aria-label": "",
+            "type": "radio",
+            "instructions": "Facultatif. Pour un livre abandonné, le statut suffit.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "coup-de-coeur": "Coup de cœur ❤️",
+                "tres-aime": "Très aimé",
+                "bonne-lecture": "Bonne lecture",
+                "mitige": "Mitigé",
+                "deception": "Déception",
+                "grosse-deception": "Grosse déception"
+            },
+            "default_value": "",
+            "return_format": "value",
+            "allow_null": 1,
+            "other_choice": 0,
+            "layout": "vertical",
+            "save_other_choice": 0
+        },
+        {
+            "key": "field_soc_lecture_traits",
+            "label": "Particularités",
+            "name": "soc_lecture_traits",
+            "aria-label": "",
+            "type": "checkbox",
+            "instructions": "Facultatif, cumulables : surprise (m’a vraiment étonnée), émotion (pèse dans mon appréciation), addictif (impossible à lâcher).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "surprise": "Surprise",
+                "emotion": "Émotion",
+                "addictif": "Addictif"
+            },
+            "default_value": [],
+            "return_format": "value",
+            "allow_custom": 0,
+            "layout": "vertical",
+            "toggle": 0,
+            "save_custom": 0
+        },
+        {
             "key": "field_soc_lecture_date",
             "label": "Date de lecture",
             "name": "soc_lecture_date",
@@ -155,6 +210,27 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_soc_lecture_resume",
+            "label": "Résumé de l’éditeur",
+            "name": "soc_lecture_resume",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Facultatif. Quatrième de couverture, affiché entre la fiche et l’avis. Mentionner la source si besoin.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": 5,
+            "placeholder": "",
+            "new_lines": ""
         },
         {
             "key": "field_soc_lecture_serie",

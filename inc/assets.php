@@ -223,17 +223,15 @@ function soc_enqueue_assets(): void {
 	}
 
 	if ( is_singular( 'lecture' ) ) {
-		foreach ( array( 'templates/single-lecture', 'components/lecture-spoilers' ) as $lecture_style ) {
-			$lecture_style_path = get_theme_file_path( "/assets/styles/{$lecture_style}.css" );
+		$lecture_style_path = get_theme_file_path( '/assets/styles/templates/single-lecture.css' );
 
-			if ( is_readable( $lecture_style_path ) ) {
-				wp_enqueue_style(
-					'sliceofcactus-' . basename( $lecture_style ),
-					get_theme_file_uri( "/assets/styles/{$lecture_style}.css" ),
-					array( 'sliceofcactus-single-recit', 'sliceofcactus-archive-lecture' ),
-					(string) filemtime( $lecture_style_path )
-				);
-			}
+		if ( is_readable( $lecture_style_path ) ) {
+			wp_enqueue_style(
+				'sliceofcactus-single-lecture',
+				get_theme_file_uri( '/assets/styles/templates/single-lecture.css' ),
+				array( 'sliceofcactus-single-recit', 'sliceofcactus-archive-lecture' ),
+				(string) filemtime( $lecture_style_path )
+			);
 		}
 	}
 

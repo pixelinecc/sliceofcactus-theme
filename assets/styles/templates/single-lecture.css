@@ -2,8 +2,7 @@
  * Single lecture: the book's fiche (cover, author, details, note).
  *
  * The masthead, reading column and back link are the récit ones
- * (single-recit.css); the .lecture-note badge lives in archive-lecture.css
- * and the spoiler section in components/lecture-spoilers.css.
+ * (single-recit.css); the .lecture-note badge lives in archive-lecture.css.
  */
 
 .lecture-fiche {
@@ -129,15 +128,47 @@
 	}
 }
 
+.lecture-summary {
+	margin: 2.4rem 0 0;
+	color: var(--ink);
+	font-family: var(--font-display);
+	font-size: 1.2rem;
+	font-style: italic;
+	line-height: 1.5;
+}
+
+.lecture-summary__label {
+	margin: 0 0 .6rem;
+	color: var(--grey);
+	font-family: var(--font-mono);
+	font-size: .7rem;
+	font-style: normal;
+	font-weight: 400;
+	letter-spacing: .16em;
+	line-height: 1.4;
+	text-transform: uppercase;
+}
+
+.lecture-summary p {
+	margin: 0 0 .8rem;
+}
+
+.lecture-notice {
+	margin: 2.4rem 0 0;
+	padding: 1rem 1.2rem;
+	border-left: 4px solid var(--accent);
+	background: rgb(20 18 16 / 5%);
+	color: var(--ink);
+	font-family: var(--font-display);
+	font-size: 1.1rem;
+	font-style: italic;
+	line-height: 1.4;
+}
+
 .single-lecture .article__body h2,
 .single-lecture .article__body h3 {
 	margin-top: 2.4rem;
 	margin-bottom: 1.2rem;
-}
-
-/* The spoiler title opens its own box: no extra space above it. */
-.single-lecture .article__body .lecture-spoilers > :first-child {
-	margin-top: 0;
 }
 
 .single-lecture .back-link--center {

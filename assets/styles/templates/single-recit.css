@@ -20,7 +20,7 @@
  *
  * .recit-palette (soc_recit_palette ACF field, template-parts/single/
  * recit-article.php): optional, shown once right after the body, still
- * inside .article so it sits in the same 680px reading column as the text.
+ * inside .article so it sits in the same 840px reading column as the text.
  * Text color per swatch is a PHP-side modifier class, computed from the
  * swatch's own hex luminance — same approach as the À propos page's
  * palette, minus the JS (ACF already gives the literal hex here).
@@ -31,7 +31,7 @@
 }
 
 .article {
-	max-width: 680px;
+	max-width: 840px;
 	margin: 0 auto;
 	padding: 0 clamp(1.2rem, 4vw, 3rem);
 }
@@ -424,7 +424,7 @@
 
 /*
  * Sits outside <article> (see recit-article.php) so it isn't held inside the
- * 680px reading column: width and gutter come from .rmosaic-section
+ * 840px reading column: width and gutter come from .rmosaic-section
  * (var(--maxw)), this only sets the rhythm around it.
  */
 .article__resonances {
